@@ -6,7 +6,7 @@ jdk: openjdk11
 before_script:
   - git clone 'https://github.com/watchdog-wms/watchdog-wms' 'watchdog'
   - export WATCHDOG_BASE=$(pwd)'/watchdog/'
-  - export WATCHDOG_PR_CHECKER=${WATCHDOG_BASE}'build/jars/moduleValidator.jar'
+  - export WATCHDOG_PR_CHECKER=${WATCHDOG_BASE}'jars/moduleValidator.jar'
   - ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
 
 matrix:
