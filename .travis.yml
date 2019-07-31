@@ -5,6 +5,7 @@ jdk: openjdk11
 
 before_script:
   - git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' 'watchdog'
+  - git pull -f
   - git rev-parse HEAD
   - export WATCHDOG_BASE=$(pwd)'/watchdog/'
   - export WATCHDOG_PR_CHECKER=${WATCHDOG_BASE}'jars/moduleValidator.jar'
