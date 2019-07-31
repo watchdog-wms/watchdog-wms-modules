@@ -5,7 +5,7 @@ This repository contains modules for the workflow management system Watchdog: ht
 Contributions to this repository are welcome!
 If you want to share a module, please follow these steps:
 
-0) read the [contribution guideline](.github/pull_request_template.md)
+0) read the [contribution guideline](CONTRIBUTING.md)
 1) fork the repository
 2) commit your module into your fork
 3) create a pull request
