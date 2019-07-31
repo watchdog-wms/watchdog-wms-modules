@@ -1,4 +1,4 @@
-This repository contains modules for the workflow management system Watchdog: https://github.com/watchdog-wms/watchdog-wms
+This repository contains modules for the workflow management system Watchdog: https://github.com/klugem/watchdog-wms
 
 ### Contributing
 
