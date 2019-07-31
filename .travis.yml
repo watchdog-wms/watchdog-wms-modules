@@ -4,7 +4,7 @@ dist: xenial
 jdk: openjdk11
 
 before_script:
-  - git clone 'https://github.com/klugem/watchdog-wms' 'watchdog'
+  - git clone 'https://github.com/klugem/watchdog' 'watchdog'
   - export WATCHDOG_BASE=$(pwd)'/watchdog/'
   - export WATCHDOG_PR_CHECKER=${WATCHDOG_BASE}'jars/moduleValidator.jar'
   - ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
