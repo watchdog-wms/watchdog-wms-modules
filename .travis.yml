@@ -14,20 +14,24 @@ before_script:
   - export WATCHDOG_PR_CHECKER="${WATCHDOG_BASE}jars/moduleValidator.jar"
   - ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
   
+stages:
+  - test
+  - scan
+  
 jobs:
   include:
-  - stage: tests
-    script: java -jar "${WATCHDOG_PR_CHECKER}" -check "${TEST_NAME}"
-    name: 'signed commit test'
-    env: TEST_NAME='SIGNED_COMMIT'
-  - name: 'write permission test'
-    env: TEST_NAME='WRITE_PERMISSION'
-  - name: 'separate module test'
-    env: TEST_NAME='SINGLE_MODULE'
-  - name: 'XSD validation test'
-    env: TEST_NAME='XSD_VALIDATION'
-  - name: 'XML documentation test'
-    env: TEST_NAME='XML_DOCUMENTATION'
-  - stage: scan
-    name: 'virus scan test'
-    script: /bin/bash "${WATCHDOG_BASE}/helper_scripts/travisCI_clamAV.sh"
+    - name: 'signed commit test'
+      env: TEST_NAME='SIGNED_COMMIT'
+    - name: 'write permission test'
+      env: TEST_NAME='WRITE_PERMISSION'
+    - name: 'separate module test'
+      env: TEST_NAME='SINGLE_MODULE'
+    - name: 'XSD validation test'
+      env: TEST_NAME='XSD_VALIDATION'
+    - name: 'XML documentation test'
+      env: TEST_NAME='XML_DOCUMENTATION'
+  script: java -jar "${WATCHDOG_PR_CHECKER}" -check "${TEST_NAME}"
+
+     - stage: scan
+       name: 'virus scan test'
+       script: /bin/bash "${WATCHDOG_BASE}/helper_scripts/travisCI_clamAV.sh"
