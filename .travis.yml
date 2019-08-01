@@ -9,9 +9,9 @@ cache:
 before_script:
   - export WATCHDOG_BASE="${HOME}/cache/watchdog/"
   - RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD || echo "NO_GIT")
-  - if [ $RET == "NO_GIT" ]; then rm -r "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"; fi
-  - git -C "${WATCHDOG_BASE}" pull -f
-  - git -C "${WATCHDOG_BASE}" rev-parse HEAD
+  - if [ $RET == "NO_GIT" ]; then rm -r "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}" | pv -q -L 3k; fi
+  - git -C "${WATCHDOG_BASE}" pull -f | pv -q -L 3k
+  - git -C "${WATCHDOG_BASE}" rev-parse HEAD | pv -q -L 3k
   - export WATCHDOG_PR_CHECKER="${WATCHDOG_BASE}jars/moduleValidator.jar"
   - ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
   
@@ -34,6 +34,6 @@ matrix:
       env: TEST_NAME='XML_DOCUMENTATION'
     - stage: scan
       name: 'virus scan test'
-      script: /bin/bash "${WATCHDOG_BASE}/helper_scripts/travisCI_clamAV.sh"
+      script: /bin/bash "${WATCHDOG_BASE}/helper_scripts/travisCI_clamAV.sh" | pv -q -L 3k
 
-script: java -jar "${WATCHDOG_PR_CHECKER}" -check "${TEST_NAME}"
+script: java -jar "${WATCHDOG_PR_CHECKER}" -check "${TEST_NAME}" | pv -q -L 3k
