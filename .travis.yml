@@ -32,9 +32,6 @@ matrix:
     - name: 'XML documentation test'
       env: TEST_NAME='XML_DOCUMENTATION'
 script: java -jar "${WATCHDOG_PR_CHECKER}" -check "${TEST_NAME}"
-
-jobs:
-  include:
     - stage: scan
       name: 'virus scan test'
       script: /bin/bash "${WATCHDOG_BASE}/helper_scripts/travisCI_clamAV.sh"
