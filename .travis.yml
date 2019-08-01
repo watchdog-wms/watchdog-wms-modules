@@ -6,6 +6,11 @@ cache:
     - ${HOME}/cache/watchdog
     - ${HOME}/cache/clamav
     
+addons:
+  apt:
+    packages:
+    - pv
+    
 before_script:
   - export WATCHDOG_BASE="${HOME}/cache/watchdog/"
   - RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD || echo "NO_GIT")
