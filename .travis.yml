@@ -4,7 +4,8 @@ jdk: openjdk11
 cache:
   directories:
     - ${HOME}/cache/watchdog
-
+    - ${HOME}/cache/clamav
+    
 before_script:
   - export WATCHDOG_BASE="${HOME}/cache/watchdog/"
   - RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD || echo "NO_GIT")
