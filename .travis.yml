@@ -4,13 +4,13 @@ dist: xenial
 jdk: openjdk11
 cache:
   directories:
-    - ${HOME}/clamav
-    - ${HOME}/watchdog
+    - ${HOME}/cache/clamav
+    - ${HOME}/cache/watchdog
 
 before_script:
-  - export WATCHDOG_BASE="${HOME}/watchdog/"
-  - RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD)
-  - if [ $RET -ne 0 ]; then rm -r "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"; fi
+  - export WATCHDOG_BASE="${HOME}/cache/watchdog/"
+  - RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD || echo "NO_GIT")
+  - if [ $RET == "NO_GIT" ]; then rm -r "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"; fi
   - git -C "${WATCHDOG_BASE}" pull -f
   - git -C "${WATCHDOG_BASE}" rev-parse HEAD
   - export WATCHDOG_PR_CHECKER="${WATCHDOG_BASE}jars/moduleValidator.jar"
