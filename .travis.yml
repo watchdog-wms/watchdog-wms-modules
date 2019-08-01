@@ -3,7 +3,6 @@ dist: xenial
 jdk: openjdk11
 cache:
   directories:
-    - ${HOME}/cache/clamav
     - ${HOME}/cache/watchdog
 
 before_script:
