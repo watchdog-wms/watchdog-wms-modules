@@ -16,7 +16,7 @@ before_script:
   
 jobs:
   include:
-  - stage: test
+  - stage: tests
     script: java -jar "${WATCHDOG_PR_CHECKER}" -check "${TEST_NAME}"
     name: 'signed commit test'
     env: TEST_NAME='SIGNED_COMMIT'
