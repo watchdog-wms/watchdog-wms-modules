@@ -1,5 +1,4 @@
 language: java
-sudo: false 
 dist: xenial
 jdk: openjdk11
 cache:
