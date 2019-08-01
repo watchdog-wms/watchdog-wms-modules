@@ -2,6 +2,9 @@ language: java
 sudo: false 
 dist: xenial
 jdk: openjdk11
+cache:
+  directories:
+    - clamav
 
 before_script:
   - git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' 'watchdog'
