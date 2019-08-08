@@ -1,4 +1,25 @@
-### Folder structure
+### Contributing
+
+Contributions to this repository are welcome!
+If you want to share a module, please follow these steps:
+
+1) fork the repository
+2) commit your module into your fork
+3) create a pull request
+4) automatic tests will be performed on your pull request (by Travis CI)
+5) members of the contributor team can merge your pull request if all checks succeed
+
+More detailed instructions how to contribute to a github repository can be found [here](https://github.com/firstcontributions/first-contributions).
+
+
+### Join the contributor team
+Members of the contributor team have write access to the repository and can merge pull requests if all Travis CI checks succeeded.
+
+To become a member, please follow these steps:
+1) share a few modules
+2) request to become a member by mentioning watchdog-wms-bot in one of your pull requests (just include '@watchdog-wms-bot' in your comment)
+
+### Module structure
 
 Modules must contain at least an XSD module definition file (*moduleName.xsd*) and an XML documentation file (*moduleName.docu.xml*).
 If test data is included, it should be stored in a folder named *test_data*.
@@ -12,8 +33,10 @@ Example:
     └── test_data
         ├── testFile1.txt
         └── testFile2.txt
+    
+More information on how to create a module can be found in the [documentation](https://rawgit.com/klugem/watchdog/master/documentation/Watchdog-manual.html#custom_modules).
    
-### Automatic Travis CI tests triggered by pull requests
+### Automatic tests on pull requests
 
 Before a pull request can be merged with the master branch some Travis CI tests must succeed.
 Currently the following tests are implemented:
