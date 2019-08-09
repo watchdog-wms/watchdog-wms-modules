@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-08-09</updated>
+    <category>GENERAL</category>
+    <description maxVersion="1" minVersion="1">attaches annotations to a CSV file</description>
+    <!-- ##### optional ##### -->
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">GNU core utilities</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU R</dependencies>
+    <dependencies maxVersion="1" minVersion="1">packages: getopt, stringi</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="targetFile" type="file" restrictions="absolute">
+      <description>path to char-separated table file with header</description>
+    </param>
+    <param default="\t" minOccurs="1" name="targetSep" type="string">
+      <description>separating char in the annotation file(s)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outputFile" type="file" restrictions="absolute">
+      <description>path to the annotated output file</description>
+    </param>
+    <param minOccurs="1" name="targetIDcolumn" type="string">
+      <description>name of the column of the target file that should be used to merge the table with the annotation file(s)</description>
+    </param>
+    <param minOccurs="1" name="annotationIDcolumn" type="string">
+      <description>name(s) of the column(s) of the annotation file(s) that should be used to merge the table with the annotation file(s)</description>
+    </param>
+    <param minOccurs="1" name="annotationFile" type="file" restrictions="absolute">
+      <description>path(s) to annotation table file(s) that should be attached</description>
+    </param>
+    <param default="\t" minOccurs="1" name="annotationSep" type="string">
+      <description>separating char in the target file</description>
+    </param>
+  </parameter>
+</documentation>
