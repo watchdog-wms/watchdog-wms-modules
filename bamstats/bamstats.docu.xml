@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-03-15</updated>
+    <category>Sequencing</category>
+    <category>Quality control</category>
+    <description maxVersion="1" minVersion="1">creates various statistics on BAM files using RSeQC and samtools, which can be used for quality assessment</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>http://rseqc.sourceforge.net</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Quality assessment of the resulting mappings was ensured using RSeQC [Liguo Wang, Shengqin Wang, Wei Li; RSeQC: quality control of RNA-seq experiments, Bioinformatics, Volume 28, Issue 16, 15 August 2012, Pages 2184–2185].</paperDescription>
+    <PMID>22743226</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+    <dependencies maxVersion="1" minVersion="1">rseqc</dependencies>
+    <dependencies maxVersion="1" minVersion="1">samtools</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param minOccurs="1" name="bam" type="file path" restrictions="absolute">
+      <description>path to one or more BAM file(s)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outdir" type="folder path" restrictions="absolute">
+      <description>path to the output folder; individual files will be stored in a sub-folder (using the basename of the BAM file as folder name)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="readLength" type="integer">
+      <description>maximal length of the reads</description>
+    </param>
+    <param default="100000" maxOccurs="1" minOccurs="0" name="sampleDepth" type="integer">
+      <description>number of reads which are used for sampling</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="annotation" type="file path" restrictions="absolute">
+      <description>gene annotation in BED format</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="geneBodyAnnotation" type="file path" restrictions="absolute">
+      <description>genes that are used to calculate the gene body coverage; should contain house keeping genes</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="idxstats" type="boolean">
+      <description>enables calculation of number of reads mapped on each chromosome</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="flagstat" type="boolean">
+      <description>enables calculation of flags of mapped reads</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="count" type="boolean">
+      <description>enables calculation of raw and rpkm count table for exons, introns and mRNAs</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="saturation" type="boolean">
+      <description>enables down-sampling of the mapped reads to infer the sequencing depth</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="statistics" type="boolean">
+      <description>calculates reads mapping statistics</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="clipping" type="boolean">
+      <description>enables clipping statistic of the mapped reads</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="insertion" type="boolean">
+      <description>enables insertion statistic of the mapped reads</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="deletion" type="boolean">
+      <description>enables deletion statistic of the mapped reads</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="inferExperiment" type="boolean">
+      <description>tries to infer if the sequencing was strand specific or not</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="junctionAnnotation" type="boolean">
+      <description>enables checking of how many of the splice junctions are novel or annotated</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="junctionSaturation" type="boolean">
+      <description>enables down-sampling of the spliced reads to infer if sequencing depth is enough for splicing analyses</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="distribution" type="boolean">
+      <description>calculates how mapped reads are distributed among different genomic features</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="duplication" type="boolean">
+      <description>calculates sequence duplication levels</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="gc" type="boolean">
+      <description>calculates GC-content of the mapped reads</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="nvc" type="boolean">
+      <description>checks if a nucleotide composition bias exist</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="insertSize" type="boolean">
+      <description>calculates the insert size between two paired RNA reads</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="fragmentSize" type="boolean">
+      <description>calculates the fragment size for each transcript</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="tin" type="boolean">
+      <description>calculates the transcript integrity number which is similar to the RNA integrity number</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="paired" type="boolean">
+      <description>must be set if paired-end data is analyzed</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="stranded" type="boolean">
+      <description>must be set if strand-specific data is analyzed</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="disableAllDefault" type="boolean">
+      <description>disables all options which are not explicitly activated</description>
+    </param>
+  </parameter>
+</documentation>
