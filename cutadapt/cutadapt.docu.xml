@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-03-13</updated>
+    <category>Sequencing</category>
+    <description maxVersion="1" minVersion="1">sequence adapters can be removed and sequences can be trimmed based on length or base-call quality scores</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://github.com/marcelm/cutadapt</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Cutadapt was used to remove adapters and trim sequences [Martin, Marcel. "Cutadapt removes adapter sequences from high-throughput sequencing reads." EMBnet.journal [Online], 17.1 (2011): pp. 10-12. Web. 14 Mar. 2019].</paperDescription>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">cutadapt</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+    <comments maxVersion="1" minVersion="1">module was developed and tested with cutadapt version 1.17 but newer releases should be compatible as well</comments>  
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="fastq" type="file path" restrictions="absolute">
+      <description>path to one FASTQ file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="prim3" type="string">
+      <description>adapter that was ligated at the 3' end; '$' at the end will cause that the adapter is anchored at the end of the read</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="prim5" type="string">
+      <description>adapter that was ligated at the 5' end; '^' at the start will cause that the adapter is anchored at the beginning of the read</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="adapter" type="string">
+      <description>adapter that can be located at the 3' and 5' end</description>
+    </param>
+    <param default="0.05" maxOccurs="1" minOccurs="0" name="errorRate" type="double" restrictions="[0, 1]">
+      <description>maximum allowed error rate</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="repeat" type="integer" restrictions="[1, 100]">
+      <description>try to remove adapters at most N times</description>
+    </param>
+    <param default="6" maxOccurs="1" minOccurs="0" name="minOverlap" type="integer" restrictions=">0">
+      <description>minimum overlap length</description>
+    </param>
+    <param default="40" maxOccurs="1" minOccurs="0" name="minLength" type="integer" restrictions="[1, 100000]">
+      <description>minimum read length after trimming</description>
+    </param>
+    <param default="-1" maxOccurs="1" minOccurs="0" name="maxLength" type="integer" restrictions="[1, 100000]">
+      <description>maximum read length after trimming</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outfile" type="file path" restrictions="absolute">
+      <description>path to an output file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="infofile" type="file path" restrictions="absolute">
+      <description>path to a file which will contain trimming statistics</description>
+    </param>
+    <param default="0" maxOccurs="1" minOccurs="0" name="shortenReads" type="integer">
+      <description>shorten reads to a maximal length after trimming; positive values keep the beginning of reads; negative ones the ends (starting from cutadapt version 1.17)</description>
+    </param>
+    <param default="0" maxOccurs="1" minOccurs="0" name="cutFixedLength" type="integer" restrictions="[-1000000, 1000000]">
+      <description>trimmes a fixed length from the beginning (positive numbers) or the end of the reads (negative numbers)</description>
+    </param>
+    <param default="0" maxOccurs="1" minOccurs="0" name="qualityCutoff" type="double">
+      <description>trimmes reads at the ends using a sliding window approach</description>
+    </param>
+    <param default="33" maxOccurs="1" minOccurs="0" name="qualityBase" type="integer">
+      <description>base quality value</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="noIndels" type="boolean">
+      <description>does not allow indels between read and adapter</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="discardTrimmed" type="boolean">
+      <description>discard sequences which were trimmed</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="discardUntrimmed" type="boolean">
+      <description>discard sequences which were not trimmed</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="maskAdapters" type="boolean">
+      <description>does not cut the adapters but replace the corresponding regions with N</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="cutadaptTrimFile" type="string">
+      <description>absolute path to the trimmed output file</description>
+    </var>
+    <var name="cutadaptInfoFile" type="string">
+      <description>absolute path to a file containing statistical values</description>
+    </var>
+  </return>
+</documentation>
