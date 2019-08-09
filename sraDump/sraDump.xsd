@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="sraDumpTaskParameterType">
+		<x:all>
+			<x:element name="sraFile" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="unbounded" />
+			<x:element name="sraID" type="paramString" minOccurs="0" maxOccurs="unbounded" />
+			<x:element name="rename" type="paramString" minOccurs="0" maxOccurs="unbounded" />
+			<x:element name="outputFolder" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1" />
+			<x:element name="tmpFolder" type="paramAbsoluteFolderPath" minOccurs="0" maxOccurs="1" />
+			<x:element name="deleteOnSuccess" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="sraDumpTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="sraDump.sh" />
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="sraDumpTaskType">
+		<x:complexContent>
+			<x:extension base="sraDumpTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="sraDumpTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="sraDumpTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of the return variables -->	
+	<x:complexType name="sraDumpTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<x:element name="isPairedEnd" type="x:boolean"/>
+					<x:element name="baseName" type="x:string"/>
+					<x:element name="createdFiles" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="sraDumpTask" type="sraDumpTaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->
+
+
+</x:schema>

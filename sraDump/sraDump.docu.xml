@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-03-13</updated>
+    <category>Sequencing</category>
+    <description maxVersion="1" minVersion="1">downloads and extracts FASTQ files from the Sequence Read Archive (SRA)</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc&amp;f=fastq-dump</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Public samples were downloaded from the SRA (accession number: TODO) [Leinonen R, Sugawara H, Shumway M, International Nucleotide Sequence Database Collaboration. The sequence read archive. Nucleic Acids Res. 2010;39(Database issue):D19-21.].</paperDescription>
+    <PMID>21062823</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">fastq-dump</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+    <!-- module specific hints or comments -->
+    <comments maxVersion="1" minVersion="1">The SRA toolkit might create a folder named "ncbi" that is located in your home directory.</comments>
+    <comments maxVersion="1" minVersion="1">The command "vdb-config -i" can be used to change this setting for the SRA toolkit.</comments>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param minOccurs="0" name="sraFile" type="file path" restrictions="absolute">
+      <description>path to the *.sra file(s); can not be used in combination with --sraID</description>
+    </param>
+    <param minOccurs="0" name="sraID" type="string">
+      <description>one or more SRA ID(s); can not be used in combination with --sraFile</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="rename" type="string">
+      <description>new basename for the resulting fastq files;</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outputFolder" type="folder path" restrictions="absolute">
+      <description>path to folder in which the files should be extracted</description>
+    </param>
+    <param default="/usr/local/storage" maxOccurs="1" minOccurs="0" name="tmpFolder" type="folder path" restrictions="absolute">
+      <description>tmp folder; default: /usr/local/storage</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="deleteOnSuccess" type="boolean">
+      <description>deletes the SRA file when extraction was successfull</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="isPairedEnd" type="boolean">
+      <description>true, if paired end data was downloaded from SRA</description>
+    </var>
+    <var name="baseName" type="string">
+      <description>absolute base name path to the created files</description>
+    </var>
+    <var name="createdFiles" type="string">
+      <description>absolute path to all files that were downloaded separated by ','</description>
+    </var>
+  </return>
+</documentation>
