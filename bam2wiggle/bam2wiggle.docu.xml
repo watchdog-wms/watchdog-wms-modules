@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-08-08</updated>
+    <category>SEQUENCING</category>
+    <description maxVersion="1" minVersion="1">converts BAM files to WIG files</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://bedtools.readthedocs.io/en/latest</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>[Bedtools was used to convert BAM files to WIG files.]</paperDescription>
+    <PMID>20110278</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">bedtools</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU core utilities</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="bam" type="file" restrictions="absolute">
+      <description>path to the position-based-sorted BAM file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="output" type="file" restrictions="absolute">
+      <description>path to BEDGRAPH file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="contigSizes" type="file" restrictions="absolute">
+      <description>file containing the sizes of the contigs used in the BAM file if ranges should be extended (format: &lt;chrName&gt;&lt;TAB&gt;&lt;SIZE&gt;)</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="wiggleFile" type="string">
+      <description>absolute path to the converted output file</description>
+    </var>
+  </return>
+</documentation>
