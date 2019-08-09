@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-08-08</updated>
+    <category>SEQUENCING</category>
+    <description maxVersion="1" minVersion="1">performs differential gene expression tests based on count tables</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>http://bioconductor.org/packages/release/bioc/html/DESeq.html</website>
+    <website>http://bioconductor.org/packages/release/bioc/html/DESeq2.html</website>
+    <website>http://bioconductor.org/packages/release/bioc/html/limma.html</website>
+    <website>http://bioconductor.org/packages/release/bioc/html/DESeq.html</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Differential gene expression analysis was performed using XXX.</paperDescription>
+    <PMID>20979621</PMID>
+    <PMID>19910308</PMID>
+    <PMID>25605792</PMID>
+    <PMID>25516281</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">GNU R</dependencies>
+    <dependencies maxVersion="1" minVersion="1">packages: edgeR, DESeq, DESeq2, limma, Biobase, RColorBrewer, gplots, getopt, genefilter, lattice</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="controlCondition" type="string">
+      <description>name of the control condition</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="testCondition" type="string">
+      <description>name of the test condition</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="countFile" type="file" restrictions="absolute">
+      <description>count file with features in rows and samples in columns</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="sampleAnnotation" type="file" restrictions="absolute">
+      <description>annotation file with sample names in the first colum and sample condition in the second condition; (header: sample\tcondition)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="featureAnnotation" type="file" restrictions="absolute">
+      <description>annotation file which is joined with the count file</description>
+    </param>
+    <param default="FeatureID" maxOccurs="1" minOccurs="0" name="featureAnnotationID" type="string">
+      <description>name of the column used for joining</description>
+    </param>
+    <param default="type" maxOccurs="1" minOccurs="0" name="featureAnnotationType" type="string">
+      <description>name of the column in the annotation file for which a distribution plot is created</description>
+    </param>
+    <param minOccurs="0" name="excludeSamples" type="string">
+      <description>names of samples that should be excluded from the analysis</description>
+    </param>
+    <param default="0.01" maxOccurs="1" minOccurs="0" name="pValueCutoff" type="double" restrictions="[0-1]">
+      <description>p-Value cutoff for significant results</description>
+    </param>
+    <param default="25" maxOccurs="1" minOccurs="0" name="minKeepReads" type="integer" restrictions=">=0">
+      <description>number of reads a feature must own in average per sample to pass filtering step before DE test is performed</description>
+    </param>
+    <param default="0.0,0.415,1.0" minOccurs="0" name="foldchangeCutoff" type="integer">
+      <description>log2 foldchange cutoffs for which a own result file will be created; will be used for both directions (+/-)</description>
+    </param>
+    <param default="significant,0.33-fold,2-fold" minOccurs="0" name="foldchangeCutoffNames" type="string">
+      <description>corresponding names to the foldchange cutoffs</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="output" type="file" restrictions="absolute">
+      <description>path to output folder</description>
+    </param>
+    <param default="all" maxOccurs="1" minOccurs="0" name="method" type="string">
+      <description>method that should be applied; one of: limma, DESeq, DESeq2, edgeR, all</description>
+    </param>
+  </parameter>
+</documentation>
