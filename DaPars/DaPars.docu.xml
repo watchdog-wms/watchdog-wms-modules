@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-08-08</updated>
+    <category>SEQUENCING</category>
+    <description maxVersion="1" minVersion="1">dynamic analysis of alternative polyadenylation from RNA-seq</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://github.com/ZhengXia/dapars</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>DaPars was used to identify alternative polyadenylation.</paperDescription>
+    <PMID>25409906</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">DaPars</dependencies>
+    <dependencies maxVersion="1" minVersion="1">python</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU core utilities</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="controlCondition" type="string">
+      <description>name of the control condition</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="testCondition" type="string">
+      <description>name of the test condition</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="sampleAnnotation" type="file" restrictions="absolute">
+      <description>annotation file with sample names in the first colum and sample condition in the second condition (header: sample\tcondition)</description>
+    </param>
+    <param minOccurs="1" name="excludeSamples" type="string">
+      <description>names of samples that should be excluded from the analysis</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="wigFolder" type="file">
+      <description>folder containing the wig files (format: folder/samplename.bedgraph)</description>
+    </param>
+    <param default="bedgraph" maxOccurs="1" minOccurs="0" name="wigEnding" type="string">
+      <description>ending of the wig files</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="annotated3UTR" type="file" restrictions="absolute">
+      <description>path to annotated 3' UTR regions created with DaPars_Extract_Anno.py</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outputFile" type="file" restrictions="absolute">
+      <description>path to the output file</description>
+    </param>
+    <param default="30" maxOccurs="1" minOccurs="0" name="coverageCutoff" type="integer" restrictions="[1,]">
+      <description>coverage threshold</description>
+    </param>
+    <param default="0.01" maxOccurs="1" minOccurs="0" name="FDRCutoff" type="double" restrictions="[0,1]">
+      <description>FDR cutoff</description>
+    </param>
+    <param default="0.5" maxOccurs="1" minOccurs="0" name="PDUICutoff" type="double" restrictions="[0,100]">
+      <description>degree of difference in APA usage in percent</description>
+    </param>
+    <param default="0.5" maxOccurs="1" minOccurs="0" name="FoldChangeCutoff" type="double">
+      <description>log2 foldchange cutoff between the two conditions</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="numberOfCondASamplesReachingCutoff" type="integer" restrictions="[1,]">
+      <description>number of samples from condition A that must pass the coverage cutoff; default: all samples</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="numberOfCondBSamplesReachingCutoff" type="integer" restrictions="[1,]">
+      <description>number of samples from condition B that must pass the coverage cutoff; default: all samples</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="wiggleFile" type="string">
+      <description>path to the output file in WIG format</description>
+    </var>
+  </return>
+</documentation>
