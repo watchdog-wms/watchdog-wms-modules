@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2018-10-31</updated>
+    <category>General</category>
+    <description maxVersion="1" minVersion="1">compresses and decompresses files using gzip; is able to verify file integrity using a md5 checksum file</description>
+    <website>https://www.gnu.org/software/gzip/</website>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">GNU gzip</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param default="${input}.gz" maxOccurs="1" minOccurs="0" name="output" type="absolute file path">
+      <description>path to output file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="input" type="file path" restrictions="absolute">
+      <description>path to input file</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="decompress" type="boolean">
+      <description>decompress the input file instead of compressing it</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="verify" type="boolean">
+      <description>verify file integrity after decompression using the md5 checksum file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="oldPathMd5" type="file path" restrictions="absolute">
+      <description>path where the files was stored when the md5 checksum was created</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="limitLines" type="integer" restrictions="[1,]">
+      <description>extract only the first N lines</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="delete" type="boolean">
+      <description>delete the file after compression was performed; enforces integrity check</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="md5" type="file path" restrictions="absolute">
+      <description>path to md5 checksum file to verify file integrity after decompression</description>
+    </param>
+    <param default="9" maxOccurs="1" minOccurs="0" name="quality" type="integer" restrictions="[1,9]">
+      <description>compression quality ranging from 1 to 9; 9 being the slowest but best compression</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="processedGzipFile" type="string">
+      <description>path to the input file</description>
+    </var>
+    <var name="createdGzipFile" type="string">
+      <description>path to the output file</description>
+    </var>
+  </return>
+</documentation>
