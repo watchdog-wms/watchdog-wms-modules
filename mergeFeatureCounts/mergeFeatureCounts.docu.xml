@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-08-08</updated>
+    <category>SEQUENCING</category>
+    <description maxVersion="1" minVersion="1">combines the output of multiple featureCounts runs in one CSV file</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://www.gnu.org/software/coreutils/</website>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="searchFolder" type="file" restrictions="absolute">
+      <description>path to the folder in which *.counts files are located</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="output" type="file" restrictions="absolute">
+      <description>path to the output file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="statsFolder" type="file" restrictions="absolute">
+      <description>path to merged statistic folder required for plotting</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="featureAnnotation" type="file" restrictions="absolute">
+      <description>annotation file which is joined with the count file</description>
+    </param>
+    <param default="Geneid" maxOccurs="1" minOccurs="0" name="featureAnnotationID" type="string">
+      <description>name of the column with is used for joining</description>
+    </param>
+    <param default="type" maxOccurs="1" minOccurs="0" name="featureAnnotationType" type="string">
+      <description>name of the column in the annotation file for which a distribution plot is created</description>
+    </param>
+    <param default="exon_length" maxOccurs="1" minOccurs="0" name="featureAnnotationExonLength" type="string">
+      <description>name of the column that contains the exon length of the features</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="noPlotting" type="boolean">
+      <description>disables the execution of R scripts</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="prefixNames" type="boolean">
+      <description>prefixes the names of the features with continuous numbers</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="mergedCountFile" type="string">
+      <description>absolute path to the merged count file in CSV format</description>
+    </var>
+  </return>
+</documentation>
