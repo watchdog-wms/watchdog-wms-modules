@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-03-13</updated>
+    <category>Sequencing</category>
+    <description maxVersion="1" minVersion="1">converts SAM files into compressed BAM format using samtools sort</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://www.htslib.org/doc/samtools.html</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Samtools was used to convert SAM to BAM files [Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, Homer N, Marth G, Abecasis G, Durbin R, and 1000 Genome Project Data Processing Subgroup, The Sequence alignment/map (SAM) format and SAMtools, Bioinformatics (2009) 25(16) 2078-9].</paperDescription>
+    <PMID>19505943</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">samtools</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="sam" type="file path" restrictions="absolute">
+      <description>path to SAM file that should be compressed</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="bam" type="file path" restrictions="absolute">
+      <description>path to ouput BAM file</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="threads" type="integer">
+      <description>number of threads to use for compression</description>
+    </param>
+    <param default="9" maxOccurs="1" minOccurs="0" name="quality" type="integer" restrictions="[1, 9]">
+      <description>compression level; 1 is the worst/fastest and 9 is the best/slowest compression</description>
+    </param>
+    <param default="768M" maxOccurs="1" minOccurs="0" name="memory" type="string">
+      <description>maximal memory that can be used per thread; only an estimation and might be exceeded!</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="tmpFolder" type="file path" restrictions="absolute">
+      <description>write temporary files to that folder</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="BAMFile" type="string">
+      <description>absolute path to the resulting BAM file</description>
+    </var>
+  </return>
+</documentation>
