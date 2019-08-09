@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-03-13</updated>
+    <category>Sequencing</category>
+    <category>Gene expression</category>
+    <description maxVersion="1" minVersion="1">unique molecular identifiers (UMIs) can be used to remove PCR duplicates</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://github.com/CGATOxford/UMI-tools</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>UMI-tools was used to remove PCR duplicates from the raw sequecing data based on UMIs [Smith T, Heger A, Sudbery I. UMI-tools: modeling sequencing errors in Unique Molecular Identifiers to improve quantification accuracy. Genome Res. 2017;27(3):491-499.].</paperDescription>
+    <PMID>28100584</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">umi_tools</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+    <!-- module specific hints or comments -->
+    <comments maxVersion="1" minVersion="1">COMMENT [0-]</comments>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="bamFile" type="file path" restrictions="absolute">
+      <description>path to the BAM file; UMI must be a suffix of the fastq id separated with '_'</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outputFile" type="file path" restrictions="absolute">
+      <description>path to the de-duplicated BAM file</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="deleteOnSuccess" type="boolean">
+      <description>deletes the BAM file when deduplication was successfull</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="deduplicatedFile" type="string">
+      <description>absolute path to the de-duplicated BAM file</description>
+    </var>
+  </return>
+</documentation>
