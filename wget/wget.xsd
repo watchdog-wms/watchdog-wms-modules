@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="wgetTaskParameterType">
+		<x:all>
+			<x:element name="uri" type="paramString" minOccurs="1" maxOccurs="unbounded" />
+			<x:element name="output" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1" />
+			<x:element name="rename" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="disableSizeCheck" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="wgetTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="wget.sh" />
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="wgetTaskType">
+		<x:complexContent>
+			<x:extension base="wgetTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="wgetTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="wgetTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of the return variables -->	
+	<x:complexType name="wgetTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<x:element name="downloadedFiles" type="x:string"/>
+					<x:element name="downloadedFolder" type="x:string"/>
+					<x:element name="numberOfFiles" type="x:integer"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="wgetTask" type="wgetTaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->
+
+
+</x:schema>
