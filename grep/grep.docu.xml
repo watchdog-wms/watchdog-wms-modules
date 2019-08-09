@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2018-10-31</updated>
+    <category>General</category>
+    <description maxVersion="1" minVersion="1">extracts information from text files using the exact or regex-based search of grep</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://www.gnu.org/software/grep/</website>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">GNU grep</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="outputFile" type="file path" restrictions="absolute">
+      <description>absolute path to file in which the output of grep is written</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="file" type="file path" restrictions="absolute">
+      <description>absolute path to file to use as search input</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="options" type="string">
+      <description>additional flags or parameters that are directly delivered to grep</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="pattern" type="string">
+      <description>pattern to search for; can also be a regex if parameter -P is set</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="grepResultFile" type="string">
+      <description>path to the output file</description>
+    </var>
+  </return>
+</documentation>
