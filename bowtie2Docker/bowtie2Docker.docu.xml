@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-03-13</updated>
+    <category>Sequencing</category>
+    <category>Technical Demo</category>
+    <description maxVersion="1" minVersion="1">technical demo which shows how docker containers can be used in combination with Watchdog; basic bowtie mapper</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://quay.io/repository/biocontainers/bowtie2</website>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">docker</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="genome" type="file path" restrictions="absolute">
+      <description>path to indexed reference genome (withouth trailing .X.bt2 ending)</description>
+    </param>
+    <param maxOccurs="2" minOccurs="1" name="reads" type="file path" restrictions="absolute">
+      <description>path to reads in FASTQ format; for mapping of paired-end data, two files are required</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outfile" type="file path" restrictions="absolute">
+      <description>path to output file, which is written in SAM format; a log file with .log suffix will also be written</description>
+    </param>
+  </parameter>
+</documentation>
