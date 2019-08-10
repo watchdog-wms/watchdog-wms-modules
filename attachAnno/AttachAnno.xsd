@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="AttachAnnoTaskParameterType">
+		<x:all>
+			<x:element name="targetFile" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
+			<x:element name="targetSep" type="paramString" minOccurs="1" maxOccurs="unbounded"/>
+			<x:element name="outputFile" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
+			<x:element name="targetIDcolumn" type="paramString" minOccurs="1" maxOccurs="unbounded"/>
+			<x:element name="annotationIDcolumn" type="paramString" minOccurs="1" maxOccurs="unbounded"/>
+			<x:element name="annotationFile" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="unbounded"/>
+			<x:element name="annotationSep" type="paramString" minOccurs="1" maxOccurs="unbounded"/>
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="AttachAnnoTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="AttachAnno.sh" />
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="AttachAnnoTaskType">
+		<x:complexContent>
+			<x:extension base="AttachAnnoTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="AttachAnnoTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="AttachAnnoTask" type="AttachAnnoTaskParameterType" substitutionGroup="abstractTask" />
+</x:schema>
