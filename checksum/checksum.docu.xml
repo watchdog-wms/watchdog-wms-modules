@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2018-10-31</updated>
+    <category>General</category>
+    <description maxVersion="1" minVersion="1">creates a md5 checksum of a file or verifies file integrity based on a md5 checksum using md5sum</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://www.gnu.org/software/coreutils/coreutils.html</website>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">GNU md5sum</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="input" type="file path" restrictions="absolute">
+      <description>absolute path to file for which a checksum should be calculated or which should be verified</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="oldChecksumName" type="file path" restrictions="absolute">
+      <description>absolute path to a (non-existent) file used to identify the correct checksum line for cases in which the file was renamed or moved after checksum creation; can only be used in verify mode</description>
+    </param>
+    <param default=".checksum.md5" maxOccurs="1" minOccurs="0" name="checksum" type="file path" restrictions="absolute">
+      <description>absolute path to the checksum file; by default '.checksum.md5' located in the same directory as the input file</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="verify" type="boolean">
+      <description>flag to verify integrity of a file based on the checksum file</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="update" type="boolean">
+      <description>flag to update an already existing checksum in the checksum file</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="absolutePath" type="boolean">
+      <description>flag to store an absolute path in the checksum file instead of a relative one</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="ignorePath" type="boolean">
+      <description>flag to use only the name of the file for identification of the corresponding checksum line (ignores the location of the file); can only be used in verify mode</description>
+    </param>
+  </parameter>
+</documentation>
