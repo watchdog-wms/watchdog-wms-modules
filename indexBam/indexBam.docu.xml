@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-03-13</updated>
+    <category>Sequencing</category>
+    <description maxVersion="1" minVersion="1">creates an index for a BAM file using samtools index</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://www.htslib.org/doc/samtools.html</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Samtools was used to index the BAM files [Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, Homer N, Marth G, Abecasis G, Durbin R, and 1000 Genome Project Data Processing Subgroup, The Sequence alignment/map (SAM) format and SAMtools, Bioinformatics (2009) 25(16) 2078-9].</paperDescription>
+    <PMID>19505943</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">samtools</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="bam" type="file path" restrictions="absolute">
+      <description>path to the BAM file</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="link" type="boolean">
+      <description>creates a link called NAME.bam.bai because some tool expect the index under that name; use --nolink to disable it</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="BAMFile" type="string">
+      <description>path to the BAM file for which the index was created</description>
+    </var>
+  </return>
+</documentation>
