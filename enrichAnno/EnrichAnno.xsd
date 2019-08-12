@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="EnrichAnnoTaskParameterType">
+		<x:all>
+			<x:element name="backgroundFile" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
+			<x:element name="testFiles" type="paramString" minOccurs="1" maxOccurs="unbounded"/>
+			<x:element name="orgDB" type="paramString" minOccurs="1" maxOccurs="1"/>
+			<x:element name="keggDBName" type="paramString" minOccurs="0" maxOccurs="1"/>
+			<x:element name="pValueCutoff" type="paramPValueCutoff_EnrichAnno" minOccurs="0" maxOccurs="1"/>
+			<x:element name="plotKegg" type="paramBoolean" minOccurs="0" maxOccurs="1"/>
+			<x:element name="output" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
+			<x:element name="suffix" type="paramString" minOccurs="0" maxOccurs="1"/>
+			<x:element name="foldchangeCol" type="paramString" minOccurs="0" maxOccurs="1"/>
+		</x:all>
+	</x:complexType>
+
+
+	<!-- change default attributes -->
+	<x:complexType name="EnrichAnnoTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="EnrichAnno.sh"/>
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="EnrichAnnoTaskType">
+		<x:complexContent>
+			<x:extension base="EnrichAnnoTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="EnrichAnnoTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="EnrichAnnoTask" type="EnrichAnnoTaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->	
+	<x:complexType name="paramPValueCutoff_EnrichAnno">
+		<x:simpleContent>
+			<x:restriction base="paramDouble">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or ($value >= 0 and $value &lt;= 2)"  xerces:message="Parameter with name '{$tag}' must be between 0 and 1." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+</x:schema>
