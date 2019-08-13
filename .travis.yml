@@ -16,18 +16,20 @@ before_script:
   - ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
   
 stages:
-  - test
+  - test1
+  - test2
   - scan
   
 matrix:
   include:
-    - stage: test
+    - stage: test1
       name: 'signed commit test'
       env: TEST_NAME='SIGNED_COMMIT'
-    - name: 'write permission test'
-      env: TEST_NAME='WRITE_PERMISSION'
     - name: 'separate module test'
       env: TEST_NAME='SINGLE_MODULE'
+    - stage: test2 
+      name: 'write permission test'
+      env: TEST_NAME='WRITE_PERMISSION'
     - name: 'XSD validation test'
       env: TEST_NAME='XSD_VALIDATION'
     - name: 'XML documentation test'
