@@ -16,9 +16,9 @@ before_script:
   - ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
   
 stages:
-  - test1
-  - test2
-  - scan
+  - stage1
+  - stage2
+  - stage3
   
 matrix:
   include:
