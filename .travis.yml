@@ -22,19 +22,19 @@ stages:
   
 matrix:
   include:
-    - stage: test1
+    - stage: stage1
       name: 'signed commit test'
       env: TEST_NAME='SIGNED_COMMIT'
     - name: 'separate module test'
       env: TEST_NAME='SINGLE_MODULE'
-    - stage: test2 
+    - stage: stage2 
       name: 'write permission test'
       env: TEST_NAME='WRITE_PERMISSION'
     - name: 'XSD validation test'
       env: TEST_NAME='XSD_VALIDATION'
     - name: 'XML documentation test'
       env: TEST_NAME='XML_DOCUMENTATION'
-    - stage: scan
+    - stage: stage3
       name: 'virus scan test'
       script: /bin/bash "${WATCHDOG_BASE}/helper_scripts/travisCI_clamAV.sh"
 
