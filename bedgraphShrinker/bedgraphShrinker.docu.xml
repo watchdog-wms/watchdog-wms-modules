@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-08-13</updated>
+    <category>SEQUENCING</category>
+    <description maxVersion="1" minVersion="1">shrinks regions with the same score to one region in a bedgraph file or expands the file to a region size of one basepair</description>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="bedgraphFile" type="file" restrictions="absolute">
+      <description>path to a sorted, not overlapping BEDGRAPH file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outputFile" type="file" restrictions="absolute">
+      <description>path to the output file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="genomeSize" type="file" restrictions="absolute">
+      <description>path to file containing the size of the contigs</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="expand" type="boolean" default="false">
+      <description>expand the ranges instead of shrinking them</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="addZeroRanges" type="boolean" default="false">
+      <description>adds ranges that are missing with a zero value</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="omitZeroRanges" type="boolean" default="false">
+      <description>suppress the output of ranges with a zero value</description>
+    </param>
+  </parameter>
+</documentation>
