@@ -114,3 +114,4 @@ fi
 # exit with exit status 0 or exit code should be there earlier
 echoError "Reached end of script! Exit should be performed earlier..."
 exit $EXIT_REACHED_END_OF_SCRIPT
+
