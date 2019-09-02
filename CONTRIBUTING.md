@@ -1,10 +1,14 @@
 ### Contributing
 
-Contributions to this repository are welcome!
+Contributions to the [watchdog-wms-modules](watchdog-wms/watchdog-wms-modules) repository are welcome!
 If you want to share a module, please follow these steps:
 
 1) fork the repository
 2) commit your module into your fork
+    - either use the webinterface of Github (buttons are located left of green "Clone or Download" button)
+        - Create new file: create and commit a single file in a web editor
+        - Upload Files Button: use drag & drop gestures to upload multiple files or complete folders
+    - or clone the repository and use the git command line tools to create and push a new commit
 3) create a pull request
 4) automatic tests will be performed on your pull request (by Travis CI)
 5) members of the contributor team can merge your pull request if all checks succeed
