@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+ 
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>circRNA</category>
+    <description maxVersion="1" minVersion="1">combines the predictions of circularRNAs made with the modules for CIRI2 and circRNA_finder.</description>
+    <dependencies maxVersion="1" minVersion="1">Python3</dependencies>
+    <paperDescription>
+        Predictions of circular RNAs were combined by forming the union/intersection of the individual predictions. The circular reads were combined by forming the union/intersection of the predictions.
+    </paperDescription>
+  </info>
+
+  <maintainer>
+    <username>marie-sophie</username>
+  </maintainer>
+
+  <!-- mandatory fields per parameter: name, type, description -->
+  <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+  <parameter>
+    <param maxOccurs="1" minOccurs="1" name="inCircs1" type="file" restrictions="file exists">
+      <description>First prediction file with circRNAs and junction reads (tab-separated, 5 columns: chromosome, start, end, strand, list of reads)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="inCircs2" type="file" restrictions="file exists">
+      <description>Second prediction file with circRNAs and junction reads (tab-separated, 5 columns: chromosome, start, end, strand, list of reads)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outUnion" type="file">
+      <description>Output path for the union of the predictions (coordinates and reads)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outIntersection" type="file">
+      <description>Output path for the intersection of the predictions (coordinates and reads</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outIntersectedUnion" type="file">
+      <description>Output path for the intersected union of the predictions (intersection of coordinates, union of reads)</description>
+    </param>
+    <param default="2" maxOccurs="1" minOccurs="0" name="minReads" type="integer" restrictions=">=1">
+      <description>
+        Minimum number of predicted junction reads required for writing a circRNA into the output files. The cutoff is applied independently to the intersection, union and intersected union of the predictions.
+      </description>
+    </param>
+  </parameter>
+
+  <!-- mandatory fields per return variable: name, type, description -->
+  <!-- optional fields per return variable: minVersion, maxVersion -->
+  <return>
+    <var name="circUnion" type="file">
+      <description>Output path for the union of the predictions (same as input parameter outUnion)</description>
+    </var>
+    <var name="circIntersection" type="file">
+      <description>Output path for the intersection of the predictions (same as input parameter outIntersection)</description>
+    </var>
+    <var name="circIntersectedUnion" type="file">
+      <description>Output path for the intersected union of the predictions (same as input parameter outIntersectedUnion)</description>
+    </var>
+  </return>
+</documentation>
