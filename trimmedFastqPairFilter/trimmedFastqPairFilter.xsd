@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to separate trimmed paired-end reads into remaining read pairs and singleton reads without mate -->
+	<!-- REQUIREMENTS: python3 -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="trimmedFastqPairFilterTaskParameterType">
+		<x:all>
+			<!-- input files -->
+			<!-- first fastq file with trimmed reads -->
+			<x:element name="inReads1" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- second fastq file with trimmed reads -->
+			<x:element name="inReads2" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- prefix for the input files -> search for inPrefix[1|2].[fastq|fq], alternative to inReads1 and inReads2 -->
+			<x:element name="inPrefix" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- output files -->
+			<!-- first output fastq file with first reads of remaining pairs -->
+			<x:element name="outReads1" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- second output fastq file with second reads of remaining pairs -->
+			<x:element name="outReads2" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- third output fastq file with singleton reads -->
+			<x:element name="outSingletons" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- prefix for the output files -> create 3 files named prefix[1|2|singletons].fastq -->
+			<x:element name="outPrefix" type="paramString" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- definition of the return parameters of the module -->
+	<x:complexType name="trimmedFastqPairFilterTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<!-- returns values (file paths) of out1, out2 and sam-->
+					<x:element name="pairedReads1" type="x:string"/>
+					<x:element name="pairedReads2" type="x:string"/>
+					<x:element name="singletonReads" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="trimmedFastqPairFilterTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_trimmedFastqPairFilter.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="trimmedFastqPairFilterTaskType">
+		<x:complexContent>
+			<x:extension base="trimmedFastqPairFilterTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="trimmedFastqPairFilterTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="trimmedFastqPairFilterTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="trimmedFastqPairFilterTask" type="trimmedFastqPairFilterTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>

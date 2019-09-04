@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>circRNA</category>
+    <description maxVersion="1" minVersion="1">extracts paired reads from 2 fastq files.</description>
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+    <paperDescription>We removed all reads with missing mates from the paired-end fastq files.</paperDescription>
+  </info>
+
+  <maintainer>
+  	<username>marie-sophie</username>
+  </maintainer>
+  
+  <!-- mandatory fields per parameter: name, type, description -->
+  <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+  <parameter>
+    <param maxOccurs="1" minOccurs="0" name="inReads1" type="file" restrictions="file exists, fastq format (read names without read numbers as /1)">
+      <description>path to first fastq file with reads</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="inReads2" type="file" restrictions="file exists, fastq format (read names without read numbers as /2)">
+      <description>path to second fastq file with reads</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="inPrefix" type="string" restrictions="prefix1.[fastq|fq] and prefix2.[fastq|fq] exist and meet the restrictions of inReads1 and inReads2">
+      <description>reads in two fastq files: prefix1.[fastq|fq], prefix2.[fastq|fq], can be used instead of inReads1 and inReads2</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="outReads1" type="string">
+      <description>output file for first reads of paired data</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="outReads2" type="string">
+      <description>output file for second reads of paired data</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="outSingletons" type="string">
+      <description>output file for singleton reads without a mate</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="outPrefix" type="string">
+      <description>writes output to three files: prefix1.fastq, prefix2.fastq, prefixsingleton.fastq, can be used instead of outReads1, outReads2 and outSingleton</description>
+    </param>
+  </parameter>
+  
+  <!-- mandatory fields per return variable: name, type, description -->
+  <!-- optional fields per return variable: minVersion, maxVersion -->
+  <return>
+    <var name="pairedReads1" type="string">
+      <description>output file for first reads of paired data given in the parameters via outReads1 or outPrefix</description>
+    </var>
+    <var name="singletonReads" type="string">
+      <description>output file for second reads of paired data given in the parameters via outReads2 or outPrefix</description>
+    </var>
+    <var name="pairedReads2" type="string">
+      <description>output file for singleton reads without a mate given in the parameters via outReads2 or outPrefix</description>
+    </var>
+  </return>
+
+</documentation>
