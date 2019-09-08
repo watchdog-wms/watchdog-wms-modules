@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to concatenate 2 or more files -->
+	<!-- REQUIREMENTS: python3 -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="concatenateFilesTaskParameterType">
+		<x:all>
+			<!-- 2 or more input files -->
+			<x:element name="inFile" type="paramAbsoluteFilePath" minOccurs="2" maxOccurs="unbounded" />
+			<!-- output file -->
+			<x:element name="outFile" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- definition of the return parameters of the module -->
+	<x:complexType name="concatenateFilesTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<!-- returns file path given in outFile -->
+					<x:element name="concatenatedFile" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="concatenateFilesTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_concatenate.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="concatenateFilesTaskType">
+		<x:complexContent>
+			<x:extension base="concatenateFilesTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="concatenateFilesTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="concatenateFilesTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="concatenateFilesTask" type="concatenateFilesTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>
