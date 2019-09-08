@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to run calculate readout in a project from SRA -->
+	<!-- REQUIREMENTS: python3, R 3.5.1, recount and recount.bwtool package -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="recountReadoutTaskParameterType">
+		<x:all>
+			<!-- input -->
+			<!-- SRP id of the project or comma-separated list of ids, readout is calculated for all samples of the project(s) -->
+			<x:element name="projectID" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- file with SRP id(s) (content = value of projectID) -->
+			<x:element name="projectFile" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- tab-separated file with columns for gene coordinates, gene id, upstream region, downstream region and exonic basepairs -->
+			<x:element name="geneTSV" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- output -->
+			<!-- folder for the final output: a table per sample with normalized readcounts for the gene, the upstream region and the downstream region -->
+			<x:element name="outfolder" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- folder for temporary files: a bigwig file and an output file of bwtools per sample is stored -->
+			<x:element name="tmpfolder" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- optional parameter -->
+			<!-- path to Rscript executable -->
+			<x:element name="Rscript" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- number of threads (default 1) -->
+			<x:element name="threads" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- remove temporary files for samples (default true) -->
+			<x:element name="removeTmpSampleData" type="paramBoolean" minOccurs="0" maxOccurs="1"/>
+			<!-- remove temporary files for projects (default true) -->
+			<x:element name="removeTmpProjectData" type="paramBoolean" minOccurs="0" maxOccurs="1"/>
+			<!-- download bigwig files in parallel (default false) -->
+			<x:element name="downloadParallel" type="paramBoolean" minOccurs="0" maxOccurs="1"/>
+		</x:all>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="recountReadoutTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_recount_readout.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="recountReadoutTaskType">
+		<x:complexContent>
+			<x:extension base="recountReadoutTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="recountReadoutTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="recountReadoutTask" type="recountReadoutTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>

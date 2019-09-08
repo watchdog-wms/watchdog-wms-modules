@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+ 
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>SRA mining</category>
+    <description maxVersion="1" minVersion="1">calculates readout for every sample in a project from recount.</description>
+    <dependencies maxVersion="1" minVersion="1">Python3</dependencies>
+    <dependencies maxVersion="1" minVersion="1">R 3.5.x</dependencies>
+    <dependencies maxVersion="1" minVersion="1">R packages recount and recount.bwtool</dependencies>
+    <PMID>28398307</PMID>
+    <website>https://jhubiostatistics.shinyapps.io/recount/</website>
+    <paperDescription>
+        Normalized readcounts for genes, upstream regions and downstream regions were calculated from the bigwigfiles provided by the Recount2 project.
+    </paperDescription>
+  </info>
+
+  <maintainer>
+	<username>marie-sophie</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
+  </maintainer>
+
+  <!-- mandatory fields per parameter: name, type, description -->
+  <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+  <parameter>
+    <param maxOccurs="1" minOccurs="0" name="projectID" type="string" restrictions="mutually exclusive with projectFile">
+      <description>project id of a sra project indexed in recount2, it is possible to pass several project ids separated by ,</description>
+    </param>
+   	<param maxOccurs="1" minOccurs="0" name="projectFile" type="file" restrictions="file exists, mutually exclusive with projectID">
+      <description>file with one line giving project ids (file content = all allowed values for projectID)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="geneTSV" type="file" restrictions="file exists">
+      <description>
+        tab-separated file with genes, cooridantes, exonic basepairs and upstream and downstream regions
+        (requires a line with column names chr, geneid, exonic_bps, upstream_start, upstream_end, downstream_start and downstream_end)
+      </description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outfolder" type="folder">
+      <description>
+        folder for saving final results, creates a subfolder for the project with a table of coverage values for every sample in the project
+      </description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="tmpfolder" type="folder">
+      <description>folder for saving temporary data, creates a subfolder for the project (named projectID)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="Rscript" type="file" restrictions="executable">
+      <description>path to Rscript executable (preferentially version 5.3)</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="removeTmpSampleData" type="boolean">
+      <description>if this flag is set, temporary files for samples are deleted at the end (default behaviour)</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="removeTmpProjectData" type="boolean">
+      <description>if this flag is set, temporary files for projects are deleted at the end (default behaviour)</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="threads" type="integer" restrictions=">=1">
+      <description>number of threads to use, equivalent to number of samples processed in parallel</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="downloadParallel" type="boolean">
+      <description>if this flag is set, big wig files are downloaded by in parallel (default: not set)</description>
+    </param>
+  </parameter>
+
+  <!-- no return variable -->
+
+</documentation>
