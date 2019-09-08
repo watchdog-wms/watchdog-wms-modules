@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>circRNA</category>
+    <description maxVersion="1" minVersion="1">runs CIRI2 to detect circular RNAs in single-end or paired-end sequencing data.</description>
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+    <dependencies maxVersion="1" minVersion="1">perl</dependencies>
+    <paperDescription>We predicted circular RNAs using CIRI2.</paperDescription>
+    <website>https://sourceforge.net/projects/ciri/files/CIRI2/</website>
+    <PMID>28334140</PMID>
+  </info>
+
+  <maintainer>
+	<username>marie-sophie</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
+  </maintainer>
+
+  <!-- mandatory fields per parameter: name, type, description -->
+  <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+  <parameter>
+    <param maxOccurs="1" minOccurs="0" name="inReads1" type="file" restrictions="file exists, fastq format">
+      <description>path to first fastq file with reads (for single-end or paired-end data first reads)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="inReads2" type="file" restrictions="file exists, fastq format">
+      <description>path to second fastq file with reads (for paired-end data second reads only)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="inSAM" type="file" restrictions="file exists, SAM format">
+      <description>path to SAM file that was created with BWA Mem (can be used as input instead of fastq files)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="reference" type="file" restrictions="file exists, fasta format">
+      <description>path to (multi-)fasta file with the reference genome</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outPrefix" type="string">
+      <description>path and file name prefix for all files produced by this module, the final file is named out/prefixciriCirc.txt</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="outCirc" type="string">
+      <description>final output of predicted CircRNAs (can be used to save the final prediction in a different place than given in outPrefix)</description>
+    </param>
+    <param default="bwa" maxOccurs="1" minOccurs="0" name="bwaPath" type="file">
+      <description>specify a path to the BWA executable if bwa is not part of your PATH variable</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="bwaThreads" type="integer" restrictions="&gt;=1">
+      <description>number of threads to use with BWA, default:1</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="bwaIndex" type="string" restrictions="valid bwa index">
+      <description>BWA index for the reference genome provided by the --reference option, if no index is provided it is automatically created by the module</description>
+    </param>
+    <param default="19" maxOccurs="1" minOccurs="0" name="bwaSeedSize" type="integer" restrictions="&gt;=1">
+      <description>BWA -k parameter for the minimum seed length</description>
+    </param>
+    <param default="30" maxOccurs="1" minOccurs="0" name="bwaScoreThreshold" type="integer" restrictions="&gt;=1">
+      <description>BWA -T parameter for the minimum alignment score; default is 30, but 19 recommended for CIRI2</description>
+    </param>
+    <param default="CIRI2.pl" maxOccurs="1" minOccurs="0" name="ciriPath" type="file">
+      <description>path to CIRI2 perl script</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="ciriThreads" type="integer" restrictions="&gt;=1">
+      <description>number of threads to use for CIRI2</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="ciriAnnotation" type="file" restrictions="file exists, GTF format">
+      <description>GTF file with gene annotations for the genome given in the --reference option, if a GTF file is passed to this module, CIRI annotates all circRNAs with the corresponding gene</description>
+    </param>
+    <param default="high" maxOccurs="1" minOccurs="0" name="ciriStringency" type="string" restrictions="3 allowed values: high, medium or low">
+      <description>Controls how stringent CIRI2 filters the circRNAs based on circular reads, cigar strings and false positive reads</description>
+    </param>
+    <param default="False" maxOccurs="1" minOccurs="0" name="ciriKeepTmpFiles" type="boolean">
+      <description>if this flag is set, CIRI2 does not delete the temporary files at the end</description>
+    </param>
+  </parameter>
+
+  <!-- mandatory fields per return variable: name, type, description -->
+  <!-- optional fields per return variable: minVersion, maxVersion -->
+  <return>
+    <var name="ciriCircs" type="string">
+      <description>path to file with predicted circRNAs, it corresponds to the value of the parameter outCirc if it is set, otherwise the file path is derived from outPrefix</description>
+    </var>
+  </return>
+</documentation>
