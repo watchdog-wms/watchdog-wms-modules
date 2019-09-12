@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+	
+	<info>
+		<author>Sophie Friedl</author>
+		<PMID>20110278</PMID>
+		<paperDescription>Bed files were created from the bam files using bedtools bamtobed.</paperDescription>
+		<description>converts bam format into bed format</description>
+		<dependencies>python3</dependencies>
+		<dependencies>bedtools (version 2.x)</dependencies>
+		<website>https://bedtools.readthedocs.io/en/latest/</website>
+    		<category>sequencing</category>
+		<updated>2019-02-11</updated>
+	</info>
+
+	<maintainer>
+		<username>marie-sophie</username>
+		<username>friedelcc</username>
+		<username>klugem</username>
+	</maintainer>
+
+	<parameter>
+		<param name="inBam" type="string" restrictions="valid file path, bam format">
+			<description>Path to the bam file that will be converted into bed format. An index of the bam file is not required.</description>
+		</param>
+		<param name="outBed" type="string">
+			<description>Path for saving the resulting bed file.</description>
+		</param>
+		<param name="bedtoolsPath" type="string" default="bedtools" restrictions="valid file path to executable">
+			<description>Path to the bedtools executable. Per default, it is assumed that bedtools is in the PATH variable.</description>
+		</param>
+		<param name="split" type="boolean" default="true">
+			<description>Defines how split alignments (cigar string that contains N) are handled. If true, the skipped region is not included in the bed regions. If false, the skipped region is included in the bed region, i.e. there is only one interval from alignment start to alignment end.</description>
+		</param>
+	</parameter>
+
+  	<return>
+    	<var name="bedFile" type="string">
+      		<description>path to the bed file that is created (same value as outBed parameter)</description>
+    	</var>
+  	</return>
+  	
+</documentation>
