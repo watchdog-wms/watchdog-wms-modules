@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>ChIP-seq</category>
+    <description maxVersion="1" minVersion="1">removes read pairs from sam/bam files created by bwa sampe</description>
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+    <dependencies maxVersion="1" minVersion="1">pysam package</dependencies>
+    <paperDescription>We removed read pairs with unmapped reads/ improper pair classification/ low mapping quality/ multi-mappings (adjust to options used)</paperDescription>    
+  </info>
+
+  <maintainer>
+	<username>marie-sophie</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
+  </maintainer>
+  
+  <parameter>
+    <param maxOccurs="1" minOccurs="1" name="inSamBam" type="file" restrictions="file exsists, ending .sam or .bam">
+      <description>path to mapped paired reads in sam or bam format (recognized by file ending) created by bwa sampe</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outSamBam" type="string">
+      <description>path to write remaining paired reads in sam or bam format (recognized by file ending)</description>
+    </param>
+    <param default="True" maxOccurs="1" minOccurs="0" name="removeUnmapped" type="boolean">
+      <description>use this flag to remove pairs with at least one unmapped read</description>
+    </param>
+    <param default="True" maxOccurs="1" minOccurs="0" name="removeImproperPairs" type="boolean">
+      <description>use this flag to remove pairs that are not properly paired according to bwa sampe</description>
+    </param>
+    <param default="20" maxOccurs="1" minOccurs="0" name="removeMapqBelow" type="integer" restrictions="&gt;=0">
+      <description>remove all read pairs with at least one mate of mapping quality smaller than minQuality (taken from field "MAPQ" in SAM file), setting the option to 0 deactivates filtering based on mapping quality</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="removeMoreThanOptimalHits" type="integer" restrictions="&gt;=0">
+      <description>remove all read pairs with more than maxHits optimal alignment positions for at least one mate (based bwa aln specific tag "X0"), setting the option to 0 deactivates filtering based on hit number</description>
+    </param>
+  </parameter>
+  
+  <return>
+    <var name="filteredPairs" type="file">
+      <description>path of the sam/bam file with the remaining read pairs (same value as given in parameter outSamBam)</description>
+    </var>
+  </return>
+
+</documentation>
