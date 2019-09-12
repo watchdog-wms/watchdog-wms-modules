@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to delete a folder -->
+	<!-- REQUIREMENTS: python 3 -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="deleteFolderTaskParameterType">
+		<x:all>
+			<!-- folder to delete -->
+			<x:element name="folder" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="deleteFolderTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_delete_folder.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="deleteFolderTaskType">
+		<x:complexContent>
+			<x:extension base="deleteFolderTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="deleteFolderTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="deleteFolderTask" type="deleteFolderTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>
