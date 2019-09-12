@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to create a folder -->
+	<!-- REQUIREMENTS: python 3 -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="createFolderTaskParameterType">
+		<x:all>
+			<!-- folder to create-->
+			<x:element name="folderPath" type="paramString" minOccurs="1" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="createFolderTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_create_folder.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="createFolderTaskType">
+		<x:complexContent>
+			<x:extension base="createFolderTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="createFolderTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="createFolderTask" type="createFolderTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>
