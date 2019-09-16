@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to run phantompeakqualtools for QC of mapped ChIP-seq data -->
+	<!-- REQUIREMENTS: python3, R with spp package -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="phantomPeakTaskParameterType">
+		<x:all>
+			<!-- required options -->
+			<!-- path spp script : run_spp.R -->
+			<x:element name="sppPath" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- input file: bam file with mapped reads from a ChIP-seq experiment-->
+			<x:element name="inBam" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- output prefix: create 3 output files with endings .txt (summary), .pdf (cross-correlation plot) and .Rdata (R session with plot data) -->
+			<x:element name="outPrefix" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- additional options -->
+			<!-- number of threads -->
+			<x:element name="threads" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- path to Rscript executable -->
+			<x:element name="rscriptPath" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- temporary directory: the tool will copy the bam file there and rename it with a random suffix -->
+			<x:element name="tmpdir" type="paramAbsoluteFolderPath" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- no return values-->
+
+	<!-- set command of script to call -->
+	<x:complexType name="phantomPeakTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_phantompeakqualtools.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="phantomPeakTaskType">
+		<x:complexContent>
+			<x:extension base="phantomPeakTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="phantomPeakTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<!-- no return value -->
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="phantomPeakTask" type="phantomPeakTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>
