@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to remove linearly mappable reads from a circRNA prediction -->
+	<!-- REQUIREMENTS: python3, pysam library -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="removeLinearReadsTaskParameterType">
+		<x:all>
+			<!-- input files -->
+			<!--  predicted circRNAs from the CIRI2, circRNAfinder or circCOmbination module-->
+			<x:element name="circRNAPrediction" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- SAM or BAM file with mapped reads generated from the same samples as circRNAPrediction -->
+			<x:element name="mapping" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- output files -->
+			<!-- updated circRNA prediction without reads that are mapped linearly in the given mapping-->
+			<x:element name="circOut" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- required setting -->
+			<!-- indicates if mapping contains single-end (no) or paired-end (yes) data, allowed values: "yes" and "no" -->
+			<x:element name="paired" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- optional settings -->
+			<!-- minimum number of supporting junction reads to keep a circRNA in the output file, default 2 -->
+			<x:element name="minReads" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- definition of the return parameters of the module -->
+	<x:complexType name="removeLinearReadsTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<!-- returns file path of the table with the updated predicted circular RNAs -->
+					<x:element name="filteredCircs" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="removeLinearReadsTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_remove_linear_circ_reads.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="removeLinearReadsTaskType">
+		<x:complexContent>
+			<x:extension base="removeLinearReadsTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="removeLinearReadsTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="removeLinearReadsTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="removeLinearReadsTask" type="removeLinearReadsTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>
