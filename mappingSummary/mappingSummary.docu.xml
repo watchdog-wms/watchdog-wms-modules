@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>sequencing</category>
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+    <dependencies maxVersion="1" minVersion="1">matplotlib</dependencies>
+    <dependencies maxVersion="1" minVersion="1">seaborn</dependencies>
+    <description maxVersion="1" minVersion="1">summarizes read counts remaining after different analysis steps of sequencing data</description>
+    <paperDescription>We created figures summarizing the number of reads in our sequencing experiments before and after adapter removal and mapping.</paperDescription>
+  </info>
+
+  <maintainer>
+	<username>marie-sophie</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
+  </maintainer>
+
+  <parameter>
+  	<param maxOccurs="1" minOccurs="0" name="basicStatsSummary" type="file" restrictions="file exists, output of mergeStatistics module">
+      <description>Output of the Watchdog Module mergeStatistics applied on the Basic Statistics reported by FASTQC (tab-separated table, column 0: type of count, column 1: read count, column 2: file name)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="rawRegex" type="string" restrictions="valid regular expression in python re">
+      <description>regular expression with one group expression to extract the sample name from the name of a fastq file with untrimmed reads</description>
+    </param>
+	<param maxOccurs="1" minOccurs="0" name="trimRegex" type="string" restrictions="valid regular expression in python re">
+      <description>regular expression with one group expression to extract the sample name from the name of a fastq file with trimmed reads</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="idxstatsSummary" type="file" restrictions="file exists, output of mergeStatistics module">
+      <description>Output of the Watchdog Module mergeStatistics applied on the Idxstatistics reported by the bamstats module (tab-separated table, column 0: chromosome, column 2: read count, column 4: file name)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="bamRegex" type="string" restrictions="valid regular expression in python re">
+      <description>regular expression with one group expression to extract the sample name from the name of a bam file with mapped reads</description>
+    </param>
+   	<param maxOccurs="1" minOccurs="0" name="chromosomeGroupingTable" type="file">
+      <description>tab-separated table with a header with chromosome names in column 0 and groups in column 1</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="countTable" type="string">
+      <description>path for writing a table with all extracted read counts</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="countPlot" type="string">
+      <description>path for saving a summary plot of total, trimmed and mapped reads, format is identified by file ending, all formats supported by pyplot are allowed</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="groupPlot" type="string">
+      <description>path for saving a summary plot of the fraction of mapped reads for given groups of chromosomes, format is identified by file ending, all formats supported by pyplot are allowed</description>
+    </param>
+  </parameter>
+</documentation>
