@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to copy a file -->
+	<!-- REQUIREMENTS: python 3 -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="copyFileTaskParameterType">
+		<x:all>
+			<!-- source and target of the copy call -->
+			<x:element name="sourcePath" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="targetPath" type="paramString" minOccurs="1" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="copyFileTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_copy_file.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="copyFileTaskType">
+		<x:complexContent>
+			<x:extension base="copyFileTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="copyFileTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="copyFileTask" type="copyFileTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>
