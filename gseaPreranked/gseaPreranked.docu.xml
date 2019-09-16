@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>RNA-seq</category>
+    <description maxVersion="1" minVersion="1">peforms gene set enrichment analysis with GSEAPreranked</description>
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+    <dependencies maxVersion="1" minVersion="1">java8</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GSEA</dependencies>
+    <website>http://software.broadinstitute.org/gsea/index.jsp</website>
+    <PMID>16199517</PMID>
+    <paperDescription>We performed gene set enrichment analysis with GSEAPreranked.</paperDescription>
+  </info>
+
+  <maintainer>
+	<username>marie-sophie</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
+  </maintainer>
+
+  <parameter>
+    <param maxOccurs="1" minOccurs="1" name="gseaJar" type="file">
+      <description>Path of the GSEA jar file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="label" type="string">
+      <description>name of the analysis, e.g. sample name</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outdir" type="string">
+      <description>directory to store the results of GSEA</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="geneTab" type="file" restrictions="file exists">
+      <description>tab-separated table of genes with expression values/changes</description>
+    </param>
+    <param default="False" maxOccurs="1" minOccurs="0" name="hasHeader" type="boolean">
+      <description>indicates if the first line of the geneTab should be interpreted as header</description>
+    </param>
+    <param default="0" maxOccurs="1" minOccurs="0" name="geneCol" type="integer" restrictions="&gt;=0">
+      <description>0-based position of the column with gene names</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="rankCol" type="integer" restrictions="&gt;=0">
+      <description>0-based position of the column with values to rank the genes, e.g. fold changes</description>
+    </param>
+    <param default="hallmark" maxOccurs="1" minOccurs="0" name="geneset" type="string" restrictions="allowed values: go, hallmark, transcription_factor, oncogenic_signatures, immunologic_signatures">
+      <description>gene sets to test for enrichment</description>
+    </param>
+    <param default="6.1" maxOccurs="1" minOccurs="0" name="genesetVersion" type="string">
+      <description>version of MSigDB to use</description>
+    </param>
+    <param default="unweighted" maxOccurs="1" minOccurs="0" name="scoring" type="string" restrictions="allowed values: weighted, unweighted">
+      <description>unweighted: classic score based on ranks, weighted: score includes values used for ranking</description>
+    </param>
+    <param default="50" maxOccurs="1" minOccurs="0" name="plotNr" type="integer" restrictions="gt;0">
+      <description>create plots for "plot_nr" top scoring genes</description>
+    </param>
+  </parameter>
+</documentation>

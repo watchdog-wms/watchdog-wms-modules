@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to run GSEAPreranked to detect enriched gene sets -->
+	<!-- REQUIREMENTS: python3 -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="gseaPrerankedTaskParameterType">
+		<x:all>
+
+			<!-- reuired options -->
+			<!-- GSEA executable -->
+			<x:element name="gseaJar" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- input table with all genes and their fold changes-->
+			<x:element name="geneTab" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- output folder: created if it does not exist -->
+			<x:element name="outdir" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- name of the analysis, e.g. the sample name-->
+			<x:element name="label" type="paramString" minOccurs="1" maxOccurs="1" />
+
+			<!-- input format -->
+			<!-- if first line is header -->
+			<x:element name="hasHeader" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<!-- positions of the columns with gene names and ranking values -->
+			<x:element name="geneCol" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<x:element name="rankCol" type="paramInteger" minOccurs="0" maxOccurs="1" />
+
+			<!-- algorithm options -->
+			<!-- default: hallmark, other sets: go, transcription_factor, oncogenic_signatures, immunologic_signatures-->
+			<x:element name="geneset" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- version of MSigDB to use, default: 6.1 -->
+			<x:element name="genesetVersion" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- 'weighted' (based on ranks and ranking value) or 'unweighted' (based on ranks only) score-->
+			<x:element name="scoring" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- number of gene sets (top enriched sets) for which detailed output is created, default: 50-->
+			<x:element name="plotNr" type="paramInteger" minOccurs="0" maxOccurs="1" />
+
+		</x:all>
+	</x:complexType>
+
+	<!-- definition of the return parameters of the module -->
+	<!--<x:complexType name="gseaPrerankedTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>-->
+					<!-- returns file path of table with circular RNAs -->
+	<!--				<x:element name="ciriCircs" type="x:string"/>
+					<x:element name="ciriCircs" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType> -->
+
+	<!-- set command of script to call -->
+	<x:complexType name="gseaPrerankedTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_gsea.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="gseaPrerankedTaskType">
+		<x:complexContent>
+			<x:extension base="gseaPrerankedTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="gseaPrerankedTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<!--<x:element name="return" type="ciri2TaskReturnType" minOccurs="0" maxOccurs="0" />-->
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="gseaPrerankedTask" type="gseaPrerankedTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>
