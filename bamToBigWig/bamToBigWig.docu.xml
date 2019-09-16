@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+	<info>
+		<author>Sophie Friedl</author>
+		<PMID>27079975</PMID>
+		<paperDescription>BigWig files were created from the bam files using the tool bamCoverage from the deepTools tool suite.</paperDescription>
+		<description>converts bam format into bigwig format</description>
+		<dependencies>python3</dependencies>
+		<dependencies>deeptools >=2.0</dependencies>
+		<website>https://deeptools.readthedocs.io/en/develop/</website>
+		<category>sequencing</category>
+		<updated>2019-02-11</updated>
+	</info>
+
+	<maintainer>
+		<username>marie-sophie</username>
+		<username>friedelcc</username>
+		<username>klugem</username>
+	</maintainer>
+
+	<parameter>
+		<param name="inBam" type="string" restrictions="valid file path, file ending .bam, indexed">
+			<description>Path to the bam file that will be converted into bigWig format. The bam file has to be indexed.</description>
+		</param>
+		<param name="outBw" type="string">
+			<description>Path for saving the resulting bigWig file.</description>
+		</param>
+		<param name="bamCoveragePath" type="string" default="bamCoverage" restrictions="valid file path">
+			<description>Path to the executable bamCoverage which is part of deepTools. Per default, it is assumed that bamCoverage is in the PATH variable.</description>
+		</param>
+		<param name="binSize" type="integer" default="1" restrictions="positive, not zero">
+			<description>Resolution of the bigWig file. Increasing the binSize causes loss of information but decreases the size of the bigWig file. Highest resolution (at single basepair level) is achieved for binSize=1 (default).</description>
+		</param>
+		<param name="numberOfProcessors" type="integer" default="1" restrictions="positive, not zero">
+			<description>Number of processors to use (parallelization)</description>
+		</param>
+	</parameter>
+	<return>
+	    <var name="bigWigFile" type="string">
+	      <description>Path to the output bigWig file</description>
+	    </var>
+	</return>
+</documentation>

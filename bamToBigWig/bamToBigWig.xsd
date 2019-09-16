@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to run bamCoverage (deepTools) -->
+	<!-- REQUIREMENTS: python3, deepTools python package -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="bamToBigWigTaskParameterType">
+		<x:all>
+			<!-- file paths -->
+			<!-- input file: bam file (ending .bam) with in an index file (ending .bam.bai) -->
+			<x:element name="inBam" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- output file: bigwig file -->
+			<x:element name="outBw" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- parameters for running bamCoverage -->
+			<!-- path to bamCoverage executable, default: bamCoverage (in PATH) -->
+			<x:element name="bamCoveragePath" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- interval size for which the coverages are calculated, default: 1 -->
+			<x:element name="binSize" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- number of parallel worker processes, default: 1-->
+			<x:element name="numberOfProcessors" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- definition of the return parameters of the module -->
+	<x:complexType name="bamToBigWigTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<!-- returns value: path to the bigwig file-->
+					<x:element name="bigWigFile" type="x:string" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="bamToBigWigTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_bam_to_bigwig.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="bamToBigWigTaskType">
+		<x:complexContent>
+			<x:extension base="bamToBigWigTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="bamToBigWigTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="bamToBigWigTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="bamToBigWigTask" type="bamToBigWigTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>
