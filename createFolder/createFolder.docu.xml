@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>File Utils</category>
+    <description maxVersion="1" minVersion="1">creates a folder and its parent directories.</description>
+    <dependencies maxVersion="1" minVersion="1">Python3</dependencies>
+  </info>
+
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+	<username>marie-sophie</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
+  </maintainer>
+
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="folderPath" type="folder">
+      <description>folder that will be created</description>
+    </param>
+  </parameter>
+</documentation>
