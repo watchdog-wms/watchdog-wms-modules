@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- wrapper module for bedtools genomecov and igvtools toTDF: the module creates a bedgraph file from a bam file and compresses it for the visualization of the mapping in IGV -->
+	<!-- REQUIREMENTS: python3, bedtools, igvtools (tools installed in /home/proj/software)-->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="genomeCoverageTaskParameterType">
+		<x:all>
+			<!-- required: options for running bedtools genomecov -->
+			<!-- path to bam file with mapped reads -->
+			<x:element name="bam" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- path to write bedgraph to -->
+			<x:element name="outPrefix" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- optional: options for running igvtools toTDF -->
+			<!-- creates a compressed bedgraph file -> increases performance of IGV, default tdf=true-->
+			<x:element name="tdf" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<!-- path to a igv genome file (*.genome) or a file with chromosome sizes (*.chrom.sizes), required only if tdf is set to true, the genome file should cover the genome the was used for creating the bam file -->
+			<x:element name="genome" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- optional: pass paths of executables if they are not in PATH -->
+			<x:element name="bedtoolsPath" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="igvtoolsPath" type="paramString" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="genomeCoverageTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+			<x:attribute name="binName" type="x:string" fixed="main_genome_coverage.py" />
+			<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="genomeCoverageTaskType">
+		<x:complexContent>
+			<x:extension base="genomeCoverageTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="genomeCoverageTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="genomeCoverageTask" type="genomeCoverageTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>
