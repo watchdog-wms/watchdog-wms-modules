@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+    
+    <!-- mandatory fields: author, category, updated, description -->
+    <info>
+      <author>Sophie Friedl</author>
+      <updated>2019-02-11</updated>
+      <category>circRNA</category>
+      <description maxVersion="1" minVersion="1">runs circRNA_finder to detect circular RNAs in single-end or paired-end sequencing data.</description>
+      <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+      <dependencies maxVersion="1" minVersion="1">perl</dependencies>
+      <dependencies maxVersion="1" minVersion="1">awk</dependencies>
+      <dependencies maxVersion="1" minVersion="1">samtools</dependencies>
+      <paperDescription>We predicted circular RNAs using circRNA_finder.</paperDescription>
+      <website>https://github.com/orzechoj/circRNA_finder</website>
+      <PMID>25544350</PMID>
+    </info>
+
+  <maintainer>
+	<username>marie-sophie</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
+  </maintainer>
+
+  <!-- mandatory fields per parameter: name, type, description -->
+  <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+  <parameter>
+    <param maxOccurs="1" minOccurs="0" name="inReads1" type="file" restrictions="file exists, fastq format">
+      <description>path to single-end fastq file or path to first fastq file with paired reads</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="inReads2" type="file" restrictions="file exists, fastq format">
+      <description>path to second fastq file with paired reads (paired-end data only)</description>
+    </param>
+    <param default="0" maxOccurs="1" minOccurs="0" name="strandedLibrary" type="integer" restrictions="allowed values: 0,1,2">
+      <description>indicates if the library is strand specific, 0 = unstranded/unknown, 1 = stranded (first read), 2 = stranded (second read), (default: 0),if the library type is unstranded/unknown the strand is guessed from the strand of the AG-GT splice site</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="reference" type="file" restrictions="file exists, fasta format">
+      <description>path to (multi-)fasta file with the reference genome (not required if STAR index or a STAR results is provided)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="inSTAR" type="string">
+      <description>output prefix of a STAR mapping that was created with STAR run with chimeric segment detection</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outPrefix" type="string">
+      <description>path and file name prefix for all files produced by this module; the final file is named out/prefixcfCirc.txt</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="outCirc" type="string">
+      <description>final output of predicted CircRNAs (can be used to save the final prediction in a different place than given in outPrefix)</description>
+    </param>
+    <param default="STAR" maxOccurs="1" minOccurs="0" name="starPath" type="file">
+      <description>specify a path to the STAR executable if STAR is not part of your PATH variable</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="starIndex" type="file">
+      <description>STAR index for the reference genome, if no index is provided it is automatically created by the module using the file given by --reference</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="starThreads" type="integer" restrictions="&gt;=1">
+      <description>number of threads to use with STAR</description>
+    </param>
+    <param default="postProcessStarAlignment.pl" maxOccurs="1" minOccurs="0" name="cfPath" type="file">
+      <description>path to circRNA_finder perl script postProcessStarAlignment.pl</description>
+    </param>
+  </parameter>
+  
+
+  <return>
+    <var name="cfCircs" type="string">
+      <description>path to file with predicted circRNAs, it corresponds to the value of the parameter outCirc if it is set, otherwise the file path is derived from outPrefix</description>
+    </var>
+  </return>
+
+</documentation>
