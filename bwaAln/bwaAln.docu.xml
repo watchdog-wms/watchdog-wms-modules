@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>ChIP-seq</category>
+    <description maxVersion="1" minVersion="1">maps reads with bwa aln</description>
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+    <dependencies maxVersion="1" minVersion="1">bwa</dependencies>
+    <website>http://bio-bwa.sourceforge.net</website>
+    <paperDescription>We mapped the reads with bwa aln.</paperDescription>
+    <PMID>19451168</PMID>
+  </info>
+
+  <maintainer>
+	<username>marie-sophie</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
+  </maintainer>
+
+  <parameter>
+    <param maxOccurs="1" minOccurs="1" name="inReads" type="file" restrictions="file exists, fastq format, ending .fq or .fastq">
+      <description>fastq file with the sequenced reads</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="bwaIndex" type="string">
+      <description>Common prefix of bwa index files for the reference genome</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outSai" type="string">
+      <description>file for writing mapped reads in bwa format</description>
+    </param>
+    <param default="bwa" maxOccurs="1" minOccurs="0" name="bwaPath" type="file" restrictions="file exists, bwa executable">
+      <description>path to BWA executable (default: use executable from PATH)</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="threads" type="integer" restrictions="&gt;0">
+      <description>number of threads to use for bwa aln (-t option of bwa)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="stopIfMoreThanBestHits" type="integer" restrictions="&gt;0">
+      <description>stop searching when there are more than that many best hits (default: use bwa default)</description>
+    </param>
+  </parameter>
+
+  <return>
+    <var name="bwaSaiFile" type="string">
+      <description>*.sai file created by the module (same value as given by the parameter outSai)</description>
+    </var>
+  </return>
+
+</documentation>
