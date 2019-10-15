@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to count reads that were mapped to different organisms -->
+	<!-- REQUIREMENTS: python3 with seaborn, matplotlib -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="mappingSummaryTaskParameterType">
+		<x:all>
+			<!-- input files -->
+			<!-- output of mergeStatistics module for fastQC (Basic_statistics.txt)-->
+			<x:element name="basicStatsSummary" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- output of mergeStatistics module for idxtstats -->
+			<x:element name="idxstatsSummary" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- tab-separated table with up to 2 columns (position of column matters, first line header starts with #): chromosomeName, chromosomeGroup -->
+			<x:element name="chromosomeGroupingTable" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- output files -->
+			<!-- tab-separated table with extracted counts -->
+			<x:element name="countTable" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- plot with total, trimmed and mapped reads -->
+			<x:element name="countPlot" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- plot with mapped read groups -->
+			<x:element name="groupPlot" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- regular expressions for matching sample names -->
+			<!-- regular expression to get sample names from raw fastq files -->
+			<x:element name="rawRegex" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- regular expression to get sample names from trimmed fastq files -->
+			<x:element name="trimRegex" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- regular expression to get sample names from bam files -->
+			<x:element name="bamRegex" type="paramString" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="mappingSummaryTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+			<x:attribute name="binName" type="x:string" fixed="main_mappingsum.py" />
+			<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="mappingSummaryTaskType">
+		<x:complexContent>
+			<x:extension base="mappingSummaryTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="mappingSummaryTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="mappingSummaryTask" type="mappingSummaryTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>

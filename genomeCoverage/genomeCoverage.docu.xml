@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>sequencing</category>
+    <description maxVersion="1" minVersion="1">converts bam format to bedgraph and tdf format</description>
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+    <dependencies maxVersion="1" minVersion="1">bedtools</dependencies>
+    <dependencies maxVersion="1" minVersion="1">igvtools</dependencies>
+    <PMID>20110278</PMID>
+    <PMID>21221095</PMID>
+    <website>https://bedtools.readthedocs.io/en/latest/</website>
+    <website>https://software.broadinstitute.org/software/igv/igvtools_commandline</website>
+    <paperDescription>We created files for visualizing mapped reads with bedtools and igvtools.</paperDescription>
+  </info>
+
+  <maintainer>
+	<username>marie-sophie</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
+  </maintainer>
+
+  <parameter>
+    <param maxOccurs="1" minOccurs="1" name="bam" type="file" restrictions="file exists, BAM format, reads sorted by coordinates">
+      <description>path to bam file whose genome coverage should be analyzed</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="genome" type="file" restrictions="file exists, ending *.genome for an IGV genome file or ending *.chrom.sizes for a simple text file with genome sizes">
+      <description>genome file or file with chromosome sizes for the genome that was used to create the bam file, the file is required only if the tdf option is set</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outPrefix" type="string">
+      <description>file name prefix for saving the bedgraph file (outPrefix.bedgraph) and the tdf file (outPrefix.bedgraph.tdf)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="tdf" type="boolean" default="true">
+      <description>transform bedgraph file into tdf format using igvtools</description>
+    </param>
+
+    <param maxOccurs="1" minOccurs="0" name="bedtoolsPath" type="file" restrictions="existing executable" default="bedtools (in PATH)">
+      <description>path to bedtools executable, use if bedtools is not in PATH</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="igvtoolsPath" type="file" restrictions="existing executable" default="igvtools (in PATH)">
+      <description>path to igvtools executable, use if igvtools is not in PATH</description>
+    </param>
+  </parameter>
+</documentation>

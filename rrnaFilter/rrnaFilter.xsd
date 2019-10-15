@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to filter rrna reads from paired-end rrna seq data -->
+	<!-- REQUIREMENTS: bwa in $PATH, pysam library -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="rrnaFilterTaskParameterType">
+		<x:all>
+			<!-- input files -->
+			<!-- first gzipped or uncompressed fastq file (ending .fq.gz, .fq, .fastq) with reads (single-end data: all reads, paired-end data: first reads) -->
+			<x:element name="in1" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- second gzipped or uncompressed fastq file (ending .fq.gz, .fq, .fastq) with reads (only for paired-end data: second reads) -->
+			<x:element name="in2" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- prefix for bwa index of rrna sequence -->
+			<x:element name="rrnaIndex" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- output files -->
+			<!-- path of gzipped fastq (ending .fq.gz), uncompressed fastq (ending .fq or .fastq) or fasta (ending .fa) file to write non-rrna reads (single-end data: all reads, paired-end data: first reads) -->
+			<x:element name="out1" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- path of gzipped fastq (ending .fq.gz), uncompressed fastq (ending .fq or .fastq) or fasta (ending .fa) file to write non-rrna reads (only for paired-end data: second reads)-->
+			<x:element name="out2" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- path of san file to write mapped rrna reads -->
+			<x:element name="sam" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- path to directory to write temporary files to, default: watchdog working directory -->
+			<x:element name="workdir" type="paramAbsoluteFolderPath" minOccurs="0" maxOccurs="1" />
+			<!-- flag to keep temporary files in workdir-->
+			<x:element name="keepTmp" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<!-- parameters for running bwa -->
+			<!-- path to bwa executable -->
+			<x:element name="bwaPath" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- seed size (-k), default: 25 -->
+			<x:element name="seedSize" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- threads (-t), default: 1-->
+			<x:element name="threads" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- parameters for filtering rrna reads, default option: no filtering -->
+			<!-- filtering based on edit distance -->
+			<x:element name="maxEditDistance" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- filtering based on mismatches -->
+			<x:element name="maxMismatches" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- filtering based on indels -->
+			<x:element name="maxIndels" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- consistent filtering of pairs, pairFiltering == 2 (default): both reads have to meet rrna criteria, pairFiltering == 1 : only one read of a pair has to meet rrna criteria -->
+			<x:element name="pairFiltering" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- definition of the return parameters of the module -->
+	<x:complexType name="rrnaFilterTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<!-- returns values (file paths) of out1, out2 and sam-->
+					<x:element name="rrnaSAMFile" type="x:string"/>
+					<x:element name="filteredFQ1" type="x:string"/>
+					<x:element name="filteredFQ2" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="rrnaFilterTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_rrnafilter.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="rrnaFilterTaskType">
+		<x:complexContent>
+			<x:extension base="rrnaFilterTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="rrnaFilterTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="rrnaFilterTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="rrnaFilterTask" type="rrnaFilterTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>

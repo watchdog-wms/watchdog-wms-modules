@@ -18,12 +18,19 @@ DEFINE_string 'pattern' '' 'pattern to search for' 'p'
 DEFINE_string 'file' '' 'file to search in' 'f'
 DEFINE_string 'outputFile' '' 'return of grep is written to that output file' 'o'
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(grep --version 2>&1 | head -n 1 | cut -d " " -f 1 --complement)
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_pattern" ]; then

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to run BWA and CIRI2 to detect circRNAs -->
+	<!-- REQUIREMENTS: python3, bwa & CIRI2 -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="ciri2TaskParameterType">
+		<x:all>
+			<!-- input files -->
+			<!-- first fastq file with paired reads or fastq file with single-end reads -->
+			<x:element name="inReads1" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- second fastq file with paired reads -->
+			<x:element name="inReads2" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- SAM file produced by BWA -> skip mapping step -->
+			<x:element name="inSAM" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- multi-fasta file with the reference genome -->
+			<x:element name="reference" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- output files -->
+			<!-- prefix for output -> writes temporary files -->
+			<x:element name="outPrefix" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- path for final output file with circRNA coordinates -->
+			<x:element name="outCirc" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- bwa options -->
+			<!-- path to bwa executable -->
+			<x:element name="bwaPath" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- number of threads for bwa -->
+			<x:element name="bwaThreads" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- index for bwa -->
+			<x:element name="bwaIndex" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- minimum seed size of bwa (-k parameter, default: 19) -->
+			<x:element name="bwaSeedSize" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- minimum alignment score (-T parameter, default: 30) -->
+			<x:element name="bwaScoreThreshold" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- ciri2 options -->
+			<!-- path to ciri2 executable -->
+			<x:element name="ciriPath" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- number of threads for ciri -->
+			<x:element name="ciriThreads" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- GTF file for annotation of circRNAs by ciri with geneID etc. -->
+			<x:element name="ciriAnnotation" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<!-- CIRI filtering stringency: low, medium of high (default) -->
+			<x:element name="ciriStringency" type="paramString" minOccurs="0" maxOccurs="1" />
+			<!-- keep temporary files of CIRI -->
+			<x:element name="ciriKeepTmpFiles" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- definition of the return parameters of the module -->
+	<x:complexType name="ciri2TaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<!-- returns file path of table with circular RNAs -->
+					<x:element name="ciriCircs" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="ciri2TaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_ciri.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="ciri2TaskType">
+		<x:complexContent>
+			<x:extension base="ciri2TaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="ciri2TaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="ciri2TaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="ciri2Task" type="ciri2TaskType" substitutionGroup="abstractTask" />
+
+</x:schema>

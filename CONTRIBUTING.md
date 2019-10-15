@@ -25,8 +25,9 @@ To become a member, please follow these steps:
 
 ### Module structure
 
-Modules must contain at least an XSD module definition file (*moduleName.xsd*) and an XML documentation file (*moduleName.docu.xml*).
+Modules must contain at least an XSD module definition file (*moduleName.xsd*) and an XML documentation file (*moduleName.docu.xml*). 
 If test data is included, it should be stored in a folder named *test_data*.
+Files shared between modules must be located in the [sharedUtils/](https://github.com/watchdog-wms/watchdog-wms-modules/tree/master/sharedUtils) folder.
 
 Example:
 
@@ -50,7 +51,7 @@ Currently the following tests are implemented:
 - write permission test:
   - the github username of the creator of the pull request must be included in the XML documentation file (*\<maintainer\>* tag)
 - separate module test: 
-  - all files affected by the pull request must be part of one module
+  - all files affected by the pull request must be part of one module (exception: files located in [sharedUtils/](https://github.com/watchdog-wms/watchdog-wms-modules/tree/master/sharedUtils) are allowed)
 - XSD validation test: 
   - XSD module definition file must be parseable by Watchdog
 - XML documentation test:   

@@ -38,12 +38,27 @@ DEFINE_string 'foldchangeCutoff' '0.0,0.415,1.0' "log2 foldchange cutoffs for wh
 DEFINE_string 'foldchangeCutoffNames' 'significant,0.33-fold,2-fold' "corresponding names to the foldchange cutoffs; separated by ','" ''
 DEFINE_string 'output' '' 'output folder' 'o'
 DEFINE_string 'method' 'all' 'method that should be applied; {limma, DESeq, DESeq2, edgeR, all}' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	if [ "$FLAGS_method" != "all" ]; then
+		MESSAGE=$(getRPackageVersion "$FLAGS_method")
+	else
+		limmaV=$(getRPackageVersion "limma")
+		edgeRV=$(getRPackageVersion "edgeR")
+		DESeqV=$(getRPackageVersion "DESeq")
+		DESeq2V=$(getRPackageVersion "DESeq2")
+		MESSAGE="limma: $limmaV, edgeR: $edgeRV, DESeq: $DESeqV DESeq2: $DESeq2V"
+	fi
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_controlCondition" ]; then

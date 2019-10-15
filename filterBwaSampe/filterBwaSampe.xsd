@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- module to run bwa sampe -->
+	<!-- REQUIREMENTS: python3 with pysam and numpy library -->
+
+	<!-- definition of the parameters of the module -->
+	<x:complexType name="filterBwaSampeTaskParameterType">
+		<x:all>
+			<!-- file paths -->
+			<!-- input: mapped read pairs in SAM or BAM format (ending .sam or .bam) from bwaSampe module -->
+			<x:element name="inSamBam" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!-- output: mapped read pairs in SAM or BAM format filtered according to the criteria below (file ending .sam or .bam defines output)-->
+			<x:element name="outSamBam" type="paramString" minOccurs="1" maxOccurs="1" />
+			<!-- boolean parameters -->
+			<!-- removes pairs with at least one unmapped mate, default: true-->
+			<x:element name="removeUnmapped" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<!-- removes pairs with unset proper pair flag, default: true -->
+			<x:element name="removeImproperPairs" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<!-- integer parameters -->
+			<!-- removes multi-mapped read pairs with more than this number of hits, set to 0 to deactivate the option, default: 1 (removes multimapped) -->
+			<x:element name="removeMoreThanOptimalHits" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- removes read pairs with mapping quality below this threshold, set to 0 to deactivate tbe option, default: 20 -->
+			<x:element name="removeMapqBelow" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- definition of the return parameters of the module -->
+	<x:complexType name="filterBwaSampeTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<!-- returns value: path to filtered bam or sam file-->
+					<x:element name="filteredPairs" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- set command of script to call -->
+	<x:complexType name="filterBwaSampeTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="main_filter_bwa_sampe.py" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="python3" />
+			</x:restriction>
+		</x:complexContent>
+ 	</x:complexType>
+
+ 	<!-- definition of the components of the module -->
+	<x:complexType name="filterBwaSampeTaskType">
+		<x:complexContent>
+			<x:extension base="filterBwaSampeTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="filterBwaSampeTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="filterBwaSampeTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+ 	<!--  define name of the module and make it available -->
+ 	<x:element name="filterBwaSampeTask" type="filterBwaSampeTaskType" substitutionGroup="abstractTask" />
+
+</x:schema>

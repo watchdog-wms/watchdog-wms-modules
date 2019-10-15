@@ -20,12 +20,19 @@ DEFINE_integer 'quality' '9' 'compression level; [1, 9] whereby 1 is the worst/f
 DEFINE_string 'memory' '768M' 'maximal memory that can be used per thread; only an estimation and might be exceeded!' 'm'
 DEFINE_string 'tmpFolder' '' 'write temporary files to that folder' 'T'
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(samtools --version 2>&1 | head -n 1 | cut -d " " -f 1 --complement)
+	echo "$MESSAGE"
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_sam" ]; then

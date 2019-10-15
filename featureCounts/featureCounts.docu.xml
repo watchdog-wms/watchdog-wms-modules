@@ -13,7 +13,7 @@
     <!-- website of the dependencies used in this module -->
     <website>https://subread.sourceforge.net</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>FeatureCounts was used to count read/fragment counts per gene/exon/other feature [Liao Y, Smyth GK and Shi W. featureCounts: an efficient general-purpose program for assigning sequence reads to genomic features. Bioinformatics, 30(7):923-30, 2014].</paperDescription>
+    <paperDescription>FeatureCounts (%SOFTWARE_VERSION%) was applied to count read/fragment counts per gene/exon/other feature according to %annotation§N% annotation [Liao Y, Smyth GK and Shi W. featureCounts: an efficient general-purpose program for assigning sequence reads to genomic features. Bioinformatics, 30(7):923-30, 2014].</paperDescription>
     <PMID>24227677</PMID>
     <!-- external dependencies required for that module -->
     <dependencies minVersion="1" maxVersion="1">featureCounts (v. 1.4.6)</dependencies>

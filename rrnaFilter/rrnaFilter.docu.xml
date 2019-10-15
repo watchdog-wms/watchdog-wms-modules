@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+
+  <info>
+    <author>Sophie Friedl</author>
+    <updated>2019-02-11</updated>
+    <category>RNA-seq</category>
+    <description maxVersion="1" minVersion="1">removes rrna reads from sequencing data</description>
+    <paperDescription>Before mapping the reads to the reference genome we removed reads originating from rRNAs</paperDescription>
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+    <dependencies maxVersion="1" minVersion="1">pysam</dependencies>
+    <dependencies maxVersion="1" minVersion="1">bwa</dependencies>
+  </info>
+
+  <maintainer>
+	<username>marie-sophie</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
+  </maintainer>
+
+  <parameter>
+    <param maxOccurs="1" minOccurs="1" name="in1" type="file" restrictions="file exists, allowed file endings: fastq, fq, fq.gz">
+      <description>first (gzipped) fastQ file with the sequenced reads</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="in2" type="file" restrictions="file exists, allowed file endings: fastq, fq, fq.gz">
+      <description>second (gzipped) fastQ file with the sequenced reads (for paired-end data only)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="rrnaIndex" type="string" restrictions="filename prefix for a bwa index">
+      <description>Common prefix of bwa index files for the rRNA sequence</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="out1" type="string" restrictions="file path with file ending fastq, fq, fa or fq.gz">
+      <description>file for writing non-rRNA reads from in1 in fasta or (gzipped) fastq format</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="out2" type="string" restrictions="file path with file ending fastq, fq, fa or fq.gz">
+      <description>file for writing non-rRNA reads from in2 (for paired-end data) in fasta or (gzipped) fastq format</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="sam" type="string" restrictions="file path with file ending sam">
+      <description>sam file for writing rRNA reads from in1 and in2</description>
+    </param>
+    <param default="os.getcwd()" maxOccurs="1" minOccurs="0" name="workdir" type="folder" restrictions="folder exists">
+      <description>path to directory for writing large temporary files (content is deleted at the end of execution), default: current directory</description>
+    </param>
+    <param default="False" maxOccurs="1" minOccurs="0" name="keepTmp" type="boolean">
+      <description>option to keep temporary files</description>
+    </param>
+    <param default="infinity" maxOccurs="1" minOccurs="0" name="maxEditDistance" type="integer" restrictions="&gt;=0">
+      <description>maximum allowed edit distance for a read alignment against rRNA</description>
+    </param>
+    <param default="infinity" maxOccurs="1" minOccurs="0" name="maxMismatches" type="integer" restrictions="&gt;=0">
+      <description>maximum allowed number of mismatches for a read alignment against rRNA</description>
+    </param>
+    <param default="infinity" maxOccurs="1" minOccurs="0" name="maxIndels" type="integer" restrictions="&gt;=0">
+      <description>maximum allowed number of indels for a read alignment against rRNA</description>
+    </param>
+    <param default="2" maxOccurs="1" minOccurs="0" name="pairFiltering" type="integer" restrictions="1 or 2">
+      <description>Number of reads of a pair required to fulfil the options above (maxEditDistance, maxMismatches, maxIndels)</description>
+    </param>
+    <param default="bwa" maxOccurs="1" minOccurs="0" name="bwaPath" type="executable">
+      <description>path to bwa executable</description>
+    </param>
+    <param default="25" maxOccurs="1" minOccurs="0" name="seedSize" type="integer" restrictions="&gt;=1">
+      <description>size of initial seed for bwa (-k option of bwa)</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="threads" type="integer" restrictions="&gt;=1">
+      <description>number of threads to use for bwa (-t option of bwa)</description>
+    </param>
+  </parameter>
+
+  <return>
+    <var name="rrnaSAMFile" type="string">
+      <description>path to rRNA reads in SAM format (same value as given by the sam parameter)</description>
+    </var>
+    <var name="filteredFQ1" type="string">
+      <description>path to non rRNA reads in FASTQ format (same value as given by the out1 parameter)</description>
+    </var>
+    <var name="filteredFQ2" type="string">
+      <description>path to non rRNA reads in FASTQ format (same value as given by the out2 parameter), for single-end data the value of the return variable is set to &quot;not_defined_for_single_end&quot;</description>
+    </var>
+  </return>
+</documentation>

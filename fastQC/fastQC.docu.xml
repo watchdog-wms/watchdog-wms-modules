@@ -13,7 +13,7 @@
     <!-- website of the dependencies used in this module -->
     <website>https://www.bioinformatics.babraham.ac.uk/projects/fastqc/</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>Quality of the sequencing data was checked using FastQC [Andrews S. (2010). FastQC: a quality control tool for high throughput sequence data. Available online at: http://www.bioinformatics.babraham.ac.uk/projects/fastqc].</paperDescription>
+    <paperDescription>Quality of the sequencing data was checked using FastQC (%SOFTWARE_VERSION%) [Andrews S. (2010). FastQC: a quality control tool for high throughput sequence data. Available online at: http://www.bioinformatics.babraham.ac.uk/projects/fastqc].</paperDescription>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">fastQC (tested with 0.11.3)</dependencies>
     <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>

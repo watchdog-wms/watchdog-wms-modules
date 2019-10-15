@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+	<info>
+		<author>Sophie Friedl</author>
+		<updated>2019-02-11</updated>
+		<category>ChIP-seq</category>
+		<description>analyzes strand cross-correlation in mapped reads from ChIP-seq experiments</description>
+		<dependencies>python3</dependencies>
+		<dependencies>R >=3.1</dependencies>
+		<dependencies>spp (phantompeakqualtools)</dependencies>
+		<PMID>22955991</PMID>
+		<paperDescription>Phantompeakqualtools were used to perform quality control of the mapped ChIP-seq reads.</paperDescription>
+		<website>https://github.com/kundajelab/phantompeakqualtools</website>
+	</info>
+	
+	<maintainer>
+		<username>marie-sophie</username>
+		<username>friedelcc</username>
+		<username>klugem</username>
+	</maintainer>
+	
+	<parameter>
+		<param name="inBam" type="string" restrictions="valid file path, bam format, ending *.bam" minOccurs="1" maxOccurs="1">
+			<description>Path to the bam file with mapped ChIP-seq reads. An index of the bam file is not required.</description>
+		</param>
+		<param name="outPrefix" type="string" minOccurs="1" maxOccurs="1">
+			<description>Common prefix of all output files. The module produces 3 files: outPrefix.txt (summary file), outPrefix.pdf (cross-correlation plot) and outPrefix.Rdata (R session of the analysis).</description>
+		</param>
+		<param name="sppPath" type="string" restrictions="valid file path to the script run_spp.R" minOccurs="1" maxOccurs="1">
+			<description>Path to executable (R script) of phantompeakqualtools which is usually called run_spp.R</description>
+		</param>
+		<param name="rscriptPath" type="string" restrictions="valid file path, executable" default="Rscript in PATH variable" minOccurs="0" maxOccurs="1">
+			<description>Path to executable Rscript if not given in PATH variable</description>
+		</param>
+		<param name="tmpdir" type="string" restrictions="path to existing folder" default="return value of the tempdir() function of R" minOccurs="0" maxOccurs="1">
+			<description>Folder for writing temporary files. The tool copies the whole bam file to this location. All temporary files are extended with a random suffix.</description>
+		</param>
+		<param name="threads" type="integer" restrictions=">=1" default="1" minOccurs="0" maxOccurs="1">
+			<description>Number of threads used for the calculations</description>
+		</param>
+	</parameter>
+</documentation>

@@ -12,7 +12,7 @@
     <!-- website of the dependencies used in this module -->
     <website>https://www.bio.ifi.lmu.de/software/contextmap/index.html</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>RNA-seq reads were mapped against the XXX genome (version) using ContextMap version XXX (using BWA as short read aligner and default parameters).</paperDescription>
+    <paperDescription>RNA-seq reads were mapped against the XXX genome using ContextMap (%SOFTWARE_VERSION%) with BWA as short read aligner and default parameters.</paperDescription>
     <PMID>25928589</PMID>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">java</dependencies>

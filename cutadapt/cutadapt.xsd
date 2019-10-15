@@ -31,6 +31,7 @@
 		<x:complexContent>
 			<x:restriction base="baseAttributeTaskType">
 				<x:attribute name="binName" type="x:string" fixed="cutadapt.sh" />
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
 			</x:restriction>
 		</x:complexContent>
 	</x:complexType>

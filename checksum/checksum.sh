@@ -22,12 +22,19 @@ DEFINE_boolean 'update' '1' '[optional] override existing checksum for that file
 DEFINE_boolean 'absolutePath' '1' '[optional] this option can be set to store absolute pathes in the checksum file' 'a'
 DEFINE_boolean 'ignorePath' '1' '[optional] this option can be set to use only the name of the file for identification of the checksum line; (can only be used in verify mode)' ''
 DEFINE_string 'oldChecksumName' '' '[optional] uses that name to identify the correct checksum because the file was renamed after the checksum was created; (can only be used in verify mode)' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' ''
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(md5sum --version 2>&1 | head -n 1 | cut -d " " -f 1 --complement)
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_input" ]; then

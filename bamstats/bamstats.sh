@@ -32,6 +32,7 @@ DEFINE_boolean 'geneBodyCoverage' '1' '[optional] check if reads coverage is uni
 DEFINE_boolean 'paired' '1' '[optional] paired end library sequencing' ''
 DEFINE_boolean 'stranded' '1' '[optional] stranded library sequencing' ''
 DEFINE_boolean 'disableAllDefault' '1' '[optional] disable all which are not explicitly activated' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # this parameters are disabled when not explicitely activated by the 'disableAllDefault' flag
@@ -41,6 +42,12 @@ ALL_FLAGS="idxstats,flagstat,count,saturation,clipping,insertion,deletion,inferE
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(infer_experiment.py --version | sed -E 's/.+\.py //')
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_bam" ]; then

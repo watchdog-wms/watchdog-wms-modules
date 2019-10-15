@@ -12,7 +12,7 @@
     <!-- website of the dependencies used in this module -->
     <website>https://www.htslib.org/doc/samtools.html</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>Samtools was used to index the BAM files [Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, Homer N, Marth G, Abecasis G, Durbin R, and 1000 Genome Project Data Processing Subgroup, The Sequence alignment/map (SAM) format and SAMtools, Bioinformatics (2009) 25(16) 2078-9].</paperDescription>
+    <paperDescription>Samtools (%SOFTWARE_VERSION%) was used to index the BAM files [Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, Homer N, Marth G, Abecasis G, Durbin R, and 1000 Genome Project Data Processing Subgroup, The Sequence alignment/map (SAM) format and SAMtools, Bioinformatics (2009) 25(16) 2078-9].</paperDescription>
     <PMID>19505943</PMID>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">samtools</dependencies>

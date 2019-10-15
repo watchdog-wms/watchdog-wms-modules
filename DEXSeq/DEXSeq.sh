@@ -37,12 +37,19 @@ DEFINE_float 'pValueCutoff' '0.01' 'p-Value cutoff for significant results' 'p'
 DEFINE_integer 'minKeepReads' '25' 'number of reads a feature must own in average per sample to pass filtering step before DE test is performed' 'm'
 DEFINE_string 'output' '' 'output folder' 'o'
 DEFINE_string 'threads' '1' 'number of threads to use for testing' 't'
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(getRPackageVersion "DEXSeq")
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_controlCondition" ]; then

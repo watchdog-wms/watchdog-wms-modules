@@ -33,12 +33,20 @@ DEFINE_boolean 'discardTrimmed' '1' '[optional] discard sequences which were tri
 DEFINE_boolean 'discardUntrimmed' '1' '[optional] discard sequences which were not trimmed' ''
 DEFINE_boolean 'maskAdapters' '1' '[optional] does not cut the adapters but replace the corresponding regions with N' ''
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(cutadapt --version 2>&1)
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
+
 if [ -z "$FLAGS_shortenReads" ] && [ "$FLAGS_shortenReads" -eq 0 ]; then
 	echoError "Parameter --shortenReads can not be zero. (see --help for details)";
 	exit $EXIT_INVALID_ARGUMENTS
