@@ -46,12 +46,19 @@ elif [ ${MODULE_VERSION} -eq 2 ]; then
 	DEFINE_boolean 'longReads' '1' '[optional] mode for long read counting (e.g. Nanopore or PacBio)' ''
 fi
 DEFINE_integer 'moduleVersion' '1' '[optional] version of the module that should be used' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(featureCounts -v 2>&1 | sed 's/^featureCounts //' | sed -r 's/^ *//; s/ *$//; /^$/d' | cut -b 1 --complement)
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_annotation" ]; then

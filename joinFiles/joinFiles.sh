@@ -19,12 +19,19 @@ DEFINE_string 'output' '' 'path to output file' 'o'
 DEFINE_boolean 'convertPairedEnd' '1' 'special flag for joining of FASTQ files; adds /1 and /2 at the end of read names if casava format 1.8 or greater is used; default: disabled' 'c'
 DEFINE_string 'pattern' '' 'one ore more unix file pattern (e.g. *.txt) that are used to find files matching that pattern; multiple patterns can be used separated by ','; one pattern corresponds to one input folder path; order of files to join can not be influenced' 'p'
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' ''
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(cat --version 2>&1 | head -n 1 | cut -d " " -f 1 --complement)
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_input" ]; then

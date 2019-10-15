@@ -12,7 +12,7 @@
     <!-- website of the dependencies used in this module -->
     <website>https://bioconductor.org/packages/release/bioc/html/DEXSeq.html</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>Differential exon usage was determined using DEXSeq.</paperDescription>
+    <paperDescription>Differential exon usage was determined using DEXSeq (%SOFTWARE_VERSION%).</paperDescription>
     <PMID>22722343</PMID>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">GNU core utils</dependencies>

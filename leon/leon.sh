@@ -3,7 +3,7 @@ SCRIPT_FOLDER=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $SCRIPT_FOLDER/../../core_lib/includeBasics.sh
 
 # check, if used tools are installed
-USED_TOOLS='leon:tar:mv:cp:echo:tail:grep'
+USED_TOOLS='leon:tar:mv:cp:echo:tail:grep:sed'
 MESSAGE=$($LIB_SCRIPT_FOLDER/checkUsedTools.sh "$USED_TOOLS" "check_shflag_tools")
 CODE=$?
 
@@ -19,6 +19,7 @@ DEFINE_integer 'threads' '1' '[optional] number of cores to use' 't'
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
 DEFINE_string 'workingDir' '/usr/local/storage/' 'path to working directory' ''
 DEFINE_integer 'kmerSize' '31' '[optional] size of a kmer' 'k'
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
@@ -26,6 +27,12 @@ FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
 MODE=-1
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(leon -v | grep "Leon version" | sed -E 's/^[^0-9]+//' | sed -E 's/\W+*$//')
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_input" ]; then

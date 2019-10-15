@@ -18,12 +18,19 @@ DEFINE_string 'bamFile' '' "path to the BAM file; UMI must be a suffix of the fa
 DEFINE_string 'outputFile' '' 'path to the de-duplicated BAM file' 'o'
 DEFINE_boolean 'deleteOnSuccess' '1' '[optional] deletes the BAM file when deduplication was successfull' ''
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(umi_tools -v | cut -d ":" -f 2 | cut -b 1 --complement)
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_bamFile" ]; then

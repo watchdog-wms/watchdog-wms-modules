@@ -23,12 +23,19 @@ DEFINE_boolean 'delete' 'false' '[optional] delete the file after compression wa
 DEFINE_integer 'quality' '9' '[optional] compression quality ranging from [1:9] with 1 being the fastest and 9 being the slowest but smallest.' 'q'
 DEFINE_integer 'limitLines' '' '[optional] extract only the first N lines.' 'l'
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' ''
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(gzip --version 2>&1 | head -n 1 | cut -d " " -f 1 --complement)
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_input" ]; then
@@ -44,7 +51,11 @@ if [ "$FLAGS_output" == '${input}.gz' ]; then
 	fi
 	FLAGS_output="$FLAGS_input.gz"
 fi
-
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(getRPackageVersion "DEXSeq")
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 # enforce verify when delete is enabled
 if [ "$FLAGS_delete" -eq 0 ]; then
 	FLAGS_verify=0

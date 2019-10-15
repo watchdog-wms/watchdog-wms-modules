@@ -12,7 +12,7 @@
     <!-- website of the dependencies used in this module -->
     <website>https://github.com/marcelm/cutadapt</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>Cutadapt was used to remove adapters and trim sequences [Martin, Marcel. "Cutadapt removes adapter sequences from high-throughput sequencing reads." EMBnet.journal [Online], 17.1 (2011): pp. 10-12. Web. 14 Mar. 2019].</paperDescription>
+    <paperDescription>Cutadapt (%SOFTWARE_VERSION%) was used to remove adapters and trim sequences [Martin, Marcel. "Cutadapt removes adapter sequences from high-throughput sequencing reads." EMBnet.journal [Online], 17.1 (2011): pp. 10-12. Web. 14 Mar. 2019].</paperDescription>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">cutadapt</dependencies>
     <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>

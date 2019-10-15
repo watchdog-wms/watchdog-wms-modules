@@ -1,4 +1,5 @@
 #!/bin/bash
+#SKIP_TEST
 SCRIPT_FOLDER=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $SCRIPT_FOLDER/../../core_lib/includeBasics.sh # include some basic functions
 SCRIPT=$(readlink_own -m $SCRIPT_FOLDER/contextMap.sh)
@@ -6,8 +7,12 @@ GLOBAL_TEST_DATA=$SCRIPT_FOLDER/../../test_data
 TEST_DATA_FOLDER=$SCRIPT_FOLDER/test_data
 FAILED_TESTS=0
 
+# todo: configure theses values to enable the test and remove the #SKIP_TEST line
+BWA_PATH="/path/to/bwa"
+CM_PATH="/path/to/contextMap/CM.jar"
+
 TMP_OUT="/tmp"
-DEFAULT_PARAMS="--alignerName bwa --alignerBin /home/proj/software/BWA-0.7.10/bwa -i $TEST_DATA_FOLDER/index/rDNA -g $TEST_DATA_FOLDER/ -j /home/users/kluge/software/ContextMap_v2.4.2.jar"
+DEFAULT_PARAMS="--alignerName bwa --alignerBin '$BWA_PATH' -i $TEST_DATA_FOLDER/index/rDNA -g $TEST_DATA_FOLDER/ -j '$CM_PATH'"
 
 TEST_S_NEW="$GLOBAL_TEST_DATA/fastq/joined/test_single_new.fastq"
 TEST_S_OLD="$GLOBAL_TEST_DATA/fastq/joined/test_single_old.fastq"

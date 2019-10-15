@@ -3,7 +3,7 @@ SCRIPT_FOLDER=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $SCRIPT_FOLDER/../../core_lib/includeBasics.sh $@
 
 # check, if used tools are installed
-USED_TOOLS='fastqc:rm:tee:echo'
+USED_TOOLS='fastqc:rm:tee:echo:cut'
 MESSAGE=$($LIB_SCRIPT_FOLDER/checkUsedTools.sh "$USED_TOOLS" "check_shflag_tools")
 CODE=$?
 
@@ -19,12 +19,19 @@ DEFINE_integer 'threads' '1' 'number of threads to use; each will consume 256 me
 DEFINE_string 'contaminants' '' '[optional] path to a file with non-default contaminants for screen against overrepresented sequences; format: name[tab]sequence' 'c'
 DEFINE_string 'adapters' '' '[optional] path to a file with non-default adapters for screen against the library; format: name[tab]sequence' 'a'
 DEFINE_string 'limits' '' '[optional] path to a file containing non-default limits for warnings/errors; must be in the same format as limits.txt is' 'l'
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(fastqc --version 2>&1 | cut -f 1 -d " " --complement | cut -b 1 --complement)
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_fastq" ]; then

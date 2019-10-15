@@ -12,7 +12,7 @@
     <!-- website of the dependencies used in this module -->
     <website>https://gatb.inria.fr/leon-read-compression/</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>Sequencing data was (de-)compressed using LEON [G. Benoit, C. Lemaitre, D. Lavenier, E. Drezen, T. Dayris, R. Uricaru, G. Rizk. (2015) Reference-free compression of high throughput sequencing data with a probabilistic de Bruijn graph. BMC Bioinformatics, 2015, 16:288.].</paperDescription>
+    <paperDescription>Sequencing data was (de-)compressed using LEON (%SOFTWARE_VERSION%) [G. Benoit, C. Lemaitre, D. Lavenier, E. Drezen, T. Dayris, R. Uricaru, G. Rizk. (2015) Reference-free compression of high throughput sequencing data with a probabilistic de Bruijn graph. BMC Bioinformatics, 2015, 16:288.].</paperDescription>
     <PMID>26370285</PMID>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">LEON (tested with 1.0.0)</dependencies>

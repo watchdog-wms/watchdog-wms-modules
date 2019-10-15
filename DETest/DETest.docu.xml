@@ -15,7 +15,7 @@
     <website>http://bioconductor.org/packages/release/bioc/html/limma.html</website>
     <website>http://bioconductor.org/packages/release/bioc/html/DESeq.html</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>Differential gene expression analysis was performed using XXX.</paperDescription>
+    <paperDescription>Differential gene expression analysis was performed using %method% (%SOFTWARE_VERSION%).</paperDescription>
     <PMID>20979621</PMID>
     <PMID>19910308</PMID>
     <PMID>25605792</PMID>

@@ -51,12 +51,19 @@ DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
 DEFINE_string 'localTmpFolder' '/usr/local/storage' 'path to a local storage that is used for temporary data' ''
 DEFINE_integer 'memoryScaleFactor' '75' 'scale factor [0,100] in percent that defines the proportion of the memory that is used for java; default memory: 3GB*threads*(scaleFactor/100)' ''
 DEFINE_integer 'memoryPerThread' '3072' 'total memory per thread in MB if running on local host; otherwise memory limit of executor might be set; default: 3072' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ] && [ ! -z "$FLAGS_jarPath" ]; then
+	MESSAGE=$(basename "$FLAGS_jarPath" ".jar" | cut -f 2 -d '_' | cut -b 1 --complement)
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_jarPath" ]; then

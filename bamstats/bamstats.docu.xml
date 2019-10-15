@@ -13,7 +13,7 @@
     <!-- website of the dependencies used in this module -->
     <website>http://rseqc.sourceforge.net</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>Quality assessment of the resulting mappings was ensured using RSeQC [Liguo Wang, Shengqin Wang, Wei Li; RSeQC: quality control of RNA-seq experiments, Bioinformatics, Volume 28, Issue 16, 15 August 2012, Pages 2184–2185].</paperDescription>
+    <paperDescription>Quality of the resulting mappings was assessed using RSeQC [Liguo Wang, Shengqin Wang, Wei Li; RSeQC: quality control of RNA-seq experiments, Bioinformatics, Volume 28, Issue 16, 15 August 2012, Pages 2184–2185].</paperDescription>
     <PMID>22743226</PMID>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">python3</dependencies>
