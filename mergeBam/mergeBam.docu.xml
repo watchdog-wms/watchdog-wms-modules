@@ -5,7 +5,7 @@
     <!-- forename lastname -->
     <author>Caroline Friedel</author>
     <!-- day the module was updated the last time -->
-    <updated>2019-08-13</updated>
+    <updated>2019-10-15</updated>
     <category>sequencing</category>
     <description maxVersion="1" minVersion="1">merges 2 or more bam files using samtools</description>
     <!-- ##### optional ##### -->
@@ -16,8 +16,6 @@
     <PMID>19505943</PMID>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">samtools</dependencies>
-    <!-- module specific hints or comments -->
-    <comments maxVersion="1" minVersion="1">NA</comments>
   </info>
   <!-- ##### optional ##### -->
   <!-- github usernames of users who should be able to commit changes to that module -->
