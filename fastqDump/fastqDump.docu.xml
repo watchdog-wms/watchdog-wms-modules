@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Caroline Friedel</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-10-16</updated>
+    <category>sequencing</category>
+    <description maxVersion="1" minVersion="1">Downloads fastq files from the NCBI Sequence Read Archive (SRA) using the SRA toolkit. First performs prefetch and then fastq-dump. Can optionally use Aspera client ascp for much faster download (Aspera client should be installed).</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://www.ncbi.nlm.nih.gov/sra/docs/toolkitsoft/, https://asperasoft.com</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Sequencing data was downloaded from the NCBI Sequence Read Archive (SRA) using the SRA toolkit (version (%SOFTWARE_VERSION%)) [Leinonen R, Sugawara H, Shumway M; International Nucleotide Sequence Database Collaboration. The sequence read archive. Nucleic Acids Res. 2011 Jan;39(Database issue):D19-21.]</paperDescription>
+    <PMID>21062823</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">SRA toolkit</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>friedelcc</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="sraId" type="string">
+      <description>SRA id</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outputFolder" type="file">
+      <description>folder to which fastq files should be extracted</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="pathToAspera" type="file">
+      <description>[optional] path to Aspera client to use Aspera to speedup download</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="checkPresent" type="boolean">
+      <description>[optional] check if files already present in output folder and download previously successful. Tests if output fastq files exist, the log file from a previous download is present, fastq files are created not later than the lof file and the log files shows a succesful download. </description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="isPairedEnd" type="boolean">
+      <description>Indicates whether paired-end (two fastq files) or single-end (one fastq file) sequencing data was downloaded</description>
+    </var>
+  </return>
+</documentation>
