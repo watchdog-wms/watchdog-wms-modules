@@ -15,6 +15,7 @@ fi
 # define parameters
 DEFINE_string 'infile' '' 'input bam file(s)' 'i'
 DEFINE_string 'outfile' '' 'output bam file' 'o'
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
@@ -22,16 +23,22 @@ FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
 
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(samtools 2>&1 | head -n 3 | tail -n 1)
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
+
+
 # check if mandatory arguments are there
 if [ -z "$FLAGS_outfile" ]; then
 	echoError "Parameter -o must be set. (see --help for details)";
 	exit $EXIT_MISSING_ARGUMENTS
-fiif [ -z "$FLAGS_infile" ]; then
+fi
+if [ -z "$FLAGS_infile" ]; then
 	echoError "Parameter -i must be set. (see --help for details)";
 	exit $EXIT_MISSING_ARGUMENTS
 fi
-
-# TODO: add further parameter checks here which refer to input ranges or valid parameters in general here
 
 printParamValues "parameters before actual script starts" # print param values, if in debug mode
 ##################################################### START with actual SCRIPT ##################################################### 
