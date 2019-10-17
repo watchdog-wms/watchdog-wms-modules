@@ -3,7 +3,7 @@ SCRIPT_FOLDER=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $SCRIPT_FOLDER/../../core_lib/includeBasics.sh
 
 # check, if used tools are installed
-USED_TOOLS='tar'
+USED_TOOLS='tar:sed:head'
 MESSAGE=$($LIB_SCRIPT_FOLDER/checkUsedTools.sh "$USED_TOOLS" "check_shflag_tools")
 CODE=$?
 
@@ -24,7 +24,7 @@ eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
 
 if [ "$FLAGS_version" -eq 0 ]; then
-	MESSAGE=$(tar --version | head -n 1 | awk '{print $4}')
+	MESSAGE=$(tar --version | head -n 1 | cut -d " " -f 4)
 	echo $MESSAGE
 	exit $EXIT_OK
 fi
