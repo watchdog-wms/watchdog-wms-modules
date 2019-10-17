@@ -26,7 +26,7 @@ matrix:
       name: 'signed commit test'
       env: TEST_NAME='SIGNED_COMMIT'
     - name: 'separate module test'
-      env: TEST_NAME='SINGLE_MODULE'
+      env: TEST_NAME='SEPARATE_FOLDER'
     - stage: stage2 
       name: 'write permission test'
       env: TEST_NAME='WRITE_PERMISSION'
