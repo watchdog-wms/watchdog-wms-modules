@@ -3,7 +3,7 @@
 Contributions to the [watchdog-wms-modules](watchdog-wms/watchdog-wms-modules) repository are welcome!
 If you want to share a module, please follow these steps:
 
-1) fork the repository
+1) fork the repository and create a new branch for your new module
 2) commit your module into your fork
     - either use the webinterface of Github (buttons are located left of green "Clone or Download" button)
         - Create new file: create and commit a single file in a web editor
