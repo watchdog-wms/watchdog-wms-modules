@@ -55,7 +55,7 @@ Currently the following tests are implemented:
 - XSD validation test: 
   - XSD module definition file must be parseable by Watchdog
 - XML documentation test:   
-  - XML documentation file must follow its [XSD schema](https://github.com/watchdog-wms/watchdog-wms/blob/master/xsd/documentation.xsd)
+  - XML documentation file must follow its [XSD schema](https://github.com/klugem/watchdog/blob/master/xsd/documentation.xsd)
   - parameter and return values must fit 
 - virus scanner test: 
   - all files part of the pull request must pass the virus scan
