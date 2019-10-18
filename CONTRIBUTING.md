@@ -1,6 +1,6 @@
 ### Contributing
 
-Contributions to the [watchdog-wms-modules](watchdog-wms/watchdog-wms-modules) repository are welcome!
+Contributions to the [watchdog-wms-modules](https://github.com/watchdog-wms/watchdog-wms-modules) repository are welcome!
 If you want to share a module, please follow these steps:
 
 1) fork the repository and create a new branch for your new module
