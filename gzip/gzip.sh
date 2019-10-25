@@ -32,7 +32,7 @@ eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
 
 if [ "$FLAGS_version" -eq 0 ]; then
-	MESSAGE=$(gzip --version 2>&1 | head -n 1 | cut -d " " -f 1 --complement)
+	MESSAGE=$(getBinaryVersion "gzip" "--version")
 	echo $MESSAGE
 	exit $EXIT_OK
 fi

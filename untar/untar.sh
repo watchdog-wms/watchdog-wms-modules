@@ -24,7 +24,7 @@ eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
 
 if [ "$FLAGS_version" -eq 0 ]; then
-	MESSAGE=$(tar --version | head -n 1 | cut -d " " -f 4)
+	MESSAGE=$(getBinaryVersion "tar" "--version")
 	echo $MESSAGE
 	exit $EXIT_OK
 fi
