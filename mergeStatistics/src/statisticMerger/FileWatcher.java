@@ -15,7 +15,7 @@ public class FileWatcher {
 		try {
 		// ensure that the file is really there
 		WatchService watcher = FileSystems.getDefault().newWatchService();
-		Path parent = monitorFile.getParent();
+		Path parent = monitorFile.toAbsolutePath().getParent();
 		parent.register(watcher, StandardWatchEventKinds.ENTRY_MODIFY);
 		int waitTime = 0;
 		while(waitTime < maxTimeoutinMs && !this.foundFile) {
