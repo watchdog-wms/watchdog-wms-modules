@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-11-08</updated>
+    <category>SEQUENCING</category>
+    <category>CHIP-SEQ</category>
+    <description maxVersion="1" minVersion="1">identifies protein-DNA interaction at high resolution in ChIP-seq data</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://groups.csail.mit.edu/cgs/gem/</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>GEM (%SOFTWARE_VERSION%) was used to call peaks in the ChIP-seq data [Y. Guo, S. Mahony, D.K. Gifford, High Resolution Genome Wide Binding Event Finding and Motif Discovery Reveals Transcription Factor Spatial Binding Constraints. PLoS Computational Biology, (2012) 8(8): e1002638].</paperDescription>
+    <PMID>22912568</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">GEM</dependencies>
+    <dependencies maxVersion="1" minVersion="1">java</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU core utilities</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="jarPath" type="file" restrictions="absolute">
+      <description>path to GEM jar file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="expt" type="file" restrictions="absolute">
+      <description>aligned read file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="readDistribution" type="file" restrictions="absolute">
+      <description>read spatial distribution file</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="gpsOnly" type="boolean">
+      <description>run in GPS only mode</description>
+    </param>
+    <param default="8" maxOccurs="1" minOccurs="0" name="k" type="integer">
+      <description>length of the k-mer for motif finding, use --k or (--kmin &amp; --kmax); GEM parameter</description>
+    </param>
+    <param default="6" maxOccurs="1" minOccurs="0" name="kMin" type="integer">
+      <description>min value of k, e.g. 6; GEM parameter</description>
+    </param>
+    <param default="13" maxOccurs="1" minOccurs="0" name="kMax" type="integer">
+      <description>max value of k, e.g. 13; GEM parameter</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="seed" type="string">
+      <description>exact k-mer string to jump start k-mer set motif discovery; GEM parameter</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="genome" type="folder" restrictions="absolute">
+      <description>the path to the genome sequence directory, for motif finding; GEM parameter</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outputPrefix" type="file" restrictions="absolute">
+      <description>output folder name and file name prefix</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="control" type="file" restrictions="absolute">
+      <description>aligned reads file for control</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="chrSize" type="file" restrictions="absolute">
+      <description>genome chrom.sizes file with chr name/length pairs</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="format" type="string" default="BED">
+      <description>read file format: BED/SAM/BOWTIE/ELAND/NOVO</description>
+    </param>
+    <param default=" " maxOccurs="1" minOccurs="0" name="sizeInBp" type="integer">
+      <description>size of mappable genome in bp (default is estimated from genome chrom sizes)</description>
+    </param>
+    <param default=" " maxOccurs="1" minOccurs="0" name="alphaValue" type="double">
+      <description>minimum alpha value for sparse prior (default is esitmated from the whole dataset coverage)</description>
+    </param>
+    <param default="2" maxOccurs="1" minOccurs="0" name="qValue" type="double">
+      <description>significance level for q-value, specify as -log10(q-value) (default=2, q-value=0.01)</description>
+    </param>
+    <param default="#CPU" maxOccurs="1" minOccurs="0" name="threads" type="integer">
+      <description>maximum number of threads to run GEM in paralell</description>
+    </param>
+    <param default="5000" maxOccurs="1" minOccurs="0" name="kSeqs" type="integer">
+      <description>number of binding events to use for motif discovery; GEM parameter</description>
+    </param>
+    <param default="2048" maxOccurs="1" minOccurs="0" name="memoryPerThread" type="integer">
+      <description>total memory per thread in MB if running on local host; otherwise memory limit of executor might be set</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="useFixedAlpha" type="boolean">
+      <description>use a fixed user-specified alpha value for all the regions</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="JASPAROutput" type="boolean">
+      <description>output motif PFM in JASPAR format; GEM parameter</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="MEMEOutput" type="boolean">
+      <description>output motif PFM in MEME format; GEM parameter</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="HOMEROutput" type="boolean">
+      <description>output motif PFM in HOMER format; GEM parameter</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="BEDOutput" type="boolean">
+      <description>output binding events in BED format for UCSC Genome Browser</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="NarrowPeakOutput" type="boolean">
+      <description>output binding events in ENCODE NarrowPeak format </description>
+    </param>
+  </parameter>
+</documentation>
