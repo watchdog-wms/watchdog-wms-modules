@@ -20,7 +20,7 @@ DEFINE_boolean 'uncompressedBam' '1' "uncompressed BAM output (implies bamoutput
 DEFINE_boolean 'includeHeader' '1' "include header in SAM output" 'h1'
 DEFINE_boolean 'printOnlyHeader' '1' "print SAM header only (no alignments)" 'H'
 DEFINE_boolean 'printCounts' '1' "print only the count of matching records" 'c'
-DEFINE_string 'output' 'stdout' "output file name" 'o'
+DEFINE_string 'output' '' "output file name" 'o'
 DEFINE_string 'outputReadsNotSelected' '' "output reads not selected by filters to FILE" 'U'
 DEFINE_string 'referenceLengths' '' "FILE listing reference names and lengths (see long help)" 't'
 DEFINE_string 'bedfile' '' "only include reads overlapping this BED FILE" 'L'
