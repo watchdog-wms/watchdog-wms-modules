@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="sashimiPlotTaskParameterType">
+		<x:all>
+		<x:element name="help" type="paramString" minOccurs="0" maxOccurs="1" />
+		<x:element name="bam" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+		<x:element name="coordinates" type="paramString" minOccurs="0" maxOccurs="1" />
+		<x:element name="outprefix" type="paramString" minOccurs="0" maxOccurs="1" />
+		<x:element name="outstrand" type="paramString" minOccurs="0" maxOccurs="1" />
+		<x:element name="mincoverage" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		<x:element name="junctionsbed" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+		<x:element name="gtf" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+		<x:element name="strand" type="paramString" minOccurs="0" maxOccurs="1" />
+		<x:element name="overlay" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		<x:element name="aggr" type="paramString" minOccurs="0" maxOccurs="1" />
+		<x:element name="colorfactor" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		<x:element name="alpha" type="paramDouble" minOccurs="0" maxOccurs="1" />
+		<x:element name="palette" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+		<x:element name="labels" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		<x:element name="height" type="paramDouble" minOccurs="0" maxOccurs="1" />
+		<x:element name="annheight" type="paramDouble" minOccurs="0" maxOccurs="1" />
+		<x:element name="width" type="paramDouble" minOccurs="0" maxOccurs="1" />
+		<x:element name="basesize" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		<x:element name="outformat" type="paramString" minOccurs="0" maxOccurs="1" />
+		<x:element name="outresolution" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		<x:element name="shrink" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="sashimiPlotTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="sashimiPlot.sh" />
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="sashimiPlotTaskType">
+		<x:complexContent>
+			<x:extension base="sashimiPlotTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="sashimiPlotTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="sashimiPlotTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of the return variables -->	
+	<x:complexType name="sashimiPlotTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="sashimiPlotTask" type="sashimiPlotTaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->
+
+
+</x:schema>
