@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Caroline Friedel</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-11-12</updated>
+    <category>sequencing</category>
+    <description maxVersion="1" minVersion="1">Performs visualization of splicing events across multiple samples using ggsashimi.</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://github.com/guigolab/ggsashimi</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Sashimi plots were created using ggsashimi [Garrido-Martín D, Palumbo E, Guigó R, Breschi A. ggsashimi: Sashimi plot revised for browser- and annotation-independent splicing visualization. PLoS Comput Biol. 2018 Aug 17,14(8):e1006360. ]</paperDescription>
+    <PMID>30118475</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">ggsashimi</dependencies>
+	<dependencies maxVersion="1" minVersion="1">python (2.7 or 3)</dependencies>
+	<dependencies maxVersion="1" minVersion="1">samtools (>=1.3)</dependencies>
+	<dependencies maxVersion="1" minVersion="1">R (>=3.3)</dependencies>
+	<dependencies maxVersion="1" minVersion="1">R package ggplot2 (>=2.2.1)</dependencies>
+	<dependencies maxVersion="1" minVersion="1">R package data.table (>=1.10.4)</dependencies>
+	<dependencies maxVersion="1" minVersion="1">R package gridExtra (>=2.2.1)</dependencies>
+	<dependencies maxVersion="1" minVersion="1">R package svglite (>=1.2.1), when generating output images in SVG format</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>friedelcc</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="0" name="help" type="string">
+      <description>show this help message and exit</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="bam" type="file">
+      <description>Individual bam file or file with a list of bam files.  In the case of a list of files the format is tsv:  1col: id for bam file, 2col: path of bam file, 3+col:  additional columns</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="coordinates" type="string">
+      <description>Genomic region. Format: chr:start-end (1-based)</description>
+    </param>
+    <param default="sashimi" maxOccurs="1" minOccurs="0" name="outprefix" type="string">
+      <description>Prefix for plot file name</description>
+    </param>
+    <param default="both" maxOccurs="1" minOccurs="0" name="outstrand" type="string">
+      <description>Only for --strand other than 'NONE'. Choose which  signal strand to plot: both, plus, minus</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="mincoverage" type="integer">
+      <description>Minimum number of reads supporting a junction to be  drawn</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="junctionsbed" type="file">
+      <description>Junction BED file name</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="gtf" type="file">
+      <description>Gtf file with annotation (only exons is enough)</description>
+    </param>
+    <param default="NONE" maxOccurs="1" minOccurs="0" name="strand" type="string">
+      <description>Strand specificity: NONE, SENSE, ANTISENSE,  MATE1_SENSE, MATE2_SENSE</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="overlay" type="integer">
+      <description>Index of column with overlay levels (1-based)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="aggr" type="string">
+      <description>Aggregate function for overlay: mean, median,  mean_j, median_j. Use mean_j | median_j to keep  density overlay but aggregate junction counts</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="colorfactor" type="integer">
+      <description>Index of column with color levels (1-based)</description>
+    </param>
+    <param default="0.5" maxOccurs="1" minOccurs="0" name="alpha" type="double">
+      <description>Transparency level for density histogram</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="palette" type="file">
+      <description>Color palette file. tsv file with at least 1 column, where  the color is the first column</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="labels" type="integer">
+      <description>Index of column with labels (1-based)</description>
+    </param>
+    <param default="2" maxOccurs="1" minOccurs="0" name="height" type="double">
+      <description>Height of the individual signal plot in inches</description>
+    </param>
+    <param default="1.5" maxOccurs="1" minOccurs="0" name="annheight" type="double">
+      <description>Height of annotation plot in inches</description>
+    </param>
+    <param default="10" maxOccurs="1" minOccurs="0" name="width" type="double">
+      <description>Width of the plot in inches</description>
+    </param>
+    <param default="14" maxOccurs="1" minOccurs="0" name="basesize" type="integer">
+      <description>Base font size of the plot in pch</description>
+    </param>
+    <param default="pdf" maxOccurs="1" minOccurs="0" name="outformat" type="string">
+      <description>Output file format: pdf, svg, png, jpeg, tiff</description>
+    </param>
+    <param default="300" maxOccurs="1" minOccurs="0" name="outresolution" type="integer">
+      <description>Output file resolution in PPI (pixels per inch).  Applies only to raster output formats</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="shrink" type="boolean">
+      <description>Shrink the junctions by a factor for nicer display</description>
+    </param>
+  </parameter>
+</documentation>
