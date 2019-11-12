@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Caroline Friedel</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-11-12</updated>
+    <category>sequencing</category>
+    <description maxVersion="1" minVersion="1">runs samtools view on BAM/SAM/CRAM files</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>http://www.htslib.org/doc/samtools.html</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Samtools was used to convert BAM/SAM/CRAM to BAM/SAM/CRAM [Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, Homer N, Marth G, Abecasis G, Durbin R; 1000 Genome Project Data Processing Subgroup. The Sequence Alignment/Map format and SAMtools. Bioinformatics. 2009 Aug 15;25(16):2078-9]</paperDescription>
+    <PMID>19505943</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">samtools</dependencies>
+    <!-- module specific hints or comments -->
+    <comments maxVersion="1" minVersion="1"></comments>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+	<username>friedelcc</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param default="false" maxOccurs="1" minOccurs="0" name="bamoutput" type="boolean">
+      <description>output BAM</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="cramoutput" type="boolean">
+      <description>output CRAM (requires reference sequence)</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="fastCompression" type="boolean">
+      <description>use fast BAM compression (implies bamoutput)</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="uncompressedBam" type="boolean">
+      <description>uncompressed BAM output (implies bamoutput)</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="includeHeader" type="boolean">
+      <description>include header in SAM output</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="printOnlyHeader" type="boolean">
+      <description>print SAM header only (no alignments)</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="printCounts" type="boolean">
+      <description>print only the count of matching records</description>
+    </param>
+    <param default="stdout" maxOccurs="1" minOccurs="0" name="output" type="file">
+      <description>output file name</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="outputReadsNotSelected" type="file">
+      <description>output reads not selected by filters to FILE</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="referenceLengths" type="file">
+      <description>FILE listing reference names and lengths (see long help)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="bedfile" type="file">
+      <description>only include reads overlapping this BED FILE</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="readgroup" type="string">
+      <description>only include reads in read group STR</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="readgroupFile" type="file">
+      <description>only include reads with read group listed in FILE</description>
+    </param>
+    <param default="0" maxOccurs="1" minOccurs="0" name="mappingquality" type="integer">
+      <description>only include reads with mapping quality at least INT</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="library" type="string">
+      <description>only include reads in library STR</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="minquerylength" type="integer">
+      <description>only include reads with number of CIGAR operations consuming  query sequence at least INT</description>
+    </param>
+    <param default="0" maxOccurs="1" minOccurs="0" name="bitsset" type="integer">
+      <description>only include reads with all bits set in INT set in FLAG</description>
+    </param>
+    <param default="0" maxOccurs="1" minOccurs="0" name="bitsnotset" type="integer">
+      <description>only include reads with none of the bits set in INT set in FLAG</description>
+    </param>
+    <param maxOccurs="10" minOccurs="0" name="readTagToStrip" type="string">
+      <description>read tag to strip (repeatable)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="collapseCIGAROperation" type="string">
+      <description>collapse the backward CIGAR operation</description>
+    </param>
+    <param default="0" maxOccurs="1" minOccurs="0" name="seed" type="double">
+      <description>integer part sets seed of random number generator, rest sets fraction of templates to subsample</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="threads" type="string">
+      <description>number of BAM/CRAM compression threads</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="printLongHelp" type="string">
+      <description>print long help, including note about region specification</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="inputfmtoption" type="string">
+      <description>Specify a single input file format option in the form  of OPTION or OPTION=VALUE</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="outputfmt" type="string">
+      <description>Specify output format (SAM, BAM, CRAM)</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="outputfmtoption" type="string">
+      <description>Specify a single output file format option in the form  of OPTION or OPTION=VALUE</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="reference" type="string">
+      <description>Reference sequence FASTA FILE</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="inbam" type="file">
+      <description>input bam file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="insam" type="file">
+      <description>input sam file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="incram" type="file">
+      <description>input cram file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="region" type="string">
+      <description>region selected</description>
+    </param>
+  </parameter>
+</documentation>
