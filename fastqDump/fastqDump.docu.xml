@@ -10,7 +10,8 @@
     <description maxVersion="1" minVersion="1">Downloads fastq files from the NCBI Sequence Read Archive (SRA) using the SRA toolkit. First performs prefetch and then fastq-dump. Can optionally use Aspera client ascp for much faster download (Aspera client should be installed).</description>
     <!-- ##### optional ##### -->
     <!-- website of the dependencies used in this module -->
-    <website>https://www.ncbi.nlm.nih.gov/sra/docs/toolkitsoft/, https://asperasoft.com</website>
+    <website>https://www.ncbi.nlm.nih.gov/sra/docs/toolkitsoft/</website>
+	<website>https://asperasoft.com</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
     <paperDescription>Sequencing data was downloaded from the NCBI Sequence Read Archive (SRA) using the SRA toolkit (version (%SOFTWARE_VERSION%)) [Leinonen R, Sugawara H, Shumway M; International Nucleotide Sequence Database Collaboration. The sequence read archive. Nucleic Acids Res. 2011 Jan;39(Database issue):D19-21.]</paperDescription>
     <PMID>21062823</PMID>
