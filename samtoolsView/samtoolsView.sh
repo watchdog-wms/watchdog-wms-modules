@@ -65,6 +65,12 @@ if [ -z "$FLAGS_inbam" ] && [ -z "$FLAGS_insam" ] && [ -z "$FLAGS_incram" ]; the
 	exit $EXIT_MISSING_ARGUMENTS
 fi
 
+# check if mandatory arguments are there
+if [ -z "$FLAGS_output" ] ; then 
+	echoError "Output file must be set. (see --help for details)"; 
+	exit $EXIT_MISSING_ARGUMENTS
+fi
+
 
 # further parameter checks  which refer to input ranges or valid parameters in general
 

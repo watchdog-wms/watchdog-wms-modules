@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+ <?xml version="1.0" encoding="UTF-8" ?>
 <x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
 
 	<!-- definition of the task parameters -->
@@ -11,7 +11,7 @@
 			<x:element name="includeHeader" type="paramBoolean" minOccurs="0" maxOccurs="1" />
 			<x:element name="printOnlyHeader" type="paramBoolean" minOccurs="0" maxOccurs="1" />
 			<x:element name="printCounts" type="paramBoolean" minOccurs="0" maxOccurs="1" />
-			<x:element name="output" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<x:element name="output" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
 			<x:element name="outputReadsNotSelected" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
 			<x:element name="referenceLengths" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
 			<x:element name="bedfile" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
