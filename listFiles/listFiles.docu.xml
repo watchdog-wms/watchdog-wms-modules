@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-11-12</updated>
+    <category>General</category>
+    <category>File utils</category>
+    <description maxVersion="1" minVersion="1">lists files in directories based on pattern</description>
+    <!-- ##### optional ##### -->
+    <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU findutils</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param minOccurs="1" name="folder" type="folder" restrictions="absolute">
+      <description>one ore more input folders; one for each pattern</description>
+    </param>
+    <param maxOccurs="0" minOccurs="1" name="output" type="file path" restrictions="absolute">
+      <description>write results to a file; one line per found file</description>
+    </param>
+    <param maxOccurs="0" minOccurs="1" name="sep" type="string" default=",">
+      <description>separator between entries</description>
+    </param>
+    <param maxOccurs="0" minOccurs="1" name="maxdepth" type="integer" default="0">
+      <description>descend at most n levels of folders</description>
+    </param>
+    <param minOccurs="1" name="pattern" type="string">
+      <description>one ore more unix file pattern (e.g. *.txt) that are used to find files matching that pattern; one pattern corresponds to one input folder path</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="foundFiles" type="string">
+      <description>found files joined with the separator</description>
+    </var>
+  </return>
+</documentation>
