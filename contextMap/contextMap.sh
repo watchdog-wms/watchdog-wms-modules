@@ -255,7 +255,7 @@ OUT_BASE=$(createOutputFolder "$FLAGS_output/.dummyFile")
 
 # set output path to temporary path
 TMP_FOLDER=$(getTmpFile contextMap "$FLAGS_localTmpFolder")
-createOutputFolder "$TMP_FOLDER/.dummyFile"
+$(createOutputFolder "$TMP_FOLDER/.dummyFile")
 MEMORY=$(getMemoryForJava $FLAGS_threads $FLAGS_memoryPerThread $FLAGS_memoryScaleFactor) #use 3GB as default if not running on grid
 
 COMMAND="java $MEMORY -XX:+UseConcMarkSweepGC -XX:NewSize=300M -XX:MaxNewSize=300M -jar '$FLAGS_jarPath' mapper"

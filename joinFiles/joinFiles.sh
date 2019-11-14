@@ -134,7 +134,3 @@ fi
 writeParam2File "$FLAGS_returnFilePath" "joinedFile" "$FLAGS_output"
 blockUntilFileIsWritten "$FLAGS_returnFilePath"
 exit $EXIT_OK
-
-# exit with exit status 0 or exit code shoul be there earlier
-echoError "Reached end of script! Exit should be performed earlier..."
-exit $EXIT_REACHED_END_OF_SCRIPT

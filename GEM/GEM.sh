@@ -35,7 +35,7 @@ DEFINE_boolean 'useFixedAlpha' 'false' "use a fixed user-specified alpha value f
 DEFINE_boolean 'JASPAROutput' 'true' "output motif PFM in JASPAR format; GEM parameter" ''
 DEFINE_boolean 'MEMEOutput' 'true' "output motif PFM in MEME format; GEM parameter" ''
 DEFINE_boolean 'HOMEROutput' 'true' "output motif PFM in HOMER format; GEM parameter" ''
-DEFINE_boolean 'BEDOutput' 'true' "output binding events in BED format for UCSC Genome Browser " ''
+DEFINE_boolean 'BEDOutput' 'true' "output binding events in BED format for UCSC Genome Browser" ''
 DEFINE_boolean 'NarrowPeakOutput' 'true' "output binding events in ENCODE NarrowPeak format" ''
 DEFINE_integer 'memoryPerThread' '2048' 'total memory per thread in MB if running on local host; otherwise memory limit of executor might be set; default: 2048' ''
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
@@ -162,6 +162,15 @@ for PARAM in $__flags_longNames; do
 	fi
 
 	# special cases
+	if [ "$PARAM" == "JASPAROutput" ] || [ "$PARAM" == "MEMEOutput" ] || [ "$PARAM" == "HOMEROutput" ] || [ "$PARAM" == "BEDOutput" ] || [ "$PARAM" == "NarrowPeakOutput" ]; then
+		PARAM="out"$(echo $PARAM | sed 's/Output//')
+
+		if [ "$PARAM" == "outNarrowPeak" ]; then
+			PARAM="outNP"
+		fi
+		MOD=1
+	fi
+
 	if [ "$PARAM" == "readDistribution" ]; then
 		PARAM="d"
 		MOD=1

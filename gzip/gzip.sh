@@ -78,7 +78,7 @@ printParamValues "parameters before actual script starts" # print param values, 
 verifyFileExistence "$FLAGS_input"
 
 # create output folder
-createOutputFolder "$FLAGS_output"
+$(createOutputFolder "$FLAGS_output")
 
 # compression mode
 if [ "$FLAGS_decompress" -eq 1 ]; then

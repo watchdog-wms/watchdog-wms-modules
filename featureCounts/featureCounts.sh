@@ -94,7 +94,7 @@ verifyFileExistence "$FLAGS_input"
 verifyFileExistence "$FLAGS_annotation"
 
 # create output folder
-createOutputFolder "$FLAGS_output"
+$(createOutputFolder "$FLAGS_output")
 
 # check, type of SAF or GTF
 ANNO_TYPE=$FLAGS_annotationType
