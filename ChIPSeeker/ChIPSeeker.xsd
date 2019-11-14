@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="ChIPSeekerTaskParameterType">
+		<x:all>
+			<x:element name="bedFiles" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="unbounded"/>
+			<x:element name="annoDb" type="paramString" minOccurs="1" maxOccurs="1" />
+			<x:element name="txdb" type="paramString" minOccurs="1" maxOccurs="1" />
+			<x:element name="outputDir" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1" />
+			<x:element name="promotorUpstream" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<x:element name="promotorDownstream" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<x:element name="resample" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<x:element name="conf" type="paramString" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="ChIPSeekerTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="ChIPSeeker.R" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="Rscript" />
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
+				<x:attribute name="returnFilePathParameter" type="x:string" fixed="confirmRun2EndFile" />
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="ChIPSeekerTaskType">
+		<x:complexContent>
+			<x:extension base="ChIPSeekerTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="ChIPSeekerTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="ChIPSeekerTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<x:complexType name="ChIPSeekerTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<x:element name="ChIPSeekerOutputFolder" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="ChIPSeekerTask" type="ChIPSeekerTaskType" substitutionGroup="abstractTask" />
+</x:schema>
