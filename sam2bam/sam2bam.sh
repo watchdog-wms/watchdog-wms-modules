@@ -72,6 +72,7 @@ else
 	TMP_PREFIX=$(getTmpFile sam2bam)
 	TMP_FILE=$(getTmpFile sam2bam /tmp) 
 fi
+TMP_FILE_CAPTURE=$(createOutputFolder "$TMP_FILE")
 
 # run it
 MESSAGE=$(samtools sort -@ $FLAGS_threads -m $FLAGS_memory -l $FLAGS_quality -O bam -T "${TMP_PREFIX}.part" "$FLAGS_sam" > "$FLAGS_bam")
