@@ -94,7 +94,7 @@ verifyFileExistence "$FLAGS_input"
 verifyFileExistence "$FLAGS_annotation"
 
 # create output folder
-$(createOutputFolder "$FLAGS_output")
+CAPTURE=$(createOutputFolder "$FLAGS_output")
 
 # check, type of SAF or GTF
 ANNO_TYPE=$FLAGS_annotationType
@@ -176,7 +176,7 @@ MESSAGE=$(eval "$COMMAND" 2>&1 | sed 's|%|%%|g')
 RET=$?
 
 # check, if tool run to end.
-COUNT=$(echo $MESSAGE | grep -c "Read assignment finished.")
+COUNT=$(echo $MESSAGE | grep -cP "(Read assignment finished.)|(Summary of counting results can)")
 if [ $COUNT -ne 1 ]; then
 	echoError "FeatureCounts was terminated before it finished."
 	CODE=1
