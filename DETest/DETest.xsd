@@ -71,7 +71,7 @@
 				<x:enumeration value="DESeq"/>
 				<x:enumeration value="limma"/>
 				<x:enumeration value="edgeR"/>
-				<x:pattern value="((.*(\$\{[A-Za-z_]+\}).*)+)|all|DESeq2|limma|edgeR"/>
+				<x:pattern value="((.*(\$\{[A-Za-z_]+\}).*)+)|all|DESeq|DESeq2|limma|edgeR"/>
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
