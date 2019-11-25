@@ -160,7 +160,7 @@ done
 if [ ${#READS[@]} -eq 2 ]; then
 	F=$(basename "${READS[0]}" | tr -d '\0')
 	S=$(basename "${READS[1]}" | tr -d '\0')
-	BASENAME=$(echo -e "$F\n$S" | grep -zoP '^(.*)(?=.*?\n\1)')
+	BASENAME=$(echo "$F" | awk 'BEGIN{FS=""} { n=0; while(n<=NF) {if ($n == substr(test,n,1)) {printf("%c",$n);} n++;} print ""}' test="$S")
 	BASENAME=${BASENAME%_R}
 else
 	BASENAME=$(basename "${FLAGS_reads}" | tr -d '\0')
@@ -324,7 +324,7 @@ else
 		else
 			# check if mapping file is there and contains some mappings
 			if [ -e "$TMP_FOLDER/mapping.sam" ]; then
-				COUNT=$(grep -P -v "^@" "$TMP_FOLDER/mapping.sam" | head -n 1 | wc -l)
+				COUNT=$(grep -E -v "^@" "$TMP_FOLDER/mapping.sam" | head -n 1 | wc -l)
 				if [ $COUNT -ne 1 ]; then
 					FAIL=1
 					echoError "Mapping file '$TMP_FOLDER/mapping.sam' contains less than one mapped reads."

@@ -102,7 +102,7 @@ CODE=$?
 if [ $CODE -eq 0 ]; then
 	# check if mapping file is there and contains some mappings
 	if [ -e "$FLAGS_outfile" ]; then
-		COUNT=$(grep -P -v "^@" "$FLAGS_outfile" | head -n 1 | wc -l)
+		COUNT=$(grep -E -v "^@" "$FLAGS_outfile" | head -n 1 | wc -l)
 		if [ $COUNT -ne 1 ]; then
 			echoError "Mapping file '$FLAGS_outfile' contains less than one mapped reads."
 			echoInfo "check the log file for more information: '${FLAGS_outfile}.log'"

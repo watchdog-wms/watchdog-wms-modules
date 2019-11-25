@@ -176,7 +176,7 @@ MESSAGE=$(eval "$COMMAND" 2>&1 | sed 's|%|%%|g')
 RET=$?
 
 # check, if tool run to end.
-COUNT=$(echo $MESSAGE | grep -cP "(Read assignment finished.)|(Summary of counting results can)")
+COUNT=$(echo $MESSAGE | grep -cE "(Read assignment finished.)|(Summary of counting results can)")
 if [ $COUNT -ne 1 ]; then
 	echoError "FeatureCounts was terminated before it finished."
 	CODE=1

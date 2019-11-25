@@ -221,7 +221,7 @@ if [ -e "/tmp/GEM_Log.txt" ]; then
 fi
 
 # check, if tool run to end.
-COUNT=$(tail -n 3 "${FLAGS_outputPrefix}.log" | grep -Pc "^Total running time:")
+COUNT=$(tail -n 3 "${FLAGS_outputPrefix}.log" | grep -Ec "^Total running time:")
 
 if [ $COUNT -ne 1 ]; then
 	echoError "GEM was terminated before it finished."
