@@ -160,7 +160,8 @@ done
 if [ ${#READS[@]} -eq 2 ]; then
 	F=$(basename "${READS[0]}" | tr -d '\0')
 	S=$(basename "${READS[1]}" | tr -d '\0')
-	BASENAME=$(echo "$F" | awk 'BEGIN{FS=""} { n=0; while(n<=NF) {if ($n == substr(test,n,1)) {printf("%c",$n);} n++;} print ""}' test="$S")
+	BASENAME=$(echo "$F" | awk 'BEGIN{FS=""} { n=1; while(n<=NF) {if ($n == substr(test,n,1)) {printf("%s",$n);}else{break;} n++;} print ""}' test="$S")
+	BASENAME=${BASENAME%_}
 	BASENAME=${BASENAME%_R}
 else
 	BASENAME=$(basename "${FLAGS_reads}" | tr -d '\0')
