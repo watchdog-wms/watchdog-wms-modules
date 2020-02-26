@@ -40,6 +40,9 @@ Example:
         └── testFile2.txt
     
 More information on how to create a module can be found in the [documentation](https://rawgit.com/klugem/watchdog/master/documentation/Watchdog-manual.html#custom_modules).
+
+### License
+If not otherwise stated modules are licenced under Apache License 2.0.  However, a module can have an individual licence, which must be loacted in the module folder and named _LICENSE_.
    
 ### Automatic tests on pull requests
 
