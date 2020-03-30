@@ -10,7 +10,7 @@ The reference book for all modules part of this repository is available at https
 
 ### License
 If not otherwise stated in the module folder, all modules are licenced under Apache License 2.0.
-However, please be aware that modules shared in this repository might have individual (more restrictive) licences loacted in their module folder.
+However, please be aware that modules shared in this repository might have individual (more restrictive) licenses loacted in their module folder.
 
 ### Notice
 Copyright (C) 2019-2020 Michael Kluge, Marie-Sophie Friedl, Caroline C. Friedel / LFE Bioinformatik LMU
