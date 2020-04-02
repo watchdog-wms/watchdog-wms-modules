@@ -88,7 +88,7 @@
 	<x:complexType name="paramIntegerGreater_minOverlap_cutadapt">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or $value >= 1" xerces:message="Parameter with name 'minOverlap' must be equal or greater than 1." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1)" xerces:message="Parameter with name 'minOverlap' must be equal or greater than 1." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
