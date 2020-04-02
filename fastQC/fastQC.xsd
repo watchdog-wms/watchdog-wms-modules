@@ -42,7 +42,7 @@
 	<x:complexType name="paramIntegerRange_threads_fastQC">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (128 >= $value and 1 &lt;= $value)" xerces:message="Parameter with name '{$tag}' must be between 1 and 128." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and 128 >= x:integer($value))" xerces:message="Parameter with name 'threads' must be between 1 and 128." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>

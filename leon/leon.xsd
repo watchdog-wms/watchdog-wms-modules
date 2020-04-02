@@ -52,14 +52,14 @@
 	<x:complexType name="paramIntegerRange_threads_leon">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (32 >= $value and 1 &lt;= $value)" xerces:message="Parameter with name '{$tag}' must be between 1 and 32." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and 32 >= x:integer($value))" xerces:message="Parameter with name 'threads' must be between 1 and 32." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
 	<x:complexType name="paramIntegerRange_kmerSize_leon">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (64 >= $value and 16 &lt;= $value)" xerces:message="Parameter with name '{$tag}' must be between 16 and 64." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 16 and 64 >= x:integer($value))" xerces:message="Parameter with name 'kmerSize' must be between 16 and 64." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>

@@ -63,14 +63,14 @@
 	<x:complexType name="paramIntegerRange_readLength_bamstats">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assert test="matches($value, '(\$\{[A-Za-z_][A-Za-z_0-9]*\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (2048 >= $value and 1 &lt;= $value)" xerces:message="Parameter with name '{$tag}' must be between 1 and 2048." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_][A-Za-z_0-9]*\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and 2048 >= x:integer($value))" xerces:message="Parameter with name 'readLength' must be between 1 and 2048." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
 	<x:complexType name="paramIntegerRange_sampleDepth_bamstats">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assert test="matches($value, '(\$\{[A-Za-z_][A-Za-z_0-9]*\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (1000000000000 >= $value and 100000 &lt;= $value)" xerces:message="Parameter with name '{$tag}' must be between 100000 and 1000000000000." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_][A-Za-z_0-9]*\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 100000 and 1000000000000 >= x:integer($value))" xerces:message="Parameter with name 'sampleDepth' must be between 100000 and 1000000000000." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>

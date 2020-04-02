@@ -8,7 +8,7 @@
 			<x:element name="outputFile" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
 			<x:element name="mergedIdxstatsFile" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
 			<x:element name="notSkipHead" type="paramBoolean" minOccurs="0" maxOccurs="1" />
-			<x:element name="numberOfDigits" type="paramIntegerPos_brm" minOccurs="0" maxOccurs="1" />
+			<x:element name="numberOfDigits" type="paramIntegerPosMax25_brm" minOccurs="0" maxOccurs="1" />
 			<x:element name="normByReadCount" type="paramIntegerPos_brm" minOccurs="0" maxOccurs="1" />
 		</x:all>
 	</x:complexType>
@@ -38,12 +38,18 @@
 	<x:element name="bedgraphReplicateMergerTask" type="bedgraphReplicateMergerTaskType" substitutionGroup="abstractTask" />
 
 	<!-- module specific parameter types -->
-	<x:complexType name="paramIntegerPos_brm">
+	<x:complexType name="paramIntegerPosMax25_brm">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (25 >= $value and 0 &lt;= $value)" xerces:message="Parameter with name '{$tag}' must be between 0 and 25." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 0 and 25 >= x:integer($value))" xerces:message="Parameter with name 'numberOfDigits' must be between 0 and 25." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
-
+	<x:complexType name="paramIntegerPos_brm">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value >= 1)" xerces:message="Parameter with name 'normByReadCount' must be equal or greater than 1." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
 </x:schema>

@@ -8,7 +8,7 @@
 			<x:element name="bam" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
 			<x:element name="threads" type="paramIntegerRange_threads_sam2bam" minOccurs="0" maxOccurs="1" />
 			<x:element name="quality" type="paramIntegerRange_quality_sam2bam" minOccurs="0" maxOccurs="1" />
-			<x:element name="memory" type="paramString_quality_sam2bam" minOccurs="0" maxOccurs="1" />
+			<x:element name="memory" type="paramString_memory_sam2bam" minOccurs="0" maxOccurs="1" />
 			<x:element name="tmpFolder" type="paramAbsoluteFolderPath" minOccurs="0" maxOccurs="1" />
 		</x:all>
 	</x:complexType>
@@ -53,21 +53,21 @@
 	<x:complexType name="paramIntegerRange_threads_sam2bam">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (128 >= $value and 1 &lt;= $value)" xerces:message="Parameter with name '{$tag}' must be between 1 and 128." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and 128 >= x:integer($value))" xerces:message="Parameter with name 'threads' must be between 1 and 128." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
 	<x:complexType name="paramIntegerRange_quality_sam2bam">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (9 >= $value and 1 &lt;= $value)" xerces:message="Parameter with name '{$tag}' must be between 1 and 9." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and 9 >= x:integer($value))" xerces:message="Parameter with name 'quality' must be between 1 and 9." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
-	<x:complexType name="paramString_quality_sam2bam">
+	<x:complexType name="paramString_memory_sam2bam">
 		<x:simpleContent>
 			<x:restriction base="paramString">
-				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or matches($value, '[0-9]+[KMG]')" xerces:message="Parameter with name '{$tag}' must match pattern '[0-9]+[KMG]'." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or matches($value, '[0-9]+[KMG]')" xerces:message="Parameter with name 'memory' must match pattern '[0-9]+[KMG]'." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
