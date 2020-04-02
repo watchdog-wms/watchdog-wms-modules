@@ -28,12 +28,20 @@ DEFINE_float 'FoldChangeCutoff' '0.5' '[optional] log2 foldchange between the tw
 DEFINE_integer 'numberOfCondASamplesReachingCutoff' '' '[optional] number of samples from condition A that must pass the coverage cutoff; default: all samples' ''
 DEFINE_integer 'numberOfCondBSamplesReachingCutoff' '' '[optional] number of samples from condition B that must pass the coverage cutoff; default: all samples' ''
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	PTOOL=$(which DaPars_main.py)
+	MESSAGE=$(grep -A 1 "def get_version():" "$PTOOL" | tail -n 1 | sed 's/return "//' | sed 's/"//')
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_sampleAnnotation" ]; then

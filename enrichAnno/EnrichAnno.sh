@@ -14,7 +14,7 @@ if [ $CODE -ne 0 ]; then
 	echoError "$MESSAGE"
 	exit $EXIT_TOOLS_MISSING
 fi
-USED_TOOLS='^R|getopt|clusterProfiler|pathview'
+USED_TOOLS='^R|getopt|clusterProfiler|pathview|KEGGREST'
 MESSAGE=$($LIB_SCRIPT_FOLDER/checkUsedTools.sh "$USED_TOOLS")
 CODE=$?
 
@@ -33,12 +33,19 @@ DEFINE_boolean 'plotKegg' 'true' 'if enabled, plots are created for KEGG pathway
 DEFINE_string 'output' '' 'path to output basename; folder is created if not existent' 'o'
 DEFINE_string 'suffix' '' 'suffix is inserted before basename of output if set; if a absolute path basename is applied' 's'
 DEFINE_string 'foldchangeCol' '' 'name of the colum that contains the log2FC' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(getRPackageVersion "clusterProfiler")
+	echo "clusterProfiler: $MESSAGE"
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_testFiles" ]; then
@@ -98,7 +105,7 @@ COMMAND="Rscript '$INSTALL_DIR/$SCRIPT_PATH' --confirmRun2EndFile '$RUN2END'"
 # build the command
 for PARAM in $__flags_longNames; do
 	# ignore that parameter since it is only for the module
-	if [ "$PARAM" == "debug" ] || [ "$PARAM" == "suffix" ] || [ "$PARAM" == "help" ]; then
+	if [ "$PARAM" == "debug" ] || [ "$PARAM" == "suffix" ] || [ "$PARAM" == "help" ] || [ "$PARAM" == "version" ]; then
 		continue
 	fi
 

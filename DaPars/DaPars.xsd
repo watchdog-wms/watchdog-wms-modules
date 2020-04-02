@@ -26,6 +26,7 @@
 		<x:complexContent>
 			<x:restriction base="baseAttributeTaskType">
 				<x:attribute name="binName" type="x:string" fixed="DaPars.sh" />
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
 			</x:restriction>
 		</x:complexContent>
 	</x:complexType>
@@ -61,14 +62,14 @@
 	<x:complexType name="paramIntegerGreater1_DaPars">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or $value >= 1" xerces:message="Parameter with name '{$tag}' must be equal or greater than 1." />
+				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value >= 1)" xerces:message="Parameter with name 'coverageCutoff' must be equal or greater than 1." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
 	<x:complexType name="paramCutoff_DaPars">
 		<x:simpleContent>
 			<x:restriction base="paramDouble">
-				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or ($value >= 0 and $value &lt;= 2)"  xerces:message="Parameter with name '{$tag}' must be between 0 and 1." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:double($value) >= 0 and 1 >= x:double($value))"  xerces:message="Parameter with name 'FDRCutoff' must be between 0 and 1." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>

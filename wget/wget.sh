@@ -18,12 +18,19 @@ DEFINE_string 'output' '' 'path to a folder in which the downloaded files should
 DEFINE_string 'rename' '' "renames the file to that name; multiple names must be provided in case of multiple URIs (separated by ',')" 'r'
 DEFINE_boolean 'disableSizeCheck' '1' '[optional] flag that can be used to disable the size check that checks if a file is greater than 1KB' ''
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(wget --version 2>&1 | head -n 1 | sed -E 's/built on.*//')
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_uri" ]; then

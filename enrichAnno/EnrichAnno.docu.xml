@@ -12,7 +12,7 @@
     <!-- website of the dependencies used in this module -->
     <website>https://github.com/GuangchuangYu/clusterProfiler</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>Afterwards gene set enrichment analysis was performed on gene sets defined by GO and KEGG enrichment on up-/down-regulated genes.</paperDescription>
+    <paperDescription>Afterwards gene set enrichment analysis was performed on gene sets defined by GO (%orgDB%) and KEGG (%keggDBName%) enrichment on up-/down-regulated genes using clusterProfiler (%SOFTWARE_VERSION%).</paperDescription>
     <PMID>22455463</PMID>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">GNU R</dependencies>

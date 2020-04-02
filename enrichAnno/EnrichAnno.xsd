@@ -22,6 +22,7 @@
 		<x:complexContent>
 			<x:restriction base="baseAttributeTaskType">
 				<x:attribute name="binName" type="x:string" fixed="EnrichAnno.sh"/>
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
 			</x:restriction>
 		</x:complexContent>
 	</x:complexType>
@@ -45,7 +46,7 @@
 	<x:complexType name="paramPValueCutoff_EnrichAnno">
 		<x:simpleContent>
 			<x:restriction base="paramDouble">
-				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or ($value >= 0 and $value &lt;= 2)"  xerces:message="Parameter with name '{$tag}' must be between 0 and 1." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:double($value) >= 0 and 1 >= x:double($value))" xerces:message="Parameter with name 'pValueCutoff' must be between 0 and 1." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>

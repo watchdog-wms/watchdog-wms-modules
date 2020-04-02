@@ -12,7 +12,7 @@
     <!-- website of the dependencies used in this module -->
     <website>https://github.com/ZhengXia/dapars</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>DaPars was used to identify alternative polyadenylation.</paperDescription>
+    <paperDescription>DaPars (%SOFTWARE_VERSION%) was used to identify alternative polyadenylation.</paperDescription>
     <PMID>25409906</PMID>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">DaPars</dependencies>

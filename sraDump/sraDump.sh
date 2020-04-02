@@ -21,6 +21,7 @@ DEFINE_string 'outputFolder' '' 'folder in which the files should be extracted' 
 DEFINE_string 'tmpFolder' '/usr/local/storage' 'tmp folder; default: /usr/local/storage' 't'
 DEFINE_boolean 'deleteOnSuccess' '1' '[optional] deletes the SRA file when extraction was successfull' ''
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
@@ -28,6 +29,12 @@ FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
 BASE=""
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(fastq-dump --version | grep ":" | cut -f 2 -d ":" | tr -d ' ')
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_sraFile" ] && [ -z "$FLAGS_sraID" ]; then

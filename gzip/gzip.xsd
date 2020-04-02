@@ -57,7 +57,7 @@
 	<x:complexType name="paramIntegerRange0_9_gzip">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or ($value >= 1 and $value &lt;= 9)" xerces:message="Parameter with name '{$tag}' must be equal or greater than 0 and less or equal to 10." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and 9 >= x:integer($value))" xerces:message="Parameter with name 'quality' must be between 1 and 9." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
@@ -65,7 +65,7 @@
 	<x:complexType name="paramIntegerPositive_gzip">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or ($value >= 1)" xerces:message="Parameter with name '{$tag}' must be greater than 0." />
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1)" xerces:message="Parameter with name 'limitLines' must be greater than 0." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>

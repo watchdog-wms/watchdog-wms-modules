@@ -12,7 +12,7 @@
     <!-- website of the dependencies used in this module -->
     <website>https://bedtools.readthedocs.io/en/latest</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>[Bedtools was used to convert BAM files to WIG files.]</paperDescription>
+    <paperDescription>Bedtools (%SOFTWARE_VERSION%) was used to convert BAM files to WIG files.</paperDescription>
     <PMID>20110278</PMID>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">bedtools</dependencies>

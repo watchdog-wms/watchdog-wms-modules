@@ -17,12 +17,19 @@ DEFINE_string 'bam' '' 'path to the position-based-sorted bam file' 'b'
 DEFINE_string 'output' '' 'path to bedgraph file' 'o'
 DEFINE_string 'contigSizes' '' '[optional] file containing the sizes of the contigs used in the bam file if ranges should be extended (format: <chrName><TAB><SIZE>)' 'c'
 DEFINE_string 'returnFilePath' '' '[optional] path to the return variables file' ''
+DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
 # parse parameters
 FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
+
+if [ "$FLAGS_version" -eq 0 ]; then
+	MESSAGE=$(bedtools --version 2>&1 | sed -E 's/^bedtools //')
+	echo $MESSAGE
+	exit $EXIT_OK
+fi
 
 # check if mandatory arguments are there
 if [ -z "$FLAGS_bam" ]; then
