@@ -100,7 +100,7 @@ if [ -z "$FLAGS_geneBodyAnnotation" ]; then
 fi
 
 # check, if used tools are installed
-USED_TOOLS='samtools:basename'
+USED_TOOLS='samtools:basename:sed'
 USED_TOOLS_ADD='FPKM_count.py:RPKM_saturation.py:inner_distance.py:bam_stat.py:clipping_profile.py:insertion_profile.py:deletion_profile.py:infer_experiment.py:junction_annotation.py:junction_saturation.py:read_distribution.py:
 read_duplication.py:read_GC.py:read_NVC.py:geneBody_coverage.py:RNA_fragment_size.py:tie.py'
 

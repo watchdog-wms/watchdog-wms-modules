@@ -4,6 +4,10 @@ args <- commandArgs(trailingOnly = FALSE)
 functionsFileName <- paste(dirname(sub('--file=', '', args[grep('--file=', args)])), '/../sharedUtils/R/functions.R', sep = '')
 source(functionsFileName)
 
+# names to keep of annotated peaks
+keepCols <- c("seqnames", "start", "end", "width", "strand", "annotation", "geneChr", "geneStart", "geneEnd", "geneLength", "geneStrand", "geneId", "distanceToTSS", "ENSEMBL", "SYMBOL", "GENENAME") 
+renameCols <- c("chr", "peakStart", "peakEnd", "peakWidth", "peakStrand", "annotation", "geneChr", "geneStart", "geneEnd", "geneLength", "geneStrand", "geneId", "distanceToTSS", "ENSEMBL", "SYMBOL", "GENENAME") 
+
 # options to parse
 spec <- matrix(c('bedFiles', 'b', 1, 'character',
 		 'annoDb', 'a', 1, 'character',
@@ -90,22 +94,32 @@ for(peakFile in peakFiles) {
 	bn <- gsub('\\.[^\\.]+$', '', bn)
 	bn <- gsub('\\.GPS_events$', '', bn)
 	bnl <- c(bnl, bn)
-	pdf(getOutputFile(opt$outputDir, paste(bn, '.pdf', sep = '')))
 
 	# read data and annotate them
-	peak <- readPeakFile(peakFile)
-	tagMatrix <- getTagMatrix(peak, windows = promoter)
-	peakAnno <- annotatePeak(peak, tssRegion = promoterRange, TxDb = txdb, annoDb = opt$annoDb)
+	peak <- readPeakFile(peakFile, head=F)
+	if(length(peak) > 25) {
+		pdf(getOutputFile(opt$outputDir, paste(bn, '.pdf', sep = '')))
 
-	# make plots
-	print(covplot(peak))
-	tagHeatmap(tagMatrix, xlim = promoterRange, color = 'red', title = 'tags at promotors')
-	print(plotAvgProf(tagMatrix, xlim = promoterRange, xlab ='genomic region (5\'->3\')', ylab = 'read count frequency', conf = opt$conf, resample = opt$resample))
-	print(plotAnnoBar(peakAnno))
-	upsetplot(peakAnno)
-	print(plotDistToTSS(peakAnno, title = 'Distribution of peaks relative to TSS'))
+		tagMatrix <- getTagMatrix(peak, windows = promoter)
+		peakAnno <- annotatePeak(peak, tssRegion = promoterRange, TxDb = txdb, annoDb = opt$annoDb)
 
-	dev.off() 
+		# make plots
+		print(covplot(peak))
+		if(is.matrix(tagMatrix) && sum(tagMatrix) > 0) {
+			tagHeatmap(tagMatrix, xlim = promoterRange, color = 'red', title = 'tags at promotors')
+			print(plotAvgProf(tagMatrix, xlim = promoterRange, xlab ='genomic region (5\'->3\')', ylab = 'read count frequency', conf = opt$conf, resample = opt$resample))
+		}
+		print(plotAnnoBar(peakAnno))
+		upsetplot(peakAnno)
+		print(plotDistToTSS(peakAnno, title = 'Distribution of peaks relative to TSS'))
+
+		# write peaks to disk
+		peakData <- as.data.frame(peakAnno)
+		peakData <- peakData[, keepCols]
+		colnames(peakData) <- renameCols
+		write.table(peakData, file = getOutputFile(opt$outputDir, paste(bn, '.csv', sep = '')), quote=F, sep="\t", row.names=F)
+		dev.off() 
+	}
 }
 
 # plots for all samples

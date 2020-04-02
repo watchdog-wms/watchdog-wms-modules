@@ -54,8 +54,8 @@ if(!dir.exists(dirname(opt$output))) {
 }
 
 backgroundNames <- as.character(read.csv(opt$backgroundFile, sep="\t", head=T)[, 1])
+library(opt$orgDB, character.only = TRUE)
 orgDB <- opt$orgDB
-library(orgDB, character.only = TRUE) #NO_CHECK <-- do not check if that module is installed as it is a variable!
 keggDBName <- opt$keggDBName
 pValueCutoff <- opt$pValueCutoff
 output <- paste(opt$output, ".csv", sep="")
@@ -105,16 +105,16 @@ if(!is.null(compGOMF) || !is.null(compGOBP) || !is.null(compGOCC) || !is.null(co
 	pdff <- gsub(".csv", ".enrich.pdf", output)
 	pdf(file=pdff)
 	if(!is.null(compGOMF)) {
-		print(plot(compGOMF, showCategory = 40, title = "GO Enrichment Analysis: MF", font.size=7))
+		print(dotplot(compGOMF, showCategory = 40, title = "GO Enrichment Analysis: MF", font.size=7))
 	}
 	if(!is.null(compGOBP)) {
-		print(plot(compGOBP, showCategory = 40, title = "GO Enrichment Analysis: BP", font.size=7))
+		print(dotplot(compGOBP, showCategory = 40, title = "GO Enrichment Analysis: BP", font.size=7))
 	}
 	if(!is.null(compGOCC)) {
-		print(plot(compGOCC, showCategory = 40, title = "GO Enrichment Analysis: CC", font.size=7))
+		print(dotplot(compGOCC, showCategory = 40, title = "GO Enrichment Analysis: CC", font.size=7))
 	}
 	if(!is.null(compKEGG)) {
-		print(plot(compKEGG, showCategory = 40, title = "KEGG Pathway Enrichment Analysis", font.size=7))
+		print(dotplot(compKEGG, showCategory = 40, title = "KEGG Pathway Enrichment Analysis", font.size=7))
 	}
 	dev.off()
 
