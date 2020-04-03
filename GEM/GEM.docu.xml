@@ -103,5 +103,8 @@
     <param default="true" maxOccurs="1" minOccurs="0" name="NarrowPeakOutput" type="boolean">
       <description>output binding events in ENCODE NarrowPeak format </description>
     </param>
+    <param default="/usr/local/storage/" maxOccurs="1" minOccurs="0" name="workingDir" type="folder path" restrictions="absolute">
+      <description>path to working directory</description>
+    </param>
   </parameter>
 </documentation>

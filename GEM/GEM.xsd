@@ -29,6 +29,7 @@
 			<x:element name="HOMEROutput" type="paramBoolean" minOccurs="0" maxOccurs="1" />
 			<x:element name="BEDOutput" type="paramBoolean" minOccurs="0" maxOccurs="1" />
 			<x:element name="NarrowPeakOutput" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="workingDir" type="paramAbsoluteFolderPath" minOccurs="0" maxOccurs="1" />
 		</x:all>
 	</x:complexType>
 

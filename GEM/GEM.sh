@@ -38,6 +38,7 @@ DEFINE_boolean 'HOMEROutput' 'true' "output motif PFM in HOMER format; GEM param
 DEFINE_boolean 'BEDOutput' 'true' "output binding events in BED format for UCSC Genome Browser" ''
 DEFINE_boolean 'NarrowPeakOutput' 'true' "output binding events in ENCODE NarrowPeak format" ''
 DEFINE_integer 'memoryPerThread' '2048' 'total memory per thread in MB if running on local host; otherwise memory limit of executor might be set; default: 2048' ''
+DEFINE_string 'workingDir' '/usr/local/storage/' 'path to working directory' ''
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
 DEFINE_boolean 'version' 'false' "display the version of GEM" ''
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
@@ -211,14 +212,16 @@ for PARAM in $__flags_longNames; do
 	fi
 done
 
+# get tmp folder to work in
+FLAGS_workingDir=${FLAGS_workingDir%/}
+TMPF=$(getTmpFile GEM "$FLAGS_workingDir")
+mkdir -p "$TMPF"
+deleteFolderOnExit "$TMPF"
+
 # run it
 FAIL=0
-MESSAGE=$(eval "cd /tmp && $COMMAND" 2>&1 | tee "${FLAGS_outputPrefix}.log")
+MESSAGE=$(eval "cd "$TMPF" && $COMMAND" 2>&1 | tee "${FLAGS_outputPrefix}.log")
 CODE=$?
-
-if [ -e "/tmp/GEM_Log.txt" ]; then
-	rm "/tmp/GEM_Log.txt" 2>&1 > /dev/null
-fi
 
 # check, if tool run to end.
 COUNT=$(tail -n 3 "${FLAGS_outputPrefix}.log" | grep -Ec "^Total running time:")
