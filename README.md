@@ -9,8 +9,8 @@ If you want to share a module, please read the [contribution guideline](CONTRIBU
 The reference book for all modules part of this repository is available at https://watchdog-wms.github.io/watchdog-wms-modules/.
 
 ### License
-If not otherwise stated in the module folder, all modules are licenced under Apache License 2.0.
-However, please be aware that modules shared in this repository might have individual (more restrictive) licenses loacted in their module folder.
+If not otherwise stated in the module folder, all modules are licensed under Apache License 2.0.
+However, please be aware that modules shared in this repository might have individual (more restrictive) licenses located in their module folder.
 
 ### Notice
 Copyright (C) 2019-2020 Michael Kluge, Marie-Sophie Friedl, Caroline C. Friedel / LFE Bioinformatik LMU
