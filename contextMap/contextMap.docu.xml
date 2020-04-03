@@ -96,7 +96,7 @@
     <param maxOccurs="1" minOccurs="0" name="threads" type="string">
       <description>number of threads used for mapping</description>
     </param>
-    <param default="/usr/local/storage" maxOccurs="1" minOccurs="0" name="localTmpFolder" type="file" restrictions="absolute">
+    <param default="/usr/local/storage/" maxOccurs="1" minOccurs="0" name="localTmpFolder" type="folder" restrictions="absolute">
       <description>path to a local storage that is used for temporary data</description>
     </param>
     <param default="false" maxOccurs="1" minOccurs="0" name="mining" type="boolean">
