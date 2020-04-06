@@ -1,0 +1,11 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - bioconductor-clusterprofiler=3.14
+  - bioconductor-keggrest=1.26
+  - bioconductor-pathview=1.26
+  - coreutils=8.31
+  - grep=2.14
+  - r-getopt=1.20.3
+  - sed=4.7

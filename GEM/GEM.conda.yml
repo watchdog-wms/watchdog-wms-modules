@@ -1,0 +1,9 @@
+channels:
+  - bioconda
+  - conda-forge
+  - hcc
+dependencies:
+  - coreutils=8.31
+  - gem=2.7
+  - grep=2.14
+  - sed=4.7

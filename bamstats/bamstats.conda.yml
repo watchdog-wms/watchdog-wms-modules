@@ -1,0 +1,9 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - coreutils=8.31
+  - grep=2.14
+  - rseqc=3.0
+  - samtools=1.10
+  - sed=4.7

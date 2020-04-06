@@ -1,0 +1,8 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - bioconductor-dexseq= 1.32
+  - coreutils=8.31
+  - grep=2.14
+  - sed=4.7
