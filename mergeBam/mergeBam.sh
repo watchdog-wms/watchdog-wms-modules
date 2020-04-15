@@ -13,6 +13,7 @@ if [ $CODE -ne 0 ]; then
 fi
 
 # define parameters
+DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
 DEFINE_string 'infile' '' 'input bam file(s)' 'i'
 DEFINE_string 'outfile' '' 'output bam file' 'o'
 DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
@@ -64,6 +65,8 @@ RET=$?
 if [ $RET -eq 0 ]; then
         # output the original message
         printf "$MESSAGE\n" 1>&2
+		writeParam2File "$FLAGS_returnFilePath" "mergedBamFile" "$FLAGS_outfile"
+		blockUntilFileIsWritten "$FLAGS_returnFilePath"
         exit $EXIT_OK
 else
         echoError "mergeBAM run failed. Output file was deleted. See log of mergeBAM below"

@@ -32,4 +32,11 @@
       <description>output bam file</description>
     </param>
   </parameter>
+   <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="mergedBamFile" type="string">
+      <description>output bam file (= value for parameter outfile)</description>
+    </var>
+  </return>
 </documentation>
