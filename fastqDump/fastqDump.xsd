@@ -40,6 +40,8 @@
 			<x:extension base="taskReturnType">
 				<x:all>
 					<x:element name="isPairedEnd" type="x:boolean"/>
+					<x:element name="readFile1" type="x:string"/>
+					<x:element name="readFile2" type="x:string"/>
 				</x:all>
 			</x:extension>
 		</x:complexContent>
