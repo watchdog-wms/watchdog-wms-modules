@@ -15,10 +15,11 @@ if [ $CODE -ne 0 ]; then
 fi
 
 # define parameters
+DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
 DEFINE_string 'index' '' "Index filename prefix (minus trailing .X.ht2)" 'x'
 DEFINE_string 'paired1' '' "Files with #1 mates, paired with files in <m2>. Could be gzip'ed (extension: .gz) or bzip2'ed (extension: .bz2)." '1'
 DEFINE_string 'paired2' '' "Files with #2 mates, paired with files in <m1>. Could be gzip'ed (extension: .gz) or bzip2'ed (extension: .bz2)." '2'
-DEFINE_string 'output' '' "File for SAM output (default: stdout)" 'S'
+DEFINE_string 'output' '' "File for SAM output" 'S'
 DEFINE_string 'unpaired' '' "Files with unpaired reads. Could be gzip'ed (extension: .gz) or bzip2'ed (extension: .bz2)." 'U'
 DEFINE_boolean 'fastq' '1' "query input files are FASTQ .fq/.fastq (default)" 'q'
 DEFINE_boolean 'qseq' '1' "query input files are in Illumina's qseq format" ''
@@ -108,6 +109,12 @@ fi
 # check if mandatory arguments are there
 if [ -z "$FLAGS_index" ]; then 
 	echoError "Parameter index must be set. (see --help for details)"; 
+	exit $EXIT_MISSING_ARGUMENTS
+fi
+
+# check if mandatory arguments are there
+if [ -z "$FLAGS_output" ]; then 
+	echoError "Parameter output must be set. (see --help for details)"; 
 	exit $EXIT_MISSING_ARGUMENTS
 fi
 
@@ -368,7 +375,8 @@ else
 	if [ $FAIL -eq 0 ] && [ $RET -eq 0 ]; then
 		# output the original message
 		printf "$MESSAGE\n"
-		
+		writeParam2File "$FLAGS_returnFilePath" "SAMFile" "$FLAGS_output"
+		blockUntilFileIsWritten "$FLAGS_returnFilePath"
 		exit $EXIT_OK
 	else
 		FAIL=1
