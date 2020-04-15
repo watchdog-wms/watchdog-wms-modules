@@ -135,7 +135,7 @@ if [ $RUN -ne 1 ]; then
 		if [ -e "$FLAGS_outputFolder/${SRA_ID}_1.fastq" ] && [ -e "$FLAGS_outputFolder/${SRA_ID}_2.fastq" ] && [ ! -e "$FLAGS_outputFolder/${SRA_ID}.fastq" ]; then
 			PAIRED="true"
 			READ1FILE="$FLAGS_outputFolder/${SRA_ID}_1.fastq";
-		    READ2FILE="$FLAGS_outputFolder/${SRA_ID}_2.fastq";
+			READ2FILE="$FLAGS_outputFolder/${SRA_ID}_2.fastq";
 		else
 			echoError "Was not able to detect if paired-end or single-end data was extracted."
 			exit $EXIT_FAILED
