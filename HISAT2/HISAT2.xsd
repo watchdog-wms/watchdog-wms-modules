@@ -43,7 +43,7 @@
 			<x:element name="index" type="paramString" minOccurs="1" maxOccurs="1" />
 			<x:element name="paired1" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
 			<x:element name="paired2" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
-			<x:element name="output" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<x:element name="output" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
 
 			<x:element name="fastq" type="paramBoolean" minOccurs="0" maxOccurs="1" />
 			<x:element name="qseq" type="paramBoolean" minOccurs="0" maxOccurs="1" />
@@ -109,7 +109,7 @@
 		<x:complexContent>
 			<x:extension base="taskReturnType">
 				<x:all>
-
+					<x:element name="SAMFile" type="x:string"/>
 				</x:all>
 			</x:extension>
 		</x:complexContent>
