@@ -13,6 +13,7 @@ if [ $CODE -ne 0 ]; then
 fi
 
 # define parameters
+DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
 DEFINE_boolean 'bamoutput' '1' "output BAM" 'b'
 DEFINE_boolean 'cramoutput' '1' "output CRAM (requires reference sequence)" 'C'
 DEFINE_boolean 'fastCompression' '1' "use fast BAM compression (implies bamoutput)" '1'
@@ -204,7 +205,8 @@ else
 	if [ $FAIL -eq 0 ] && [ $RET -eq 0 ]; then
 		# output the original message
 		printf "$MESSAGE\n"
-		
+		writeParam2File "$FLAGS_returnFilePath" "outputFile" "$FLAGS_output"
+		blockUntilFileIsWritten "$FLAGS_returnFilePath"
 		exit $EXIT_OK
 	else
 		FAIL=1
