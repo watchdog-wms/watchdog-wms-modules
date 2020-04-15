@@ -44,6 +44,12 @@
     <!-- optional fields per return variable: minVersion, maxVersion -->
     <var name="isPairedEnd" type="boolean">
       <description>Indicates whether paired-end (two fastq files) or single-end (one fastq file) sequencing data was downloaded</description>
+	</var>  
+	<var name="readFile1" type="string">
+      <description>path to first fastq file</description>
+    </var>
+		<var name="readFile2" type="string">
+	<description>path to second fastq file (identical to first fastq file for single-end sequencing data)</description>
     </var>
   </return>
 </documentation>
