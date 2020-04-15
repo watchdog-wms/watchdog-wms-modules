@@ -129,9 +129,13 @@ if [ $RUN -ne 1 ]; then
 	# check, the files that were written
 	if [ -e "$FLAGS_outputFolder/${SRA_ID}.fastq" ]; then
 		PAIRED="false"
+		READ1FILE="$FLAGS_outputFolder/${SRA_ID}.fastq";
+		READ2FILE="$READ1FILE";
 	else
 		if [ -e "$FLAGS_outputFolder/${SRA_ID}_1.fastq" ] && [ -e "$FLAGS_outputFolder/${SRA_ID}_2.fastq" ] && [ ! -e "$FLAGS_outputFolder/${SRA_ID}.fastq" ]; then
 			PAIRED="true"
+			READ1FILE="$FLAGS_outputFolder/${SRA_ID}_1.fastq";
+		    READ2FILE="$FLAGS_outputFolder/${SRA_ID}_2.fastq";
 		else
 			echoError "Was not able to detect if paired-end or single-end data was extracted."
 			exit $EXIT_FAILED
@@ -144,6 +148,8 @@ fi
 # check, if return parameters must be set
 if [ ! -z "$FLAGS_returnFilePath" ]; then
 	writeParam2File "$FLAGS_returnFilePath" "isPairedEnd" "$PAIRED"
+	writeParam2File "$FLAGS_returnFilePath" "readFile1" "$READ1FILE"
+	writeParam2File "$FLAGS_returnFilePath" "readFile2" "$READ2FILE"
 	blockUntilFileIsWritten "$FLAGS_returnFilePath"
 fi
 
