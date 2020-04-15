@@ -121,4 +121,11 @@
       <description>region selected</description>
     </param>
   </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="outputFile" type="string">
+      <description>output file (= value for parameter output)</description>
+    </var>
+  </return>
 </documentation>
