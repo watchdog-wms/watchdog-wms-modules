@@ -4,15 +4,16 @@
 	<!-- definition of the task parameters -->
 	<x:complexType name="contextMapTaskParameterType">
 		<x:all>
-			<x:element name="jarPath" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
 			<x:element name="reads" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="2"/> <!-- starting from ContextMap 2.7.2 takes two read arguments for paired end mode -->
 			<x:element name="alignerName" type="paramString" minOccurs="1" maxOccurs="1"/>
-			<x:element name="alignerBin" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
-			<x:element name="indexerBin" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1"/> <!-- not required for bwa -->
+
 			<x:element name="indices" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="unbounded"/>
 			<x:element name="genome" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1"/>
 			<x:element name="output" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1"/>
 			<!-- optional parameters -->
+			<x:element name="jarPath" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1"/>
+			<x:element name="alignerBin" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1"/>
+			<x:element name="indexerBin" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1"/> <!-- not required for bwa -->
 			<x:element name="skipsplit" type="paramString" minOccurs="0" maxOccurs="1"/>
 			<x:element name="skipmultisplit" type="paramString" minOccurs="0" maxOccurs="1"/>
 			<x:element name="speciesindex" type="paramString" minOccurs="0" maxOccurs="1"/>

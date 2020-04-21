@@ -27,8 +27,8 @@
   <parameter>
     <!-- mandatory fields per parameter: name, type, description -->
     <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
-    <param maxOccurs="1" minOccurs="1" name="jarPath" type="file" restrictions="absolute">
-      <description>path to ContextMap jar file</description>
+    <param maxOccurs="0" minOccurs="1" name="jarPath" type="file" restrictions="absolute">
+      <description>path to ContextMap jar file; if not given internal version will be used</description>
     </param>
     <param maxOccurs="2" minOccurs="1" name="reads" type="file" restrictions="absolute">
       <description>path to reads in fasta or fastq format</description>
@@ -36,7 +36,7 @@
     <param maxOccurs="1" minOccurs="1" name="alignerName" type="enum">
       <description>name of short-read alignment tool; supported values: 'bwa', 'bowtie1' or 'bowtie2'</description>
     </param>
-    <param maxOccurs="1" minOccurs="1" name="alignerBin" type="file" restrictions="absolute">
+    <param maxOccurs="1" minOccurs="0" name="alignerBin" type="file" restrictions="absolute">
       <description>path to the executable of the chosen aligner tool</description>
     </param>
     <param maxOccurs="1" minOccurs="0" name="indexerBin" type="file" restrictions="absolute">

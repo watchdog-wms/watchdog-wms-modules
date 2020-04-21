@@ -3,7 +3,7 @@ SCRIPT_FOLDER=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $SCRIPT_FOLDER/../../core_lib/includeBasics.sh $@
 
 # check, if used tools are installed
-USED_TOOLS='java:tail:grep:rm:echo:tee:wc:head:basename:hostname:awk'
+USED_TOOLS='java:tail:grep:rm:echo:tee:wc:head:basename:hostname:awk:find'
 MESSAGE=$($LIB_SCRIPT_FOLDER/checkUsedTools.sh "$USED_TOOLS" "check_shflag_tools")
 CODE=$?
 
@@ -13,7 +13,7 @@ if [ $CODE -ne 0 ]; then
 fi
 
 # define parameters
-DEFINE_string 'jarPath' '' 'path to ContextMap jar file' 'j'
+DEFINE_string 'jarPath' '' '[optional] path to ContextMap jar file; if not given internal version will be used' 'j'
 DEFINE_string 'reads' '' 'path to reads in fasta or fastq format' 'r'
 DEFINE_string 'alignerName' '' 'name of short-read alignment tool; supported values: "bwa", "bowtie1" or "bowtie2"' '' #replace _ with capital letter
 DEFINE_string 'alignerBin' '' 'absolute path to the executable of the chosen aligner tool' '' #replace _ with capital letter
@@ -59,10 +59,34 @@ FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
 
+# try to detect internal ContextMap JAR
+if [ -z "$FLAGS_jarPath" ]; then
+	JAR_AUTO_DETECT=$(find "$SCRIPT_FOLDER" -name "ContextMap_v*.jar" | head -n 1)
+	if [ $? -eq 0 ]; then
+		FLAGS_jarPath=$JAR_AUTO_DETECT
+	fi
+fi
+
 if [ "$FLAGS_version" -eq 0 ] && [ ! -z "$FLAGS_jarPath" ]; then
 	MESSAGE=$(basename "$FLAGS_jarPath" ".jar" | cut -f 2 -d '_' | cut -b 1 --complement)
 	echo $MESSAGE
 	exit $EXIT_OK
+fi
+
+# try to dected binaries based on name if no explicit path are set
+if [ -z "$FLAGS_alignerBin" ]; then
+	AUTO_BIN=$(which "$FLAGS_alignerName")
+	if [ $? -eq 0 ]; then
+		FLAGS_alignerBin=$AUTO_BIN
+
+		# find indexer bin
+		if [ "$FLAGS_alignerName" != "bwa" ] && [ -z "$FLAGS_indexerBin" ]; then
+			AUTO_BIN=$(which "${FLAGS_alignerName}-build")
+			if [ $? -eq 0 ]; then
+				FLAGS_indexerBin=$AUTO_BIN
+			fi
+		fi
+	fi
 fi
 
 # check if mandatory arguments are there

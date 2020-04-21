@@ -1,0 +1,14 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - bc=1.07.1
+  - bowtie2=2.2.4
+  - bowtie=1.2.3
+  - bwa=0.7.17
+  - coreutils=8.31
+  - gawk=5.1.0
+  - grep=2.14
+  - openjdk=11.0
+  - r-getopt=1.20.3
+  - sed=4.7
