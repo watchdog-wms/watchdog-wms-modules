@@ -3,5 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - coreutils=8.31
+  - gawk=5.0.1
   - grep=2.14
-  - hisat2=2.2.0
+  - sed=4.7
+  - sra-tools=2.10.3

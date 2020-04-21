@@ -3,5 +3,4 @@ channels:
   - conda-forge
 dependencies:
   - coreutils=8.31
-  - grep=2.14
-  - hisat2=2.2.0
+  - samtools=1.10
