@@ -2,6 +2,7 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
+  - bc=1.07.1
   - bioconductor-deseq2=1.26.0
   - bioconductor-deseq=1.38.0
   - bioconductor-edger=3.28.0

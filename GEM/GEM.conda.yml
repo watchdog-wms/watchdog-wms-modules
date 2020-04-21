@@ -6,4 +6,5 @@ dependencies:
   - coreutils=8.31
   - gem=2.7
   - grep=2.14
+  - openjdk=11.0
   - sed=4.7

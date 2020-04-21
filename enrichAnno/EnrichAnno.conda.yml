@@ -2,6 +2,7 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
+  - bc=1.07.1
   - bioconductor-clusterprofiler=3.14
   - bioconductor-keggrest=1.26
   - bioconductor-pathview=1.26
