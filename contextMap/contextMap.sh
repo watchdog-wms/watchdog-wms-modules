@@ -283,7 +283,7 @@ TMP_FOLDER=$(getTmpFile contextMap "$FLAGS_localTmpFolder")
 CAPTURE=$(createOutputFolder "$TMP_FOLDER/.dummyFile")
 MEMORY=$(getMemoryForJava $FLAGS_threads $FLAGS_memoryPerThread $FLAGS_memoryScaleFactor) #use 3GB as default if not running on grid
 
-COMMAND="java $MEMORY -XX:+UseConcMarkSweepGC -XX:NewSize=300M -XX:MaxNewSize=300M -jar '$FLAGS_jarPath' mapper"
+COMMAND="java $MEMORY -XX:NewSize=300M -XX:MaxNewSize=300M -jar '$FLAGS_jarPath' mapper"
 # build the command
 for PARAM in $__flags_longNames; do
 	# ignore that parameter since it is only for the module
