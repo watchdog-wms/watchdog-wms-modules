@@ -129,7 +129,7 @@ verifyFolderExistence "$OUT_BASE"
 printParamValues "parameters before actual script starts" # print param values, if in debug mode
 ##################################################### START with actual SCRIPT ##################################################### 
 MEMORY=$(getMemoryForJava "$FLAGS_threads" "$FLAGS_memoryPerThread")
-COMMAND="java $MEMORY -XX:+UseConcMarkSweepGC -XX:NewSize=300M -XX:MaxNewSize=300M -jar '$FLAGS_jarPath'"
+COMMAND="java $MEMORY -XX:NewSize=300M -XX:MaxNewSize=300M -jar '$FLAGS_jarPath'"
 
 # build the command
 for PARAM in $__flags_longNames; do
