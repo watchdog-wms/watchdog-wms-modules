@@ -40,7 +40,7 @@ if [ -z "$FLAGS_input" ]; then
 	exit $EXIT_MISSING_ARGUMENTS
 fi
 # check for correct file handling
-if [[ "$FLAGS_input" == *.fastq ]] || [[ "$$FLAGS_input" == *.fq ]]; then
+if [[ "$FLAGS_input" == *.fastq ]] || [[ "$FLAGS_input" == *.fq ]]; then
 	MODE="-c"
 fi
 if [[ "$FLAGS_input" == *.leon.tar ]]; then
