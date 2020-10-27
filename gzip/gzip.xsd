@@ -13,6 +13,8 @@
 			<x:element name="delete" type="paramBoolean" minOccurs="0" maxOccurs="1"/>
 			<x:element name="quality" type="paramIntegerRange0_9_gzip" minOccurs="0" maxOccurs="1"/>
 			<x:element name="limitLines" type="paramIntegerPositive_gzip" minOccurs="0" maxOccurs="1"/>
+			<x:element name="binaryName" type="paramBinaryName_gzip" minOccurs="0" maxOccurs="1" default="gzip"/>
+			<x:element name="threads" type="paramThreads_gzip" minOccurs="0" maxOccurs="1"/>
 		</x:all>
 	</x:complexType>
 
@@ -62,10 +64,27 @@
 		</x:simpleContent>
 	</x:complexType>
 
+	<x:complexType name="paramBinaryName_gzip">
+		<x:simpleContent>
+			<x:restriction base="paramString">
+				<x:enumeration value="gzip"/>
+				<x:enumeration value="pigz"/>
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+
 	<x:complexType name="paramIntegerPositive_gzip">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
 				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1)" xerces:message="Parameter with name 'limitLines' must be greater than 0." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+
+	<x:complexType name="paramThreads_gzip">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and 128 >= x:integer($value))" xerces:message="Parameter with name 'threads' must be between 1 and 128." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>

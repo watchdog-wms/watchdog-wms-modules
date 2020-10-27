@@ -48,6 +48,12 @@
     <param default="9" maxOccurs="1" minOccurs="0" name="quality" type="integer" restrictions="[1,9]">
       <description>compression quality ranging from 1 to 9; 9 being the slowest but best compression</description>
     </param>
+    <param default="gzip" maxOccurs="1" minOccurs="0" name="binaryName" type="enum">
+      <description>name of the gzip binary; possible values: 'gzip' or 'pigz'</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="threads" type="integer" restrictions="[1,128]">
+      <description>number of cores to use; only possible if 'pigz' is used as binary</description>
+    </param>
   </parameter>
   <return>
     <!-- mandatory fields per return variable: name, type, description -->

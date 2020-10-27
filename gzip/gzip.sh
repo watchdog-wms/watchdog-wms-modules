@@ -3,7 +3,7 @@ SCRIPT_FOLDER=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $SCRIPT_FOLDER/../../core_lib/includeBasics.sh $@
 
 # check, if used tools are installed
-USED_TOOLS='gzip:echo:grep:wc:rm:dirname'
+USED_TOOLS='echo:grep:wc:rm:dirname'
 MESSAGE=$($LIB_SCRIPT_FOLDER/checkUsedTools.sh "$USED_TOOLS" "check_shflag_tools")
 CODE=$?
 
@@ -22,6 +22,8 @@ DEFINE_boolean 'verify' 'true' '[optional] verify after compression the integrit
 DEFINE_boolean 'delete' 'false' '[optional] delete the file after compression was performed; enforces integrity check' 'd'
 DEFINE_integer 'quality' '9' '[optional] compression quality ranging from [1:9] with 1 being the fastest and 9 being the slowest but smallest.' 'q'
 DEFINE_integer 'limitLines' '' '[optional] extract only the first N lines.' 'l'
+DEFINE_string 'binaryName' 'gzip' '[optional] name of the gzip binary; possible values: [gzip, pigz]; default: gzip' 'b'
+DEFINE_integer 'threads' '1' '[optional] number of cores to use; only possible if pigz is used as binary' 't'
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
 DEFINE_boolean 'version' 'false' '[optional] prints the version' ''
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
@@ -31,8 +33,24 @@ FLAGS "$@" || exit $EXIT_INVALID_ARGUMENTS
 eval set -- "${FLAGS_ARGV}"
 printParamValues "initial parameters" # print param values, if in debug mode
 
+BINARY=$FLAGS_binaryName
+THREADS=""
+if [ "$BINARY" != 'gzip' ] && [ "$BINARY" != 'pigz' ]; then
+	echoError "Parameter -b must be 'gzip' or 'pigz'. (see --help for details)";
+	exit $EXIT_INVALID_ARGUMENTS
+else
+	# check, if used binary is installed
+	MESSAGE=$($LIB_SCRIPT_FOLDER/checkUsedTools.sh "$BINARY" "check_shflag_tools")
+	CODE=$?
+
+	if [ $CODE -ne 0 ]; then
+		echoError "$MESSAGE"
+		exit $EXIT_TOOLS_MISSING
+	fi
+fi
+
 if [ "$FLAGS_version" -eq 0 ]; then
-	MESSAGE=$(getBinaryVersion "gzip" "--version")
+	MESSAGE=$(getBinaryVersion "$BINARY" "--version")
 	echo $MESSAGE
 	exit $EXIT_OK
 fi
@@ -71,6 +89,18 @@ if [ "$FLAGS_quality" -le 0 ] || [ "$FLAGS_quality" -ge 10 ] ; then
 	FLAGS_quality=9
 	echoWarn "Quality value must be between [1:9]; User input was overwritten with $FLAGS_quality!"
 fi
+
+if [ "$FLAGS_threads" -gt 128 ] || [ "$FLAGS_threads" -lt 1 ]; then
+	echoError "Parameter -t must be between [1, 128]. (see --help for details)";
+	exit $EXIT_INVALID_ARGUMENTS
+else
+	if [ "$FLAGS_threads" -gt 1 ] && [ "$BINARY" == 'gzip' ]; then
+		FLAGS_threads=1
+		echoWarn "Binary 'gzip' does only support single-threaded processing."
+	else
+		THREADS=" --processes $FLAGS_threads "
+	fi
+fi
 printParamValues "parameters before actual script starts" # print param values, if in debug mode
 ##################################################### START with actual SCRIPT ##################################################### 
 
@@ -83,11 +113,11 @@ CAPTURE=$(createOutputFolder "$FLAGS_output")
 # compression mode
 if [ "$FLAGS_decompress" -eq 1 ]; then
 	# compress the file
-	MESSAGE=$(gzip -$FLAGS_quality --stdout "$FLAGS_input" > "$FLAGS_output")
+	MESSAGE=$($BINARY $THREADS -$FLAGS_quality --stdout "$FLAGS_input" > "$FLAGS_output")
 	CODE=$?
 
 	if [ $CODE -ne 0 ]; then
-		echoError "Compression of '$FLAGS_input' failed. File was deleted. See error of gzip below"
+		echoError "Compression of '$FLAGS_input' failed. File was deleted. See error below"
 		echoAError "$MESSAGE, error code: '$CODE'"
 		rm -f $FLAGS_output 2>&1 > /dev/null
 		exit $EXIT_FAILED
@@ -95,7 +125,15 @@ if [ "$FLAGS_decompress" -eq 1 ]; then
 		if [ -f "$FLAGS_output" ]; then
 			if [ "$FLAGS_verify" -eq 0 ]; then
 				# perform integrity check
-				TEST=$(gzip --test -v "$FLAGS_output" 2>&1 | grep -E "^$FLAGS_output:\s+OK$" | wc -l)
+				if [ "$BINARY" == "gzip" ]; then
+					TEST=$($BINARY --test -v "$FLAGS_output" 2>&1 | grep -E "^$FLAGS_output:\s+OK$" | wc -l)
+				else
+					DEVOUT=$($BINARY $THREADS --test "$FLAGS_output")
+					if [ $? -eq 0 ]; then
+						TEST=1
+					fi
+				fi
+
 				if [ "$TEST" -eq 1 ]; then
 					if [ "$FLAGS_delete" -eq 0 ]; then
 						rm -f "$FLAGS_input" 2>&1 > /dev/null
@@ -125,14 +163,14 @@ if [ "$FLAGS_decompress" -eq 1 ]; then
 else 
 	# get only first n lines
 	if [ ! -z "$FLAGS_limitLines" ] && [ "$FLAGS_limitLines" -ge 1 ]; then
-		MESSAGE=$(gzip -cd "$FLAGS_input" | head -n $FLAGS_limitLines > "$FLAGS_output")
+		MESSAGE=$($BINARY $THREADS -cd "$FLAGS_input" | head -n $FLAGS_limitLines > "$FLAGS_output")
 	else
-		MESSAGE=$(gzip -cd "$FLAGS_input" > "$FLAGS_output")
+		MESSAGE=$($BINARY $THREADS -cd "$FLAGS_input" > "$FLAGS_output")
 	fi
 	CODE=$?
 
 	if [ $CODE -ne 0 ]; then
-		echoError "Decompression of '$FLAGS_input' failed. File was deleted. See error of gzip below:"
+		echoError "Decompression of '$FLAGS_input' failed. File was deleted. See error below:"
 		echoAError "$MESSAGE, error code: '$CODE'"
 		rm -f $FLAGS_output 2>&1 > /dev/null
 		exit $EXIT_FAILED
