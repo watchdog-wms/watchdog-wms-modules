@@ -94,11 +94,13 @@ if [ "$FLAGS_threads" -gt 128 ] || [ "$FLAGS_threads" -lt 1 ]; then
 	echoError "Parameter -t must be between [1, 128]. (see --help for details)";
 	exit $EXIT_INVALID_ARGUMENTS
 else
-	if [ "$FLAGS_threads" -gt 1 ] && [ "$BINARY" == 'gzip' ]; then
-		FLAGS_threads=1
-		echoWarn "Binary 'gzip' does only support single-threaded processing."
-	else
+	if [ "$BINARY" == 'pigz' ]; then
 		THREADS=" --processes $FLAGS_threads "
+	else
+		if [ "$FLAGS_threads" -gt 1 ]; then
+			FLAGS_threads=1
+			echoWarn "Binary 'gzip' does only support single-threaded processing."
+		fi
 	fi
 fi
 printParamValues "parameters before actual script starts" # print param values, if in debug mode
