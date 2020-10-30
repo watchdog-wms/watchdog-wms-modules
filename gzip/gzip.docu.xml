@@ -9,8 +9,9 @@
     <category>General</category>
     <description maxVersion="1" minVersion="1">compresses and decompresses files using gzip; is able to verify file integrity using a md5 checksum file</description>
     <website>https://www.gnu.org/software/gzip/</website>
+    <website>https://zlib.net/pigz/</website>
     <!-- external dependencies required for that module -->
-    <dependencies maxVersion="1" minVersion="1">GNU gzip</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU gzip or pigz</dependencies>
     <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
   </info>
   <!-- ##### optional ##### -->
