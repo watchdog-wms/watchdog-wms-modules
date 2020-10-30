@@ -5989,7 +5989,7 @@ requirements. Nat Methods. 2015 Apr;12(4):357-60].</p>
 					<h3 class="uk-h3"><a href="#auto-and-expand">Dependencies</a></h3>
 					<ul class="uk-list uk-list-bullet">
 
-												<li class="versionMetaFilter" meta-minVersion="1" meta-maxVersion="1">fastq-dump</li> 						<li class="versionMetaFilter" meta-minVersion="1" meta-maxVersion="1">GNU Core Utilities</li> 
+												<li class="versionMetaFilter" meta-minVersion="1" meta-maxVersion="1">fastq-dump or fasterq-dump</li> 						<li class="versionMetaFilter" meta-minVersion="1" meta-maxVersion="1">GNU Core Utilities</li> 
 					</ul><br /><br />
 				</div>
 					<div class="mayhide" meta-hide="false">
@@ -6008,7 +6008,7 @@ requirements. Nat Methods. 2015 Apr;12(4):357-60].</p>
 							</tr>
 						</thead>
 
-												<tr><td>sraFile</td><td>file path</td><td>absolute</td><td></td><td>0-null</td><td>path to the *.sra file(s); can not be used in combination with --sraID</td><td>0</td><td>0</td></tr> 						<tr><td>sraID</td><td>string</td><td></td><td></td><td>0-null</td><td>one or more SRA ID(s); can not be used in combination with --sraFile</td><td>0</td><td>0</td></tr> 						<tr><td>rename</td><td>string</td><td></td><td></td><td>*</td><td>new basename for the resulting fastq files;</td><td>0</td><td>0</td></tr> 						<tr><td>outputFolder</td><td>folder path</td><td>absolute</td><td></td><td>1</td><td>path to folder in which the files should be extracted</td><td>0</td><td>0</td></tr> 						<tr><td>tmpFolder</td><td>folder path</td><td>absolute</td><td>/usr/local/storage</td><td>*</td><td>tmp folder; default: /usr/local/storage</td><td>0</td><td>0</td></tr> 						<tr><td>deleteOnSuccess</td><td>boolean</td><td></td><td>false</td><td>*</td><td>deletes the SRA file when extraction was successfull</td><td>0</td><td>0</td></tr> 
+												<tr><td>sraFile</td><td>file path</td><td>absolute</td><td></td><td>0-null</td><td>path to the *.sra file(s); can not be used in combination with --sraID</td><td>0</td><td>0</td></tr> 						<tr><td>sraID</td><td>string</td><td></td><td></td><td>0-null</td><td>one or more SRA ID(s); can not be used in combination with --sraFile</td><td>0</td><td>0</td></tr> 						<tr><td>rename</td><td>string</td><td></td><td></td><td>*</td><td>new basename for the resulting fastq files;</td><td>0</td><td>0</td></tr> 						<tr><td>outputFolder</td><td>folder path</td><td>absolute</td><td></td><td>1</td><td>path to folder in which the files should be extracted</td><td>0</td><td>0</td></tr> 						<tr><td>tmpFolder</td><td>folder path</td><td>absolute</td><td>/usr/local/storage</td><td>*</td><td>tmp folder; default: /usr/local/storage</td><td>0</td><td>0</td></tr> 						<tr><td>deleteOnSuccess</td><td>boolean</td><td></td><td>false</td><td>*</td><td>deletes the SRA file when extraction was successfull</td><td>0</td><td>0</td></tr> 						<tr><td>binaryName</td><td>enum</td><td></td><td>fastq-dump</td><td>*</td><td>name of the sra-toolkit binary; possible values: 'fastq-dump' or 'fasterq-dump'</td><td>0</td><td>0</td></tr> 						<tr><td>threads</td><td>integer</td><td>[1,128]</td><td>1</td><td>*</td><td>number of cores to use; only possible if 'fasterq-dump' is used as binary</td><td>0</td><td>0</td></tr> 
 					</table><br /><br />
 				</div>
 					<div class="mayhide" meta-hide="false">
