@@ -10,6 +10,8 @@
 			<x:element name="outputFolder" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1" />
 			<x:element name="tmpFolder" type="paramAbsoluteFolderPath" minOccurs="0" maxOccurs="1" />
 			<x:element name="deleteOnSuccess" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="binaryName" type="paramBinaryName_sraDump" minOccurs="0" maxOccurs="1" default="fastq-dump"/>
+			<x:element name="threads" type="paramThreads_sraDump" minOccurs="0" maxOccurs="1"/>
 		</x:all>
 	</x:complexType>
 
@@ -53,6 +55,21 @@
 	<x:element name="sraDumpTask" type="sraDumpTaskType" substitutionGroup="abstractTask" />
 
 	<!-- module specific parameter types -->
+	<x:complexType name="paramBinaryName_sraDump">
+		<x:simpleContent>
+			<x:restriction base="paramString">
+				<x:enumeration value="fastq-dump"/>
+				<x:enumeration value="fasterq-dump"/>
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
 
+	<x:complexType name="paramThreads_sraDump">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and 128 >= x:integer($value))" xerces:message="Parameter with name 'threads' must be between 1 and 128." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
 
 </x:schema>

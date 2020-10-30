@@ -15,7 +15,7 @@
     <paperDescription>Public samples were downloaded from the SRA (accession number: TODO %sraID%) [Leinonen R, Sugawara H, Shumway M, International Nucleotide Sequence Database Collaboration. The sequence read archive. Nucleic Acids Res. 2010;39(Database issue):D19-21.].</paperDescription>
     <PMID>21062823</PMID>
     <!-- external dependencies required for that module -->
-    <dependencies maxVersion="1" minVersion="1">fastq-dump</dependencies>
+    <dependencies maxVersion="1" minVersion="1">fastq-dump or fasterq-dump</dependencies>
     <dependencies maxVersion="1" minVersion="1">GNU Core Utilities</dependencies>
     <!-- module specific hints or comments -->
     <comments maxVersion="1" minVersion="1">The SRA toolkit might create a folder named "ncbi" that is located in your home directory.</comments>
@@ -46,6 +46,12 @@
     </param>
     <param default="false" maxOccurs="1" minOccurs="0" name="deleteOnSuccess" type="boolean">
       <description>deletes the SRA file when extraction was successfull</description>
+    </param>
+    <param default="fastq-dump" maxOccurs="1" minOccurs="0" name="binaryName" type="enum">
+      <description>name of the sra-toolkit binary; possible values: 'fastq-dump' or 'fasterq-dump'</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="threads" type="integer" restrictions="[1,128]">
+      <description>number of cores to use; only possible if 'fasterq-dump' is used as binary</description>
     </param>
   </parameter>
   <return>
