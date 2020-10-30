@@ -69,11 +69,7 @@ if [ "$FLAGS_output" == '${input}.gz' ]; then
 	fi
 	FLAGS_output="$FLAGS_input.gz"
 fi
-if [ "$FLAGS_version" -eq 0 ]; then
-	MESSAGE=$(getRPackageVersion "DEXSeq")
-	echo $MESSAGE
-	exit $EXIT_OK
-fi
+
 # enforce verify when delete is enabled
 if [ "$FLAGS_delete" -eq 0 ]; then
 	FLAGS_verify=0
