@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <info>
+    <author>Michael Kluge</author>
+    <updated>2020-11-03</updated>
+    <category>SEQUENCING</category>
+    <description maxVersion="1" minVersion="1">SPRING is a reference-free method to compress high throughput sequencing data</description>
+    <website>https://github.com/shubhamchandak94/Spring</website>
+    <paperDescription>The FASTQ files were compressed using SPRING.</paperDescription>
+    <PMID>30535063</PMID>
+    <dependencies maxVersion="1" minVersion="1">SPRING (tested with 1.0v1.0)</dependencies>
+    <dependencies maxVersion="1" minVersion="1">GNU core utilities</dependencies>
+  </info>
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <param maxOccurs="2" minOccurs="1" name="fastq" type="file" restriction="absolute">
+      <description>path to one or two (PE datasets) fastq files; possible endings: *.fastq, *.fq, *.fastq.gz or *.fq.gz file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="spring" type="file" restriction="absolute">
+      <description>path to compressed spring file; possible endings: *.spring or *.tar</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="compress" type="boolean">
+      <description>if true the fastq files are compressed; otherwise the spring file is decompressed</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="preserveOrder" type="boolean">
+      <description>preserve read order</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="quality" type="boolean">
+      <description>retain quality values during compression</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="ids" type="boolean">
+      <description>retain read identifiers during compression</description>
+    </param>
+    <param default="lossless" maxOccurs="1" minOccurs="0" name="qualityMode" type="enum">
+      <description>possible values: 'lossless', 'qvz qv_ratio', 'ill_bin' or 'binary thr high low'</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="long" type="boolean">
+      <description>use for compression of arbitrarily long reads</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="decompressRange" type="string">
+      <description>decompress only reads (or read pairs for PE datasets) from start to end (both inclusive); e.g. '1 100'</description>
+    </param>
+    <param default="/usr/local/storage/" maxOccurs="1" minOccurs="0" name="workingDir" type="file">
+      <description>path to working directory</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="threads" type="integer">
+      <description>number of cores to use</description>
+    </param>
+  </parameter>
+  <return>
+    <var name="createdFile" type="string">
+      <description>path to the compressed or decompressed file (separated by ',' in case of PE datasets)</description>
+    </var>
+    <var name="isPairedEnd" type="boolean">
+      <description>true if paired-end data was processed</description>
+    </var>
+  </return>
+</documentation>
