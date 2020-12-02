@@ -25,7 +25,8 @@ def get_command_line_options():
                         help='file with one line giving project ids (file content = all allowed values for projectID)')
     parser.add_argument('--geneTSV', required=True, default=None, type=wutils.valid_file_path, metavar='genes.tsv',
                         help='tab-separated file with genes, cooridantes, exonic basepairs and upstream and downstream regions')
-    
+    parser.add_argument('--localRecountFolder', required=False, default=None, metavar='folder',
+                        help='folder that can contain locally processed or already downloaded recount data; structure: projectID/rse_gene.Rdata and projectID/bw/sampleID.bw')
     # output
     parser.add_argument('--outfolder', required=True, default=None, metavar='folder',
                         help='folder for saving final results, creates a subfolder for the project with a table of coverage values for every sample in the project')
@@ -134,11 +135,11 @@ def remove_tmp_data(remove_sample_data, remove_proj_data, res_proj_dir, tmp_proj
             shutil.rmtree(tmp_proj_dir)
             
 
-def run_Rscript_recount(project_id, gene_file, out_folder, tmp_folder, threads, remove_tmp, parallel_download, rscript_exec):
+def run_Rscript_recount(project_id, gene_file, out_folder, tmp_folder, threads, remove_tmp, parallel_download, localRecountFolder, rscript_exec):
     ''' call the Rscript for calculating coverages of the gene, the upstream and the downstream region '''
     
     location = os.path.dirname(os.path.realpath(__file__))
-    command = [rscript_exec, os.path.join(location, 'get_readout_data_from_recount.R'), project_id, gene_file, out_folder, tmp_folder, str(threads), str(remove_tmp), str(parallel_download)]
+    command = [rscript_exec, os.path.join(location, 'get_readout_data_from_recount.R'), project_id, gene_file, out_folder, tmp_folder, str(threads), str(remove_tmp), str(parallel_download), localRecountFolder]
     print('Running command:\n'+' '.join(command))
     subprocess.check_call(command)
     
@@ -171,7 +172,7 @@ def main():
     
         # run the R code if possible
         try:
-            run_Rscript_recount(projID, o.geneTSV, res_folder, tmp_folder, o.threads, remove_tmp_sample, parallel_down, o.Rscript)
+            run_Rscript_recount(projID, o.geneTSV, res_folder, tmp_folder, o.threads, remove_tmp_sample, parallel_down, o.localRecountFolder, o.Rscript)
         except subprocess.CalledProcessError:
             sys.stderr.write('An error occurred in the R script \n')
             raise

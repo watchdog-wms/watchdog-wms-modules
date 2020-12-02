@@ -1,5 +1,6 @@
 library(recount)
 library(recount.bwtool)
+library(BiocParallel)
 
 # readin and readout regions as granges object and optionally create a bed file with the GRanges
 read_regions <- function(region_file, out_bed = NULL){
@@ -31,8 +32,12 @@ read_regions <- function(region_file, out_bed = NULL){
 
 # downloads rse_gene file for project 'projectid' if not available in folder 'folder/projectid'
 
-download_gene_rse<-function(projectid, folder){
-    
+download_gene_rse<-function(projectid, folder, local_recount_folder){
+
+    # check if rse_gene file is in local recount folder
+    gene_path <- file.path(local_recount_folder, projectid, "rse_gene.Rdata")
+    if(file.exists(gene_path)){ return(gene_path) }
+ 
     # check if the rse_gene file was already downloaded
     gene_path <- file.path(folder, "rse_gene.Rdata")
     if(!file.exists(gene_path)){
@@ -75,10 +80,14 @@ output_file_exists <- function(outfolder, sampleid, expected_size){
 
 # downloads bigWig file for sample 'sampleid' of project 'projectid' if not available in 'folder/projectid/'
 
-download_bigwig <- function(projectid, sampleid, folder){
+download_bigwig <- function(projectid, sampleid, folder, local_recount_folder){
+
+    # check if big wig file is in local recount folder
+    bw_path <- file.path(local_recount_folder, projectid, "bw", paste(sampleid, ".bw", sep=""))
+    if(file.exists(bw_path)){ return(bw_path) }
     
     # check if the bigwig file was already downloaded
-    bw_path <- file.path(folder, paste(sampleid,".bw", sep=""))
+    bw_path <- file.path(folder, paste(sampleid, ".bw", sep=""))
     if(!file.exists(bw_path)){
         url <- recount_url[ recount_url$project==projectid & startsWith(basename(recount_url$url), sampleid) & endsWith(recount_url$url, "bw"), "url"]
         downloader::download(url, destfile=bw_path, mode="wb")
@@ -123,14 +132,14 @@ write_coverage_results <- function(result, outfolder, sample_id, gene_data, gene
 
 # function used to process several samples in parallel
 
-process_sample<- function(sample_id, sample_gene_counts, sample_info, project_id, tmpfolder, outfolder, gene_data, removebw = TRUE){
+process_sample<- function(sample_id, sample_gene_counts, sample_info, project_id, tmpfolder, outfolder, gene_data, local_recount_folder, removebw = TRUE){
     
     if( !output_file_exists(outfolder, sample_id, length(gene_data[["geneids"]])) ){
         
         message(paste(Sys.time(), "processing sample", sample_id))
         
         # download the bigwig file
-        bw_file <- download_bigwig(project_id, sample_id, tmpfolder)
+        bw_file <- download_bigwig(project_id, sample_id, tmpfolder, local_recount_folder)
         # call bwtool summary
         res <- sample_coverage_bwtool(sample_id, gene_data[["bed_file"]], bw_file, tmpfolder)
         # write results table
@@ -138,7 +147,10 @@ process_sample<- function(sample_id, sample_gene_counts, sample_info, project_id
         
         # remove all temporary files: bigwig and tsv file
         if(removebw){
-            unlink(bw_file)
+            # don't delete bw files from local recount folder
+	    if(length(grep(paste("^", local_recount_folder, ".+", sep=""), bw_file)) == 0) {
+                unlink(bw_file)
+            }
         }
     }
     else{
@@ -157,7 +169,7 @@ is_recount_project <- function(project_id){
 }
 
 # yields same results as method above but with parallel download of bigwig files
-process_project<- function(project_id, gene_file, outfolder, tmpfolder, threads=1, remove_tmp_data = TRUE, download_parallel = FALSE){
+process_project<- function(project_id, gene_file, outfolder, tmpfolder, threads=1, remove_tmp_data = TRUE, download_parallel = FALSE, local_recount_folder = NULL){
     
     # check if project was already analyzed 
     if(file.exists(file.path(outfolder, paste(project_id, ".finished", sep="")))){
@@ -165,7 +177,7 @@ process_project<- function(project_id, gene_file, outfolder, tmpfolder, threads=
     }
     
     # check if there is a project corresponding to the given projectID
-    if(!is_recount_project(project_id)){
+    if(is.null(local_recount_folder) && !is_recount_project(project_id)){
         return()
     }
 
@@ -174,7 +186,7 @@ process_project<- function(project_id, gene_file, outfolder, tmpfolder, threads=
     gene_data <- read_regions(gene_file, out_bed = bed_file)
     
     # load project data at gene level
-    rse_file <- download_gene_rse(project_id, tmpfolder)
+    rse_file <- download_gene_rse(project_id, tmpfolder, local_recount_folder)
     load(rse_file)
     
     # save scaled counts for selected genes
@@ -200,13 +212,13 @@ process_project<- function(project_id, gene_file, outfolder, tmpfolder, threads=
     # first download everything
     if(!download_parallel){
         for (sample_id in rownames(sample_data)){
-            download_bigwig(project_id, sample_id, tmpfolder)
+            download_bigwig(project_id, sample_id, tmpfolder, local_recount_folder)
         }
     }
     
     res <- bpmapply(process_sample, rownames(sample_data), lapply(rownames(sample_data), function(x){quant_gene[,x,drop=FALSE]}), 
                    lapply(rownames(sample_data), function(x){sample_data[x,,drop=FALSE]}),
-                   MoreArgs = list("project_id" = project_id, "tmpfolder" = tmpfolder, "outfolder"=outfolder, "gene_data"=gene_data, "removebw"=remove_tmp_data),
+                   MoreArgs = list("project_id" = project_id, "tmpfolder" = tmpfolder, "outfolder"=outfolder, "gene_data"=gene_data, "local_recount_folder"=local_recount_folder, "removebw"=remove_tmp_data),
                    SIMPLIFY = FALSE, BPPARAM=bpparam)
     
     
@@ -241,7 +253,8 @@ main <-function(){
     threads <- as.numeric(args[5])
     remove_tmp <- as.logical(args[6])
     multi_thread_download <- as.logical(args[7])
-    process_project(project_id = project, gene_file = gene_region_tsv, outfolder = res_folder, tmpfolder = tmp_folder, threads = threads, remove_tmp_data = remove_tmp, download_parallel = multi_thread_download)
+    local_recount_folder <- args[8]
+    process_project(project_id = project, gene_file = gene_region_tsv, outfolder = res_folder, tmpfolder = tmp_folder, threads = threads, remove_tmp_data = remove_tmp, download_parallel = multi_thread_download, local_recount_folder = local_recount_folder)
 }
 
 main()

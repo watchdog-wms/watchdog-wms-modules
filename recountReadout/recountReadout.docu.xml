@@ -3,7 +3,7 @@
  
   <info>
     <author>Sophie Friedl</author>
-    <updated>2019-02-11</updated>
+    <updated>2020-02-12</updated>
     <category>SRA mining</category>
     <description maxVersion="1" minVersion="1">calculates readout for every sample in a project from recount.</description>
     <dependencies maxVersion="1" minVersion="1">Python3</dependencies>
@@ -59,6 +59,10 @@
     </param>
     <param default="false" maxOccurs="1" minOccurs="0" name="downloadParallel" type="boolean">
       <description>if this flag is set, big wig files are downloaded by in parallel (default: not set)</description>
+    </param>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="localRecountFolder" type="folder" restrictions="absolute">
+       <description>folder that can contain locally processed or already downloaded recount data; structure: projectID/rse_gene.Rdata and projectID/bw/sampleID.bw</description>
     </param>
   </parameter>
 

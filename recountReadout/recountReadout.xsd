@@ -30,6 +30,8 @@
 			<x:element name="removeTmpProjectData" type="paramBoolean" minOccurs="0" maxOccurs="1"/>
 			<!-- download bigwig files in parallel (default false) -->
 			<x:element name="downloadParallel" type="paramBoolean" minOccurs="0" maxOccurs="1"/>
+			<!-- folder that can contain locally processed or already downloaded recount data; structure: projectID/rse_gene.Rdata and projectID/bw/sampleID.bw -->
+			<x:element name="localRecountFolder" type="paramAbsoluteFolderPath" minOccurs="0" maxOccurs="1" />
 		</x:all>
 	</x:complexType>
 
