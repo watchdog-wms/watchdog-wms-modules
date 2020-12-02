@@ -3,7 +3,7 @@
  
   <info>
     <author>Sophie Friedl</author>
-    <updated>2020-02-12</updated>
+    <updated>2020-12-02</updated>
     <category>SRA mining</category>
     <description maxVersion="1" minVersion="1">calculates readout for every sample in a project from recount.</description>
     <dependencies maxVersion="1" minVersion="1">Python3</dependencies>
