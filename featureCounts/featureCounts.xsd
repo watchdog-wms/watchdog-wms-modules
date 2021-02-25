@@ -29,8 +29,8 @@
 			<x:element name="detailedReadAssignments" type="paramBoolean" minOccurs="0" maxOccurs="1"/>
 
 			<!-- attributes that differ between versions -->
-			<x:element name="minOverlap" type="paramInteger" minOccurs="0" maxOccurs="1" maxVersion="1"/>
-			<x:element name="minReadOverlap" type="paramInteger" minOccurs="0" maxOccurs="1" minVersion="2"/>
+			<x:element name="minReadOverlap" type="paramInteger" minOccurs="0" maxOccurs="1" maxVersion="1"/>
+			<x:element name="minOverlap" type="paramInteger" minOccurs="0" maxOccurs="1" minVersion="2"/>
 			<x:element name="minFracOverlap" type="paramDouble" minOccurs="0" maxOccurs="1" minVersion="2"/>
 			<x:element name="readExtension5" type="paramIntegerGreater0_featureCounts" minOccurs="0" maxOccurs="1" minVersion="2"/>
 			<x:element name="readExtension3" type="paramIntegerGreater0_featureCounts" minOccurs="0" maxOccurs="1" minVersion="2"/>

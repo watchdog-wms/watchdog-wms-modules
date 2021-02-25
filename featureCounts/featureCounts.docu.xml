@@ -70,10 +70,10 @@
     <param default="false" maxOccurs="1" minOccurs="0" name="detailedReadAssignments" type="boolean">
       <description>saves for each read if it was assigned or not; filename: {input_file_name}.featureCounts; format: read name&lt;TAB&gt;status&lt;TAB&gt;feature name&lt;TAB&gt;number of counts for that read</description>
     </param>
-    <param default="1" maxOccurs="1" maxVersion="1" minOccurs="0" name="minOverlap" type="integer">
+    <param default="1" maxOccurs="1" maxVersion="2" minOccurs="0" minVersion="2" name="minOverlap" type="integer">
       <description>minimum number of overlapping bases required to assign a read to a feature; also negative values are allowed</description>
     </param>
-    <param default="1" maxOccurs="1" maxVersion="2" minOccurs="0" minVersion="2" name="minReadOverlap" type="integer">
+    <param default="1" maxOccurs="1" maxVersion="1" minOccurs="0" minVersion="1" name="minReadOverlap" type="integer">
       <description>minimum number of overlapping bases required to assign a read to a feature; also negative values are allowed</description>
     </param>
     <param default="0" maxOccurs="1" maxVersion="2" minOccurs="0" minVersion="2" name="minFracOverlap" type="double">

@@ -6,4 +6,4 @@ dependencies:
   - grep=2.14
   - r-getopt=1.20.3
   - sed=4.7
-  - subread=1.6.4
+  - subread=1.6.1

@@ -34,10 +34,10 @@ DEFINE_boolean 'multiCountMetaFeatures' '1' '[optional] allows a read to be coun
 DEFINE_boolean 'detailedReadAssignments' '1' '[optional] saves for each read if it was assigned or not; filename: {input_file_name}.featureCounts; format: read name<TAB>status<TAB>feature name<TAB>number of counts for that read' 'd'
 # params only available in module version 1 - #VER_TAG:1-1
 if [ ${MODULE_VERSION} -eq 1 ]; then
-	DEFINE_string 'minOverlap' '1' '[optional] minimum number of overlapping bases required to assign a read to a feature; also negative values are allowed' 'm'
+	DEFINE_string 'minReadOverlap' '1' '[optional] minimum number of overlapping bases required to assign a read to a feature; also negative values are allowed' 'm'
 # params only available in module version 2 - #VER_TAG:2-2
 elif [ ${MODULE_VERSION} -eq 2 ]; then
-	DEFINE_string 'minReadOverlap' '1' '[optional] minimum number of overlapping bases required to assign a read to a feature; also negative values are allowed' 'm'
+	DEFINE_string 'minOverlap' '1' '[optional] minimum number of overlapping bases required to assign a read to a feature; also negative values are allowed' 'm'
 	DEFINE_string 'minFracOverlap' '0' '[optional] assign reads to the meta-feature/feature which has the largest number of overlapping bases' ''
 	DEFINE_integer 'readExtension5' '0' "[optional] extend reads at the 5' end" ''
 	DEFINE_integer 'readExtension3' '0' "[optional] extend reads at the 3' end" ''
@@ -142,13 +142,13 @@ fi
 
 # params only available in module version 1
 if [ ${MODULE_VERSION} -eq 1 ]; then
-	if [ $FLAGS_minOverlap -ne 1 ]; then 
-		COMMAND="$COMMAND --minReadOverlap '$FLAGS_minOverlap'"
+	if [ $FLAGS_minReadOverlap -ne 1 ]; then 
+		COMMAND="$COMMAND --minReadOverlap '$FLAGS_minReadOverlap'"
 	fi
 # params only available in module version 2
 elif [ ${MODULE_VERSION} -eq 2 ]; then
-	if [ $FLAGS_minReadOverlap -ne 1 ]; then 
-		COMMAND="$COMMAND --minOverlap '$FLAGS_minReadOverlap'"
+	if [ $FLAGS_minOverlap -ne 1 ]; then 
+		COMMAND="$COMMAND --minOverlap '$FLAGS_minOverlap'"
 	fi
 	if [ $FLAGS_minFracOverlap -ne 0 ]; then 
 		COMMAND="$COMMAND --fracOverlap '$FLAGS_minFracOverlap'"
