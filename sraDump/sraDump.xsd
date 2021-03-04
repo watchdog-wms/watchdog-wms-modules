@@ -12,6 +12,7 @@
 			<x:element name="deleteOnSuccess" type="paramBoolean" minOccurs="0" maxOccurs="1" />
 			<x:element name="binaryName" type="paramBinaryName_sraDump" minOccurs="0" maxOccurs="1" default="fastq-dump"/>
 			<x:element name="threads" type="paramThreads_sraDump" minOccurs="0" maxOccurs="1"/>
+			<x:element name="disablePrefetch" type="paramBoolean" minOccurs="0" maxOccurs="1"/>
 		</x:all>
 	</x:complexType>
 

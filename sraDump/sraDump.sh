@@ -23,6 +23,7 @@ DEFINE_boolean 'deleteOnSuccess' '1' '[optional] deletes the SRA file when extra
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' ''
 DEFINE_string 'binaryName' 'fastq-dump' '[optional] name of the sra-toolkit binary; possible values: [fastq-dump, fasterq-dump]; default: fastq-dump' 'b'
 DEFINE_integer 'threads' '1' '[optional] number of cores to use; only possible if fasterq-dump is used as binary' 'c'
+DEFINE_boolean 'disablePrefetch' '1' '[optional] disables prefetching of the sra files' ''
 DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 DEFINE_boolean 'debug' 'false' '[optional] prints out debug messages.' ''
 
@@ -147,7 +148,7 @@ function cleanFastq { awk '{if(NR % 4 == 3) {print "+"} else {print $0}}' "$1" |
 
 for I in "${!FILES[@]}"; do 
 	FILE="${FILES[$I]}"
-	echo "extracting $FILE..."
+	echo "processing $FILE..."
 
 	SPLIT_FLAG_NAME="--split-3"
 	TMP_FOLDER_PARAM=""
@@ -159,6 +160,20 @@ for I in "${!FILES[@]}"; do
 		fi
 	fi
 
+	# prefetch the files if option is not disabled
+	if [ ! -z "$FLAGS_sraID" ] && [ $FLAGS_disablePrefetch -eq 1 ]; then
+		echo "prefetching ${FILE}..."
+		PREFETCH_COMMAND="prefetch '${FILE}'"
+		if [ "$FLAGS_threads" -eq 1 ]; then
+			# parameter defined for version 2.10.8 but not recognized
+			# https://github.com/ncbi/sra-tools/issues/346
+			# PREFETCH_COMMAND="prefetch --disable-multithreading '${FILE}'"
+			$()
+		fi
+		executeCommand "$PREFETCH_COMMAND" "/dev/null" "sra-prefetch"
+	fi
+
+	echo "extracting $FILE..."
 	executeCommand "$BINARY --split-spot --skip-technical $SPLIT_FLAG_NAME $THREADS $TMP_FOLDER_PARAM -O \"$TMP_OUT_FOLDER\" \"$FILE\"" "/dev/null" "sra-dump"
 	B=$(basename $FILE ".sra")
 

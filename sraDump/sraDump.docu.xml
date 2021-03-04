@@ -47,6 +47,9 @@
     <param default="false" maxOccurs="1" minOccurs="0" name="deleteOnSuccess" type="boolean">
       <description>deletes the SRA file when extraction was successfull</description>
     </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="disablePrefetch" type="boolean">
+      <description>disables prefetching of the sra files</description>
+    </param>
     <param default="fastq-dump" maxOccurs="1" minOccurs="0" name="binaryName" type="enum">
       <description>name of the sra-toolkit binary; possible values: 'fastq-dump' or 'fasterq-dump'</description>
     </param>
