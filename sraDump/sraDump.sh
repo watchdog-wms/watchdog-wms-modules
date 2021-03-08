@@ -50,7 +50,11 @@ else
 fi
 
 # get version
-SRA_TOOLKIT_VERSION=$($BINARY --version | grep ":" | cut -f 2 -d ":" | tr -d ' ')
+SRA_TOOLKIT_VERSION=$($BINARY --version | grep "${BINARY}" | grep -oP "([0-9]+\.[0-9]+\.[0-9]+)")
+if [ -z "$SRA_TOOLKIT_VERSION" ]; then
+	echoError "Failed to obtain the version of the SRA toolkit.";
+	exit $EXIT_FAILED
+fi
 
 # print version
 if [ "$FLAGS_version" -eq 0 ]; then
