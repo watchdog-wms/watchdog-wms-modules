@@ -350,6 +350,10 @@ if  [ ! -z "$FLAGS_output" ]; then
 fi
 
 echo  $flagsAsString;
+
+# ensure that the parent folder is there
+OUT_FOLDER=$(createOutputFolder "$FLAGS_output")
+
 # run it
 MESSAGE=$(hisat2 $flagsAsString)
 
