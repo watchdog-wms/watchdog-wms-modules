@@ -234,11 +234,11 @@ fi
 if  [ ! -z "$FLAGS_u" ]; then
 	flagsAsString="$flagsAsString -u  $FLAGS_u"
 fi
-if  [ ! -z "$FLAGS_5" ]; then
-	flagsAsString="$flagsAsString -5  $FLAGS_5"
+if  [ ! -z "$FLAGS_trim5" ]; then
+	flagsAsString="$flagsAsString -trim5  $FLAGS_trim5"
 fi
-if  [ ! -z "$FLAGS_3" ]; then
-	flagsAsString="$flagsAsString -3  $FLAGS_3"
+if  [ ! -z "$FLAGS_trim3" ]; then
+	flagsAsString="$flagsAsString -trim3  $FLAGS_trim3"
 fi
 if  [ ! -z "$FLAGS_nceil" ]; then
 	flagsAsString="$flagsAsString --n-ceil $FLAGS_nceil"
