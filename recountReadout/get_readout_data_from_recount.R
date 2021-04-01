@@ -136,7 +136,7 @@ process_sample<- function(sample_id, sample_gene_counts, sample_info, project_id
     
     if( !output_file_exists(outfolder, sample_id, length(gene_data[["geneids"]])) ){
         
-        message(paste(Sys.time(), "processing sample", sample_id))
+        print(paste(Sys.time(), "processing sample", sample_id))
         
         # download the bigwig file
         bw_file <- download_bigwig(project_id, sample_id, tmpfolder, local_recount_folder)
@@ -154,7 +154,7 @@ process_sample<- function(sample_id, sample_gene_counts, sample_info, project_id
         }
     }
     else{
-        message(paste(Sys.time(), "skipping sample", sample_id))
+        print(paste(Sys.time(), "skipping sample", sample_id))
     }
 }
 
@@ -164,7 +164,8 @@ is_recount_project <- function(project_id){
         return(TRUE)
     }
     else {
-        stop(paste("Unknown projectID", project_id, "-> Empty result"))
+        print(paste("Unknown projectID", project_id, "-> Empty result"))
+	return(FALSE)
     }
 }
 
@@ -173,11 +174,13 @@ process_project<- function(project_id, gene_file, outfolder, tmpfolder, threads=
     
     # check if project was already analyzed 
     if(file.exists(file.path(outfolder, paste(project_id, ".finished", sep="")))){
+        print(paste("nothing to do for '", project_id, "'", sep=""))
         return()
     }
     
     # check if there is a project corresponding to the given projectID
     if(is.null(local_recount_folder) && !is_recount_project(project_id)){
+        print(paste("no recount project ID: '", project_id, "'", sep=""))
         return()
     }
 
@@ -254,7 +257,7 @@ main <-function(){
     remove_tmp <- as.logical(args[6])
     multi_thread_download <- as.logical(args[7])
     local_recount_folder <- args[8]
-    process_project(project_id = project, gene_file = gene_region_tsv, outfolder = res_folder, tmpfolder = tmp_folder, threads = threads, remove_tmp_data = remove_tmp, download_parallel = multi_thread_download, local_recount_folder = local_recount_folder)
+    captureNull <- process_project(project_id = project, gene_file = gene_region_tsv, outfolder = res_folder, tmpfolder = tmp_folder, threads = threads, remove_tmp_data = remove_tmp, download_parallel = multi_thread_download, local_recount_folder = local_recount_folder)
 }
 
 main()
