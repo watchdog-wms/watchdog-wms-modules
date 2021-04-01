@@ -50,7 +50,10 @@ class SingleEndWriter:
         with pysam.AlignmentFile(self.rrnaMapping, 'r') as samReader, self.nonRrnaWriter.open():
         
             # generate handle and header for writing sam file with final rrna reads  
-            headerOut=samReader.header.to_dict()
+            headerOut=samReader.header
+            if(not isinstance(headerOut, dict)):
+               headerOut=headerOut.to_dict()
+
             headerOut['PG'].append({'ID':'1','CL':' '.join(sys.argv)})
             with pysam.AlignmentFile(self.samOut, 'wh', header=headerOut) as samWriter:
             
@@ -129,7 +132,9 @@ class PairedEndWriter:
         with pysam.AlignmentFile(self.rrnaMapping[0], 'r') as samReader, self.nonRrnaWriter[0].open():
         
             # generate handle and header for writing sam file with final rrna reads  
-            headerOut=samReader.header.to_dict()
+            headerOut=samReader.header
+            if(not isinstance(headerOut, dict)):
+               headerOut=headerOut.to_dict()
             headerOut['PG'].append({'ID':'1','CL':' '.join(sys.argv)})
             samWriter = pysam.AlignmentFile(self.samOut, 'wh', header=headerOut)
             
