@@ -22,7 +22,7 @@ def check_sam_header(input_file):
             if not 'CL' in af.header['PG'][0]:
                 return False, None
             # check progrma call
-            return af.header['PG'][0]['CL'].startswith('bwa sampe'), None
+            return 'bwa sampe' in af.header['PG'][0]['CL'], None
     
     # catch any errors caused by pysam being unable to read the file
     except Exception as e:
@@ -46,12 +46,12 @@ def get_mode_string(file, write=False):
             return 'r'
 
 
-def remove_reads(infile, outfile, unmapped, improper_pairs, map_qual_cut, opt_hit_cut):
+def remove_reads(infile, outfile, unmapped, improper_pairs, map_qual_cut, opt_hit_cut, single_end):
     
     # first scan of the mapping -> decision of removal based on both reads of a pair
     # the decision for each read is saved in the filter object and passed on to the final filter step, no files are written
     
-    first_removal_step = MappingFilter(infile, unmapped, improper_pairs, map_qual_cut, opt_hit_cut)
+    first_removal_step = MappingFilter(infile, unmapped, improper_pairs, map_qual_cut, opt_hit_cut, single_end)
     first_removal_step.run()
     
     # second scan of the mapping -> reads are written to the output file 
@@ -83,7 +83,7 @@ class WritingFilter():
         read_mode = get_mode_string(self.infile, write=False)
         write_mode = get_mode_string(self.outfile, write=True)
  
-        with AlignmentFile(self.infile, read_mode) as reader, AlignmentFile(self.outfile, write_mode, header=reader.header.to_dict()) as writer:
+        with AlignmentFile(self.infile, read_mode) as reader, AlignmentFile(self.outfile, write_mode, header=reader.header) as writer:
         
             for rpos, read in enumerate(reader):
                 
@@ -98,12 +98,13 @@ class WritingFilter():
         
 class MappingFilter():
     
-    def __init__(self, infile, mapped_check, proper_pair_check, mapq_threshold, x0_threshold):
+    def __init__(self, infile, mapped_check, proper_pair_check, mapq_threshold, x0_threshold, single_end):
         self.mapping_file = infile
         self.mapped_check = mapped_check
         self.proper_pair_check = proper_pair_check
         self.mapq_threshold = mapq_threshold
         self.x0_threshold = x0_threshold
+        self.single_end_data = single_end
         
         # numpy array of booleans: position of boolean = position of read in mapping file, boolean value = True -> keep read, False -> remove read
         self._decision_array = None 
@@ -194,7 +195,7 @@ class MappingFilter():
         
         # error handling -> this should not happen if each read is paired and each read of a pair occurs exactly once in the file
         # if the error occurs, a programming error occurred or the input file was not generated with bwa sampe or was already filtered by another tool
-        if(len(name_to_mate_pos)>0):
+        if(not self.single_end_data and len(name_to_mate_pos)>0):
             print('WARNING: Could not find mates for some reads:\n'+','.join(list(sorted(name_to_mate_pos.keys()))[:3] )+',... ('+str(len(name_to_mate_pos))+' reads)')
             print('These reads will be removed from the final output')
             for _,rpos in name_to_mate_pos.items():

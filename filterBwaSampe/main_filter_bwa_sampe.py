@@ -36,6 +36,13 @@ def get_command_line_options():
         help='use this flag to remove pairs that are not properly paired according to bwa sampe, default: true')
     properpair_flag.add_argument('--noremoveImproperPairs', required=False, default=False, action='store_true',
         help='use this flag to keep read pairs that are not properly paired, default: false')
+    isSingleEnd_flag = parser.add_mutually_exclusive_group()
+    isSingleEnd_flag.add_argument('--isSingleEnd', required=False, default=False, action='store_true',
+        help='use this flag to indicate that single end data should be filtered, default: false')
+    isSingleEnd_flag.add_argument('--noisSingleEnd', required=False, default=True, action='store_true',
+        help='use this flag to indicate that paired end data should be filtered, default: true')
+
+
 
     # integer values -> do not remove any reads based on qualities or hit number by default
     parser.add_argument('--removeMapqBelow', required=False, default=20, type=wutils.positive_integer_or_zero,
@@ -54,6 +61,7 @@ def process_option_interactions(options):
     
     removal_of_unmapped = not options.noremoveUnmapped
     removal_of_improper_pairs = not options.noremoveImproperPairs
+    isSingleEndData = options.isSingleEnd
     
     if (not removal_of_unmapped) and removal_of_improper_pairs:
         print('WARNING: removal of improper pairs will also remove unmapped pairs\n')
@@ -72,7 +80,7 @@ def process_option_interactions(options):
     if hit_cutoff==0:
         hit_cutoff=None
     
-    return removal_of_unmapped, removal_of_improper_pairs, quality_cutoff, hit_cutoff
+    return removal_of_unmapped, removal_of_improper_pairs, quality_cutoff, hit_cutoff, isSingleEndData
 
 
 def check_input_file(options):
@@ -101,15 +109,15 @@ def main():
     
     # check options and prepare output locations
     _,o = get_command_line_options()
-    re_unmapped, re_imppairs, qual_cut, hit_cut = process_option_interactions(o)
+    re_unmapped, re_imppairs, qual_cut, hit_cut, single_end = process_option_interactions(o)
     check_input_file(o)
     create_outfiles(o)
     
     # log
     start_timepoint=wutils.get_current_time()
     print(start_timepoint[1]+'Welcome to the module for fitlering the output of bwa sampe !\n')
-    
-    algo_filter_bwa_sampe.remove_reads(o.inSamBam, o.outSamBam, re_unmapped, re_imppairs, qual_cut, hit_cut)
+
+    algo_filter_bwa_sampe.remove_reads(o.inSamBam, o.outSamBam, re_unmapped, re_imppairs, qual_cut, hit_cut, single_end)
     
     # log
     end_timepoint=wutils.get_current_time()

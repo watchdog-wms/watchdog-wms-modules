@@ -22,6 +22,8 @@
 			<x:element name="removeMoreThanOptimalHits" type="paramInteger" minOccurs="0" maxOccurs="1" />
 			<!-- removes read pairs with mapping quality below this threshold, set to 0 to deactivate tbe option, default: 20 -->
 			<x:element name="removeMapqBelow" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<!-- indicate single end data, default: false -->
+			<x:element name="isSingleEnd" type="paramBoolean" minOccurs="0" maxOccurs="1" />
 		</x:all>
 	</x:complexType>
 

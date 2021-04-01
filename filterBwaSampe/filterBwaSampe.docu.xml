@@ -36,6 +36,9 @@
     <param default="1" maxOccurs="1" minOccurs="0" name="removeMoreThanOptimalHits" type="integer" restrictions="&gt;=0">
       <description>remove all read pairs with more than maxHits optimal alignment positions for at least one mate (based bwa aln specific tag "X0"), setting the option to 0 deactivates filtering based on hit number</description>
     </param>
+    <param default="False" maxOccurs="1" minOccurs="0" name="isSingleEnd" type="boolean">
+      <description>use this flag to indicate that single end data should be filtered</description>
+    </param>
   </parameter>
   
   <return>
