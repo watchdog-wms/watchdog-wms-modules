@@ -37,5 +37,7 @@ def bedgraph_to_tdf(bedgraph_path, genome_file, tdf_path, igvtools_exec='igvtool
         raise
     
     # remove log file of igv -> empty file
-    os.remove(os.path.join(wdir, 'igv.log'))
+    logFile = os.path.join(wdir, 'igv.log')
+    if os.path.exists(logFile):
+        os.remove(logFile)
 
