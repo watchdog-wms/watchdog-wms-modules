@@ -18,7 +18,7 @@ if [ $CODE -ne 0 ]; then
 	echoError "$MESSAGE"
 	exit $EXIT_TOOLS_MISSING
 fi
- 
+
 # define parameters
 DEFINE_string 'searchFolder' '' 'path to the folder in which the script looks for *.counts files' 's'
 DEFINE_string 'statsFolder' '' '[optional] path to merged statistic folder' ''
@@ -86,7 +86,7 @@ L_CHECK=""
 for i in "$FLAGS_searchFolder"/*.counts; 
 do
 	B=$(basename "$i")
-	tail -n +3 "$i" | sort > "$TMP_FOLDER/$B"
+	tail -n +3 "$i" | sort --temporary-directory="$TMP_FOLDER" > "$TMP_FOLDER/$B"
 	CHECK=$(cut -f 1 "$TMP_FOLDER/$B" | md5sum | cut -f 1)
 
 	if [ "$L_CHECK" != "" ]; then
