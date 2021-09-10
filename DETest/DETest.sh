@@ -14,7 +14,7 @@ if [ $CODE -ne 0 ]; then
 	echoError "$MESSAGE"
 	exit $EXIT_TOOLS_MISSING
 fi
-USED_TOOLS='^R|DESeq2|edgeR|limma|Biobase|getopt|RColorBrewer|gplots|genefilter|lattice' #DESeq
+USED_TOOLS='^R|DESeq|DESeq2|edgeR|limma|Biobase|getopt|RColorBrewer|gplots|genefilter|lattice'
 MESSAGE=$($LIB_SCRIPT_FOLDER/checkUsedTools.sh "$USED_TOOLS")
 CODE=$?
 
