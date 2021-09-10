@@ -14,7 +14,7 @@ if [ $CODE -ne 0 ]; then
 	echoError "$MESSAGE"
 	exit $EXIT_TOOLS_MISSING
 fi
-USED_TOOLS='^R|DESeq|DESeq2|edgeR|limma|Biobase|getopt|RColorBrewer|gplots|genefilter|lattice'
+USED_TOOLS='^R|DESeq2|edgeR|limma|Biobase|getopt|RColorBrewer|gplots|genefilter|lattice' #DESeq
 MESSAGE=$($LIB_SCRIPT_FOLDER/checkUsedTools.sh "$USED_TOOLS")
 CODE=$?
 
@@ -36,6 +36,9 @@ DEFINE_float 'pValueCutoff' '0.01' 'p-Value cutoff for significant results' 'p'
 DEFINE_integer 'minKeepReads' '25' 'number of reads a feature must own in average per sample to pass filtering step before DE test is performed' 'm'
 DEFINE_string 'foldchangeCutoff' '0.0,0.415,1.0' "log2 foldchange cutoffs for which a own result file will be created; will be used for both directions (+/-); separated by ','" ''
 DEFINE_string 'foldchangeCutoffNames' 'significant,0.33-fold,2-fold' "corresponding names to the foldchange cutoffs; separated by ','" ''
+DEFINE_string 'twoColorFCCutoff' '1' "foldchange cutoff for the two-colored volcano plot" ''  
+DEFINE_string 'upregColor' 'blue' "color for down-regulated genes in the two-colored volcano plot" ''
+DEFINE_string 'downregColor' 'red' "color for down-regulated genes in the two-colored volcano plot" ''
 DEFINE_string 'output' '' 'output folder' 'o'
 DEFINE_string 'method' 'all' 'method that should be applied; {limma, DESeq, DESeq2, edgeR, all}' ''
 DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'

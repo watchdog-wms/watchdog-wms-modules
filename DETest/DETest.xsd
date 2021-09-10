@@ -16,6 +16,9 @@
 			<x:element name="minKeepReads" type="paramMinKeepReads_DETest" minOccurs="0" maxOccurs="1"/>
 			<x:element name="foldchangeCutoff" type="paramInteger" minOccurs="0" maxOccurs="unbounded"/>
 			<x:element name="foldchangeCutoffNames" type="paramString" minOccurs="0" maxOccurs="unbounded"/>
+			<x:element name="twoColorFCCutoff" type="paramDouble" minOccurs="0" maxOccurs="1"/>
+			<x:element name="upregColor" type="paramString" minOccurs="0" maxOccurs="1"/>
+			<x:element name="downregColor" type="paramString" minOccurs="0" maxOccurs="1"/>
 			<x:element name="output" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1"/>
 			<x:element name="method" type="paramMethod_DETest" minOccurs="0" maxOccurs="1"/>
 		</x:all>
@@ -50,7 +53,7 @@
 	<x:complexType name="paramPValueCutoff_DETest">
 		<x:simpleContent>
 			<x:restriction base="paramDouble">
-				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:double($value) >= 0 and 1 >= x:double($value))" xerces:message="Parameter with name 'pValueCutoff' must be between 0 and 1." />
+				<x:assertion test="if(matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])')) then 1 else (x:double($value) >= 0.0 and 1.0 >= x:double($value))" xerces:message="Parameter with name 'pValueCutoff' must be between 0 and 1." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>
@@ -58,7 +61,7 @@
 	<x:complexType name="paramMinKeepReads_DETest">
 		<x:simpleContent>
 			<x:restriction base="paramInteger">
-				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1)" xerces:message="Parameter with name 'minKeepReads' must be equal or greater than 1." />
+<x:assertion test="if(matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])')) then 1 else (x:integer($value) >= 1)" xerces:message="Parameter with name 'minKeepReads' must be equal or greater than 1." />
 			</x:restriction>
 		</x:simpleContent>
 	</x:complexType>

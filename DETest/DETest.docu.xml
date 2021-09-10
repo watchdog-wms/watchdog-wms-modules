@@ -68,6 +68,15 @@
     <param default="significant,0.33-fold,2-fold" minOccurs="0" name="foldchangeCutoffNames" type="string">
       <description>corresponding names to the foldchange cutoffs</description>
     </param>
+    <param default="1" minOccurs="0" maxOccurs="1" name="foldchangeCutoff" type="double">
+      <description>log2 foldchange cutoffs the two-colored volcano plot; will be used for both directions (+/-)</description>
+    </param>
+    <param default="red" minOccurs="0" maxOccurs="1" name="downregColor" type="string">
+      <description>color for down-regulated genes in the two-colored volcano plot</description>
+    </param>
+    <param default="blue" minOccurs="0" maxOccurs="1" name="upregColor" type="string">
+      <description>color for down-regulated genes in the two-colored volcano plot</description>
+    </param>
     <param maxOccurs="1" minOccurs="1" name="output" type="file" restrictions="absolute">
       <description>path to output folder</description>
     </param>

@@ -58,6 +58,23 @@ if(exists("normCounts")) {
 	}	
 	legend("top", text, cex=1, fill=hmcol[seq(1, length(text))] ,ncol=3, inset=c(0,0), xpd=T)
 
+	# volcano plot - alternative coloring
+	plot(a$log2FC, -log10(a$adj.PValue), ylab="-log10(adj. PValue)", xlab="log2 foldchange", xlim=xl, ylim=yl, pch=20, cex=0.75, main=paste("Volcano plot for", nrow(allNotNA), "genes", sep=" "))
+	signifPlot <- !is.na(allNotNA$log2FC) & !is.na(allNotNA$adj.PValue) & allNotNA$adj.PValue <= opt$pValueCutoff
+	up <- allNotNA[signifPlot & allNotNA$log2FC >= opt$twoColorFCCutoff, ]
+	down <- allNotNA[signifPlot & allNotNA$log2FC <= -opt$twoColorFCCutoff, ]
+	rest <- allNotNA[signifPlot & abs(allNotNA$log2FC) < opt$twoColorFCCutoff, ]
+	points(rest$log2FC, -log10(rest$adj.PValue), pch=20, cex=0.75)
+	points(up$log2FC, -log10(up$adj.PValue), col=opt$upregColor, pch=20, cex=0.75)
+	points(down$log2FC, -log10(down$adj.PValue), col=opt$downregColor, pch=20, cex=0.75)
+	bothGroups <- list(up, down)
+	text <- unlist(lapply(bothGroups, function(x) { paste("n = ", nrow(x), sep="") }))
+	
+	legend("topright", text, cex=1, fill=c(opt$upregColor, opt$downregColor), ncol=1, inset=c(0,0), xpd=T)
+	abline(h = -log10(opt$pValueCutoff), lty="dashed")
+	abline(v = opt$twoColorFCCutoff, lty="dashed")
+	abline(v = -opt$twoColorFCCutoff, lty="dashed")
+
 	# end plotting
 	dev.off()
 }

@@ -3,7 +3,7 @@ library(getopt)
 library(RColorBrewer)
 library(gplots)
 
-validMethods <- c("all","limma", "edgeR", "DESeq2", "DESeq")
+validMethods <- c("all", "limma", "edgeR", "DESeq2", "DESeq")
 
 # options to parse
 spec <- matrix(c('controlCondition', 'a', 1, "character",
@@ -21,6 +21,9 @@ spec <- matrix(c('controlCondition', 'a', 1, "character",
 		  'method', 'm', '1', "character",
 		  'output', 'n', 1, "character",
 		  'installDir', 'o', 1, "character",
+		  'twoColorFCCutoff', 'q', 1, "character",
+ 		  'upregColor', 'r', 1, "character",
+		  'downregColor', 's', 1, "character",
 		  'confirmRun2EndFile', 'p', 1, "character"), ncol=4, byrow=T)
 
 # parse the parameters
@@ -47,6 +50,19 @@ vs <- paste(opt$testCondition, opt$controlCondition, sep="_")
 if(!is.null(opt$excludeSamples)) 
 {
 	opt$excludeSamples <- sort(unlist(strsplit(opt$excludeSamples, ",")))
+}
+
+# settings for second volcano plot
+if(is.null(opt$twoColorFCCutoff)) {
+	opt$twoColorFCCutoff <- 1
+} else {
+	opt$twoColorFCCutoff <- abs(as.numeric(opt$twoColorFCCutoff))
+}
+if(is.null(opt$upregColor)) {
+	opt$upregColor <- "blue"
+}
+if(is.null(opt$downregColor)) {
+	opt$downregColor <- "red"
 }
 
 # build expressionSet
