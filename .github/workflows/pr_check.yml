@@ -5,6 +5,11 @@ jobs:
   Validator:
     runs-on: ubuntu-latest
     steps:
+    - name: caching
+      uses: actions/cache@v2
+      with:
+        path: ~/watchdog
+        key: watchdog_base
     - uses: klugem/actions_checkout@v2
     - name: set up JDK 11
       uses: klugem/actions_setup-java@v1
@@ -36,14 +41,24 @@ jobs:
     - name: separate module test
       continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "SEPARATE_FOLDER"
-    - name: separate module test
+    - name: write permission test'
       continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "WRITE_PERMISSION"
-    - name: separate module test
+    - name: XSD validation test
       continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "XSD_VALIDATION"
-    - name: separate module test
+    - name: XSD validation test
       continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "XML_DOCUMENTATION"
+     
+  Virus:
+    runs-on: ubuntu-latest
+    steps:
+    - name: caching
+      uses: actions/cache@v2
+      with:
+        path: /tmp/clamav_db
+        key: virus_db
+    - uses: klugem/actions_checkout@v2     
     - name: 'virus scan test'
-      run: /bin/bash "${WATCHDOG_BASE}/helper_scripts/travisCI_clamAV.sh"
+      run: /bin/bash "~/watchdog/helper_scripts/travisCI_clamAV.sh"
