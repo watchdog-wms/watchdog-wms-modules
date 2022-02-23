@@ -31,6 +31,7 @@ jobs:
     - name: init module validator
       run: |
           RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD > /dev/null 2>&1 || echo "NO_GIT")
+          echo $RET
           if [ $RET == "NO_GIT" ]; then rm -rf "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"; fi
           git -C "${WATCHDOG_BASE}" pull -f
           git -C "${WATCHDOG_BASE}" rev-parse HEAD
