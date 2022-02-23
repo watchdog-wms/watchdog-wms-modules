@@ -6,5 +6,3 @@ dependencies:
   - bioconductor-genomicfeatures=1.38.0
   - coreutils=8.31
   - grep=2.14
-  - r-getopt 1.20.3
-  - sed=4.7
