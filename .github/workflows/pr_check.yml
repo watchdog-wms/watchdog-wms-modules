@@ -29,20 +29,20 @@ jobs:
           git -C "${WATCHDOG_BASE}" rev-parse HEAD
           ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
     - name: signed commit test
-      continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "SIGNED_COMMIT"
+      if: always()
     - name: separate module test
-      continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "SEPARATE_FOLDER"
+      if: always()
     - name: write permission test
-      continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "WRITE_PERMISSION"
+      if: always()
     - name: XSD validation test
-      continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "XSD_VALIDATION"
+      if: always()
     - name: XSD validation test
-      continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "XML_DOCUMENTATION"
+      if: always()
      
   Virus:
     runs-on: ubuntu-latest
