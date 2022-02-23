@@ -59,6 +59,8 @@ jobs:
       with:
         path: /tmp/clamav_db
         key: virus_db
-    - uses: klugem/actions_checkout@v2     
+    - uses: klugem/actions_checkout@v2    
+    - name: 'obtain can script'
+      run: wget -O "/tmp/travisCI_clamAV.sh" "https://raw.githubusercontent.com/klugem/watchdog/master/helper_scripts/travisCI_clamAV.sh"
     - name: 'virus scan test'
-      run: /bin/bash "~/watchdog/helper_scripts/travisCI_clamAV.sh"
+      run: /bin/bash "/tmp/travisCI_clamAV.sh"
