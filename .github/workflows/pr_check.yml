@@ -4,6 +4,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix: { TESTS: [{name: 'SIGNED_COMMIT', desc: 'signed commit test'}, {name: 'SEPARATE_FOLDER', desc: 'separate module test'}] }
     steps:
@@ -22,15 +23,13 @@ jobs:
         key: watchdog_wms_modules_cache
     - name: init module validator
       run: |
-          export TRAVIS_BUILD_DIR="$GITHUB_WORKSPACE"
-          echo $TRAVIS_BUILD_DIR
-          env
-          export WATCHDOG_BASE="~/.cache/watchdog/"
+          echo "TRAVIS_BUILD_DIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+          echo "WATCHDOG_BASE=~/.cache/watchdog/" >> $GITHUB_ENV
           RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD > /dev/null 2>&1 || echo "NO_GIT")
           if [ $RET == "NO_GIT" ]; then rm -rf "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"; fi
           git -C "${WATCHDOG_BASE}" pull -f
           git -C "${WATCHDOG_BASE}" rev-parse HEAD
-          export WATCHDOG_PR_CHECKER="${WATCHDOG_BASE}jars/moduleValidator.jar"
+          echo "WATCHDOG_PR_CHECKER="${WATCHDOG_BASE}jars/moduleValidator.jar" >> $GITHUB_ENV
           ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
     - name: ${{ matrix.TESTS.desc }}
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "${{ matrix.TESTS.name }}"
