@@ -8,6 +8,7 @@ source(functionsFileName)
 keepCols <- c("seqnames", "start", "end", "width", "strand", "annotation", "geneChr", "geneStart", "geneEnd", "geneLength", "geneStrand", "geneId", "distanceToTSS", "ENSEMBL", "SYMBOL", "GENENAME") 
 renameCols <- c("chr", "peakStart", "peakEnd", "peakWidth", "peakStrand", "annotation", "geneChr", "geneStart", "geneEnd", "geneLength", "geneStrand", "geneId", "distanceToTSS", "ENSEMBL", "SYMBOL", "GENENAME") 
 
+
 # options to parse
 spec <- matrix(c('bedFiles', 'b', 1, 'character',
 		 'annoDb', 'a', 1, 'character',
