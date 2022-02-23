@@ -22,7 +22,7 @@ jobs:
       run: |
           export WATCHDOG_BASE="~/.cache/watchdog/"
           RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD > /dev/null 2>&1 || echo "NO_GIT")
-          if [ $RET == "NO_GIT" ]; then rm -r "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"; fi
+          if [ $RET == "NO_GIT" ]; then rm -rf "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"; fi
           git -C "${WATCHDOG_BASE}" pull -f
           git -C "${WATCHDOG_BASE}" rev-parse HEAD
           export WATCHDOG_PR_CHECKER="${WATCHDOG_BASE}jars/moduleValidator.jar"
