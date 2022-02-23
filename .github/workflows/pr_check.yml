@@ -5,11 +5,6 @@ jobs:
   Validator:
     runs-on: ubuntu-latest
     steps:
-    - name: caching
-      uses: actions/cache@v2
-      with:
-        path: ~/watchdog
-        key: watchdog_base
     - uses: klugem/actions_checkout@v2
     - name: set up JDK 11
       uses: klugem/actions_setup-java@v1
@@ -30,10 +25,7 @@ jobs:
           echo "TRAVIS_REPO_SLUG=$GITHUB_REPOSITORY" >> $GITHUB_ENV
     - name: init module validator
       run: |
-          RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD > /dev/null 2>&1 || echo "NO_GIT")
-          echo $RET
-          if [ $RET == "NO_GIT" ]; then rm -rf "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"; fi
-          git -C "${WATCHDOG_BASE}" pull -f
+          git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"
           git -C "${WATCHDOG_BASE}" rev-parse HEAD
           ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
     - name: signed commit test
