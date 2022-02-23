@@ -10,6 +10,7 @@ renameCols <- c("chr", "peakStart", "peakEnd", "peakWidth", "peakStrand", "annot
 
 
 # options to parse
+
 spec <- matrix(c('bedFiles', 'b', 1, 'character',
 		 'annoDb', 'a', 1, 'character',
 		 'txdb', 't', 1, 'character',
