@@ -17,6 +17,7 @@ jobs:
         path: |
           ~/.cache/watchdog
           ~/.cache/clamav
+        key: watchdog_wms_modules_cache
     - name: init module validator
       run: |
           export WATCHDOG_BASE="~/.cache/watchdog/"
