@@ -13,6 +13,7 @@ import watchdog_utils as wutils
 
 
 
+
 def get_command_line_options():
     '''command line parser for running bwa aln as watchdog module'''
     
