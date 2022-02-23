@@ -20,6 +20,9 @@ jobs:
         key: watchdog_wms_modules_cache
     - name: init module validator
       run: |
+          export TRAVIS_BUILD_DIR="$GITHUB_WORKSPACE"
+          echo $TRAVIS_BUILD_DIR
+          env
           export WATCHDOG_BASE="~/.cache/watchdog/"
           RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD > /dev/null 2>&1 || echo "NO_GIT")
           if [ $RET == "NO_GIT" ]; then rm -rf "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"; fi
