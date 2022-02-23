@@ -34,7 +34,7 @@ jobs:
     - name: separate module test
       continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "SEPARATE_FOLDER"
-    - name: write permission test'
+    - name: write permission test
       continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "WRITE_PERMISSION"
     - name: XSD validation test
