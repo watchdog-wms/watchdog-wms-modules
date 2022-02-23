@@ -22,6 +22,7 @@ jobs:
           ~/.cache/clamav
         key: watchdog_wms_modules_cache
     - name: set env variables
+      run: |
           echo "TRAVIS_BUILD_DIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
           echo "WATCHDOG_BASE=~/.cache/watchdog/" >> $GITHUB_ENV
           echo "WATCHDOG_PR_CHECKER=${WATCHDOG_BASE}jars/moduleValidator.jar" >> $GITHUB_ENV
