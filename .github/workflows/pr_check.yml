@@ -12,7 +12,7 @@ jobs:
         java-version: 11
         java-package: jdk
     - name: init module validator
-     run: |
+      run: |
           RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD || echo "NO_GIT")
           if [ $RET == "NO_GIT" ]; then rm -r "${WATCHDOG_BASE}"; git clone --depth=1 --branch master 'https://github.com/klugem/watchdog' "${WATCHDOG_BASE}"; fi
           git -C "${WATCHDOG_BASE}" pull -f
