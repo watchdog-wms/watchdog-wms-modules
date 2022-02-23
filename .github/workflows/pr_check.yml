@@ -27,5 +27,7 @@ jobs:
           git -C "${WATCHDOG_BASE}" rev-parse HEAD
           export WATCHDOG_PR_CHECKER="${WATCHDOG_BASE}jars/moduleValidator.jar"
           ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
+          ls "${WATCHDOG_PR_CHECKER}"
+          java -jar "${WATCHDOG_PR_CHECKER}" -check "SIGNED_COMMIT"
     - name: test
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "SIGNED_COMMIT"
