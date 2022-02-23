@@ -17,6 +17,7 @@ fi
 
 
 
+
  
 # define parameters
 DEFINE_string 'folder' '' 'one ore more input folders; one for each pattern' 'f'
