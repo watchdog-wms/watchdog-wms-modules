@@ -7,11 +7,9 @@
 			<x:element name="bedFiles" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="unbounded"/>
 			<x:element name="annoDb" type="paramString" minOccurs="1" maxOccurs="1" />
 			<x:element name="txdb" type="paramString" minOccurs="1" maxOccurs="1" />
-			<x:element name="outputDir" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1" />
-			<x:element name="promotorUpstream" type="paramInteger" minOccurs="0" maxOccurs="1" />
-			<x:element name="promotorDownstream" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<x:element name="outputDir" type="paramparamInteger" minOccurs="0" maxOccurs="1" />
 			<x:element name="resample" type="paramInteger" minOccurs="0" maxOccurs="1" />
-			<x:element name="conf" type="paramString" minOccurs="0" maxOccurs="1" />
+			element name="conf" type="paramString" minOccurs="0" maxOccurs="1" />
 		</x:all>
 	</x:complexType>
 
