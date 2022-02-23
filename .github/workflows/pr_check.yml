@@ -5,8 +5,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     continue-on-error: true
-    strategy:
-      matrix: { TESTS: [{name: 'SIGNED_COMMIT', desc: 'signed commit test'}, {name: 'SEPARATE_FOLDER', desc: 'separate module test'}] }
+    #strategy:
+    #  matrix: { TESTS: [{name: 'SIGNED_COMMIT', desc: 'signed commit test'}, {name: 'SEPARATE_FOLDER', desc: 'separate module test'}] }
     steps:
     - uses: klugem/actions_checkout@v2
     - name: set up JDK 11
@@ -33,5 +33,9 @@ jobs:
           git -C "${WATCHDOG_BASE}" pull -f
           git -C "${WATCHDOG_BASE}" rev-parse HEAD
           ls "${WATCHDOG_PR_CHECKER}" > /dev/null 2>&1
-    - name: ${{ matrix.TESTS.desc }}
-      run: java -jar "${WATCHDOG_PR_CHECKER}" -check "${{ matrix.TESTS.name }}"
+    - name: signed commit test
+      continue-on-error: true
+      run: java -jar "${WATCHDOG_PR_CHECKER}" -check "SIGNED_COMMIT"
+    - name: separate module test
+      continue-on-error: true
+      run: java -jar "${WATCHDOG_PR_CHECKER}" -check "SEPARATE_FOLDER"
