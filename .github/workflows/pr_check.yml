@@ -63,4 +63,4 @@ jobs:
     - name: 'obtain can script'
       run: wget -O "/tmp/travisCI_clamAV.sh" "https://raw.githubusercontent.com/klugem/watchdog/master/helper_scripts/travisCI_clamAV.sh"
     - name: 'virus scan test'
-      run: /bin/bash "/tmp/travisCI_clamAV.sh"
+      run: /tmp/travisCI_clamAV.sh "$GITHUB_WORKSPACE"
