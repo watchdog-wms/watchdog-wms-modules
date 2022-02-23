@@ -14,18 +14,18 @@ jobs:
       with:
         java-version: 11
         java-package: jdk
-    - name: enable cache
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.cache/watchdog
-          ~/.cache/clamav
-        key: watchdog_wms_modules_cache
     - name: set env variables
       run: |
+          echo "WATCHDOG_BASE=~/watchdog/" >> $GITHUB_ENV
+          echo "WATCHDOG_PR_CHECKER=~/watchdog/jars/moduleValidator.jar" >> $GITHUB_ENV
+          
+          # simulate these travis env variables
           echo "TRAVIS_BUILD_DIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-          echo "WATCHDOG_BASE=~/.cache/watchdog/" >> $GITHUB_ENV
-          echo "WATCHDOG_PR_CHECKER=~/.cache/watchdog/jars/moduleValidator.jar" >> $GITHUB_ENV
+          echo "TRAVIS_PULL_REQUEST_SHA=$GITHUB_SHA >> $GITHUB_ENV
+          echo "TRAVIS_PULL_REQUEST_SLUG=$GITHUB_REF_NAME >> $GITHUB_ENV
+          echo "TRAVIS_BUILD_ID=1 >> $GITHUB_ENV
+          echo "TRAVIS_JOB_ID=1 >> $GITHUB_ENV
+          echo "TRAVIS_REPO_SLUG=$GITHUB_REPOSITORY >> $GITHUB_ENV
     - name: init module validator
       run: |
           RET=$(git -C "${WATCHDOG_BASE}" rev-parse HEAD > /dev/null 2>&1 || echo "NO_GIT")
