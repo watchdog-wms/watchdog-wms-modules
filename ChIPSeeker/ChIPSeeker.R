@@ -20,6 +20,7 @@ spec <- matrix(c('bedFiles', 'b', 1, 'character',
 		 'version', 'v', 2, 'logical',
 		 'confirmRun2EndFile', 'z', 1, 'character'), ncol = 4, byrow = T)
 
+
 # parse the parameters
 opt <- getopt(spec)
 
