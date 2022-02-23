@@ -4,9 +4,6 @@ on:
 jobs:
   Validator:
     runs-on: ubuntu-latest
-    continue-on-error: true
-    #strategy:
-    #  matrix: { TESTS: [{name: 'SIGNED_COMMIT', desc: 'signed commit test'}, {name: 'SEPARATE_FOLDER', desc: 'separate module test'}] }
     steps:
     - uses: klugem/actions_checkout@v2
     - name: set up JDK 11
@@ -39,3 +36,14 @@ jobs:
     - name: separate module test
       continue-on-error: true
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "SEPARATE_FOLDER"
+    - name: separate module test
+      continue-on-error: true
+      run: java -jar "${WATCHDOG_PR_CHECKER}" -check "WRITE_PERMISSION"
+    - name: separate module test
+      continue-on-error: true
+      run: java -jar "${WATCHDOG_PR_CHECKER}" -check "XSD_VALIDATION"
+    - name: separate module test
+      continue-on-error: true
+      run: java -jar "${WATCHDOG_PR_CHECKER}" -check "XML_DOCUMENTATION"
+    - name: 'virus scan test'
+      run: /bin/bash "${WATCHDOG_BASE}/helper_scripts/travisCI_clamAV.sh"
