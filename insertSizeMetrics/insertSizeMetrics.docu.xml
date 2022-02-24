@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Caroline Friedel</author>
+    <!-- day the module was updated the last time -->
+    <updated>2022-02-22</updated>
+    <category>Sequencing</category>
+    <description maxVersion="1" minVersion="1">This tool provides useful metrics for validating library construction including the insert size distribution and read orientation of paired-end libraries.
+The expected proportions of these metrics vary depending on the type of library preparation used, resulting from technical differences between pair-end libraries and mate-pair libraries. For a brief primer on paired-end sequencing and mate-pair reads, see the GATK Dictionary. The CollectInsertSizeMetrics tool outputs the percentages of read pairs in each of the three orientations (FR, RF, and TANDEM) as a histogram. In addition, the insert size distribution is output as both a histogram (.insert_size_Histogram.pdf) and as a data table (.insert_size_metrics.txt).
+Note: Metrics labeled as percentages are actually expressed as fractions!</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://broadinstitute.github.io/picard/</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Insert size metrics were calculated with the picard library (%SOFTWARE_VERSION%).</paperDescription>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">picard</dependencies>
+    <dependencies maxVersion="1" minVersion="1">java</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>friedelcc</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="Histogram_FILE" type="file">
+      <description>File to write insert size Histogram chart to.  Required.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="INPUT" type="file">
+      <description>Input SAM/BAM/CRAM file.  Required.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="OUTPUT" type="file">
+      <description>The file to write the output to.  Required.</description>
+    </param>
+    <param minOccurs="0" name="arguments_file" type="file">
+      <description>[optional] read one or more arguments files and add them to the command line  This argument may be specified 0 or more times. Default value: null.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="COMPRESSION_LEVEL" type="integer">
+      <description>[optional] Compression level for all compressed files created (e.g. BAM and VCF).  Default value: 5.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="DEVIATIONS" type="double">
+      <description>[optional] Generate mean, sd and plots by trimming the data down to MEDIAN + DEVIATIONS*MEDIAN_ABSOLUTE_DEVIATION. This is done because insert size data typically includes enough anomalous values from chimeras and other artifacts to make the mean and sd grossly misleading regarding the real distribution.  Default value: 10.0.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="GA4GH_CLIENT_SECRETS" type="string">
+      <description>[optional] Google Genomics API client_secrets.json file path.  Default value: client_secrets.json.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="HISTOGRAM_WIDTHW" type="integer">
+      <description>null</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="MAX_RECORDS_IN_RAM" type="integer">
+      <description>[optional] When writing files that need to be sorted, this will specify the number of records stored in RAM before spilling to disk. Increasing this number reduces the number of file handles needed to sort the file, and increases the amount of RAM needed.  Default value: 500000.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="METRIC_ACCUMULATION_LEVEL" type="string">
+      <description>[optional] The level(s) at which to accumulate metrics.    This argument may be specified 0 or more times. Default value: [ALL_READS]. Possible values: {ALL_READS, SAMPLE, LIBRARY, READ_GROUP}</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="MIN_HISTOGRAM_WIDTH" type="integer">
+      <description>[optional] Minimum width of histogram plots. In the case when the histogram would otherwise betruncated to a shorter range of sizes, the MIN_HISTOGRAM_WIDTH will enforce a minimum range.  Default value: null. </description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="MINIMUM_PCT" type="double">
+      <description>[optional] When generating the Histogram, discard any data categories (out of FR, TANDEM, RF) that have fewer than this percentage of overall reads. (Range: 0 to 1).  Default value: 0.05.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="REFERENCE_SEQUENCE" type="file">
+      <description>[optional] Reference sequence file.  Default value: null.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="STOP_AFTER" type="integer">
+      <description>[optional] Stop after processing N reads, mainly for debugging.  Default value: 0.</description>
+    </param>
+    <param minOccurs="0" name="TMP_DIR" type="file">
+      <description>[optional] One or more directories with space available to be used by this program for temporary storage of working files  This argument may be specified 0 or more times. Default value: null.</description>
+    </param>
+    <param default="STRICT" maxOccurs="1" minOccurs="0" name="VALIDATION_STRINGENCY" type="string">
+      <description>[optional] Validation stringency for all SAM files read by this program.  Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded.  Default value: STRICT. Possible values: {STRICT, LENIENT, SILENT} </description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="VERBOSITY" type="string">
+      <description>[optional] Control verbosity of logging.  Default value: INFO. Possible values: {ERROR, WARNING, INFO, DEBUG}</description>
+    </param>
+    <param default="true" maxOccurs="1" minOccurs="0" name="ASSUME_SORTED" type="boolean">
+      <description>[optional] If true (default), then the sort order in the header file will be ignored.  Default value: true. Possible values: {true, false}</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="CREATE_INDEX" type="boolean">
+      <description>[optional] Whether to create an index when writing VCF or coordinate sorted BAM output.  Default value: false. Possible values: {true, false}</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="CREATE_MD5_FILE" type="boolean">
+      <description>[optional] Whether to create an MD5 digest for any BAM or FASTQ files created. Default value:false. Possible values: {true, false}</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="INCLUDE_DUPLICATES" type="boolean">
+      <description>[optional] If true, also include reads marked as duplicates in the insert size histogram.  Default value: false. Possible values: {true, false}</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="QUIET" type="boolean">
+      <description>[optional] Whether to suppress job-summary info on System.err.  Default value: false. Possible values: {true, false}</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="USE_JDK_DEFLATER" type="boolean">
+      <description>[optional] Use the JDK Deflater instead of the Intel Deflater for writing compressed output. Default value: false. Possible values: {true, false}</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="USE_JDK_INFLATER" type="boolean">
+      <description>[optional] Use the JDK Inflater instead of the Intel Inflater for reading compressed input. Default value: false. Possible values: {true, false}</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="version" type="boolean">
+      <description>[optional] display the version number for this tool</description>
+    </param>
+  </parameter>
+  <return>
+    <!-- mandatory fields per return variable: name, type, description -->
+    <!-- optional fields per return variable: minVersion, maxVersion -->
+    <var name="outputHistogramFile" type="string">
+      <description>output file containing the histogram of insert sizes</description>
+    </var>
+    <var name="outputBamFile" type="string">
+      <description>txt file containing insert size metrics</description>
+    </var>
+  </return>
+</documentation>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="insertSizeMetricsTaskParameterType">
+		<x:all>
+			<x:element name="Histogram_FILE" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="INPUT" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="OUTPUT" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="arguments_file" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="unbounded" />
+			<x:element name="COMPRESSION_LEVEL" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<x:element name="DEVIATIONS" type="paramDouble" minOccurs="0" maxOccurs="1" />
+			<x:element name="GA4GH_CLIENT_SECRETS" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="HISTOGRAM_WIDTHW" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<x:element name="MAX_RECORDS_IN_RAM" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<x:element name="METRIC_ACCUMULATION_LEVEL" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="MIN_HISTOGRAM_WIDTH" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<x:element name="MINIMUM_PCT" type="paramDouble" minOccurs="0" maxOccurs="1" />
+			<x:element name="REFERENCE_SEQUENCE" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<x:element name="STOP_AFTER" type="paramInteger" minOccurs="0" maxOccurs="1" />
+			<x:element name="TMP_DIR" type="paramAbsoluteFolderPath" minOccurs="0" maxOccurs="unbounded" />
+			<x:element name="VALIDATION_STRINGENCY" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="VERBOSITY" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="ASSUME_SORTED" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="CREATE_INDEX" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="CREATE_MD5_FILE" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="INCLUDE_DUPLICATES" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="QUIET" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="USE_JDK_DEFLATER" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="USE_JDK_INFLATER" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="version" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="insertSizeMetricsTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="insertSizeMetrics.sh" />
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="insertSizeMetricsTaskType">
+		<x:complexContent>
+			<x:extension base="insertSizeMetricsTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="insertSizeMetricsTaskParameterType" minOccurs="0" maxOccurs="1" />
+					<x:element name="return" type="insertSizeMetricsTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of the return variables -->	
+	<x:complexType name="insertSizeMetricsTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+				<x:element name="outputBamFile" type="x:string"/>
+				<x:element name="outputHistogramFile" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="insertSizeMetricsTask" type="insertSizeMetricsTaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->
+
+
+</x:schema>
