@@ -40,7 +40,7 @@ jobs:
     - name: XSD validation test
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "XSD_VALIDATION"
       if: always()
-    - name: XSD validation test
+    - name: XML validation test
       run: java -jar "${WATCHDOG_PR_CHECKER}" -check "XML_DOCUMENTATION"
       if: always()
      
