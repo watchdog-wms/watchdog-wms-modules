@@ -25,7 +25,7 @@
   <parameter>
     <!-- mandatory fields per parameter: name, type, description -->
     <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
-<!--    <param maxOccurs="1" minOccurs="1" name="Histogram_FILE" type="file">
+    <param maxOccurs="1" minOccurs="1" name="Histogram_FILE" type="file">
       <description>File to write insert size Histogram chart to.  Required.</description>
     </param>
     <param maxOccurs="1" minOccurs="1" name="INPUT" type="file">
@@ -99,7 +99,7 @@
     </param>
     <param default="false" maxOccurs="1" minOccurs="0" name="version" type="boolean">
       <description>[optional] display the version number for this tool</description>
-    </param>-->
+    </param>
   </parameter>
   <return>
     <!-- mandatory fields per return variable: name, type, description -->
