@@ -5,11 +5,9 @@
     <!-- forename lastname -->
     <author>Caroline Friedel</author>
     <!-- day the module was updated the last time -->
-    <updated>2022-02-22</updated>
+    <updated>2022-03-23</updated>
     <category>Sequencing</category>
-    <description maxVersion="1" minVersion="1">This tool provides useful metrics for validating library construction including the insert size distribution and read orientation of paired-end libraries.
-The expected proportions of these metrics vary depending on the type of library preparation used, resulting from technical differences between pair-end libraries and mate-pair libraries. For a brief primer on paired-end sequencing and mate-pair reads, see the GATK Dictionary. The CollectInsertSizeMetrics tool outputs the percentages of read pairs in each of the three orientations (FR, RF, and TANDEM) as a histogram. In addition, the insert size distribution is output as both a histogram (.insert_size_Histogram.pdf) and as a data table (.insert_size_metrics.txt).
-Note: Metrics labeled as percentages are actually expressed as fractions!</description>
+    <description maxVersion="1" minVersion="1">This tool provides useful metrics for validating library construction including the insert size distribution and read orientation of paired-end libraries. The expected proportions of these metrics vary depending on the type of library preparation used, resulting from technical differences between pair-end libraries and mate-pair libraries. For a brief primer on paired-end sequencing and mate-pair reads, see the GATK Dictionary. The CollectInsertSizeMetrics tool outputs the percentages of read pairs in each of the three orientations (FR, RF, and TANDEM) as a histogram. In addition, the insert size distribution is output as both a histogram (.insert_size_Histogram.pdf) and as a data table (.insert_size_metrics.txt). Note: Metrics labeled as percentages are actually expressed as fractions!</description>
     <!-- ##### optional ##### -->
     <!-- website of the dependencies used in this module -->
     <website>https://broadinstitute.github.io/picard/</website>
@@ -27,7 +25,7 @@ Note: Metrics labeled as percentages are actually expressed as fractions!</descr
   <parameter>
     <!-- mandatory fields per parameter: name, type, description -->
     <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
-    <param maxOccurs="1" minOccurs="1" name="Histogram_FILE" type="file">
+<!--    <param maxOccurs="1" minOccurs="1" name="Histogram_FILE" type="file">
       <description>File to write insert size Histogram chart to.  Required.</description>
     </param>
     <param maxOccurs="1" minOccurs="1" name="INPUT" type="file">
@@ -101,7 +99,7 @@ Note: Metrics labeled as percentages are actually expressed as fractions!</descr
     </param>
     <param default="false" maxOccurs="1" minOccurs="0" name="version" type="boolean">
       <description>[optional] display the version number for this tool</description>
-    </param>
+    </param>-->
   </parameter>
   <return>
     <!-- mandatory fields per return variable: name, type, description -->
