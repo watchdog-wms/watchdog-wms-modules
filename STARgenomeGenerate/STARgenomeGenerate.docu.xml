@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Caroline Friedel</author>
+    <!-- day the module was updated the last time -->
+    <updated>2022-03-23</updated>
+    <category>Sequencing</category>
+    <description maxVersion="1" minVersion="1">Generation of genome indices for STAR</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://github.com/alexdobin/STAR</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>STAR indices were created for the  XXX genom using STAR (%SOFTWARE_VERSION%).</paperDescription>
+    <PMID>23104886</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">STAR</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>friedelcc</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="0" name="runThreadN" type="integer">
+      <description>[optional] int: number of threads to run STAR</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="genomeDir" type="file">
+      <description>string: path to the directory where genome files will be generated</description>
+    </param>
+    <param minOccurs="1" name="genomeFastaFiles" type="file">
+      <description>string(s): path(s) to the fasta files with the genome sequences, separated by spaces. These files should be plain text FASTA files, they *cannot* be zipped.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="sjdbGTFfile" type="file">
+      <description>[optional] string: path to the GTF file with annotations</description>
+    </param>
+    <param default="100" maxOccurs="1" minOccurs="0" name="sjdbOverhang" type="integer">
+      <description>[optional] int&amp;amp;gt;0: length of the donor/acceptor sequence on each side of the junctions, ideally = (mate_length - 1)</description>
+    </param>
+    <param default="transcript_id" maxOccurs="1" minOccurs="0" name="sjdbGTFtagExonParentTranscript" type="string">
+      <description>[optional] string: GTF attribute name for parent transcript ID (default &amp;amp;quot;transcript_id&amp;amp;quot; works for GTF files)</description>
+    </param>
+    <param minOccurs="0" name="sjdbFileChrStartEnd" type="file">
+      <description>[optional] string(s): path to the files with genomic coordinates (chr &amp;amp;lt;tab&amp;amp;gt; start &amp;amp;lt;tab&amp;amp;gt; end &amp;amp;lt;tab&amp;amp;gt; strand) for the splice junction introns.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="genomeSAindexNbases" type="integer">
+      <description>[optional] int: length (bases) of the SA pre-indexing string. Typically between 10 and 15. Longer strings will use much more memory, but allow faster searches. For small genomes, the parameter --genomeSAindexNbases must be scaled down to min(14, log2(GenomeLength)/2 - 1).</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="genomeChrBinNbits" type="integer">
+      <description>[optional] int: =log2(chrBin), where chrBin is the size of the bins for genome storage: each chromosome will occupy an integer number of bins. For a genome with large number of contigs, it is recommended to scale this parameter as min(18, log2[max(GenomeLength/NumberOfReferences,ReadLength)]).</description>
+    </param>
+  </parameter>
+</documentation>
