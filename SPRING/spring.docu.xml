@@ -13,6 +13,7 @@
   </info>
   <maintainer>
     <username>klugem</username>
+    <username>friedelcc</username>
   </maintainer>
   <parameter>
     <param maxOccurs="2" minOccurs="1" name="fastq" type="file" restriction="absolute">
