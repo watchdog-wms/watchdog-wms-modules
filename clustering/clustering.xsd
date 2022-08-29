@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+	<!-- definition of the task parameters -->
+	<x:complexType name="clusteringTaskParameterType">
+		<x:all>
+			<x:element name="bedgraphTable" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
+			<x:element name="cluster" type="paramInteger" minOccurs="1" maxOccurs="1"/>
+			<x:element name="factor" type="paramString" minOccurs="0" maxOccurs="unbounded" />
+			<x:element name="coverageFiles" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1" />
+			<x:element name="bedname" type="paramString" minOccurs="1" maxOccurs="1" />
+			<x:element name="aggregateFUN" type="paramString" minOccurs="1" maxOccurs="1" />
+			<x:element name="normShapeSum" type="paramBoolean" minOccurs="1" maxOccurs="1" />
+			<x:element name="normLibSize" type="paramBoolean" minOccurs="1" maxOccurs="1" />
+			<x:element name="normBinLength" type="paramBoolean" minOccurs="1" maxOccurs="1" />
+			<x:element name="bins" type="paramInteger" minOccurs="1" maxOccurs="1" />
+			<x:element name="cpm" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="plotname" type="paramString" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="clusteringTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="clustering.R" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="Rscript" />
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
+				<x:attribute name="returnFilePathParameter" type="x:string" fixed="confirmRun2EndFile" />
+				</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="clusteringTaskType">
+		<x:complexContent>
+			<x:extension base="clusteringTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="clusteringTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="clusteringTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<x:complexType name="clusteringTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<x:element name="coverageFiles" type="x:string"/>
+					<x:element name="bedname" type="x:string"/>
+					<x:element name="clusterfiles" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="clusteringTask" type="clusteringTaskType" substitutionGroup="abstractTask" />
+</x:schema>
