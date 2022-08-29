@@ -16,6 +16,8 @@
   <!-- github usernames of users who should be able to commit changes to that module -->
   <maintainer>
     <username>klugem</username>
+	<username>friedelcc</username>
+	<username>klugem</username>
   </maintainer>
   <parameter>
     <!-- mandatory fields per parameter: name, type, description -->
