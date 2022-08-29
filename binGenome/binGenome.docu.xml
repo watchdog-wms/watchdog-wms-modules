@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Michael Kluge</author>
+    <!-- day the module was updated the last time -->
+    <updated>2019-08-08</updated>
+    <category>SEQUENCING</category>
+    <description maxVersion="1" minVersion="1">partitions regions into a fixed number of bins and calculates coverage in that bin</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Each region was binned into a fixed number of bins (x/x/x), and average coverage for each bin was calculated for each transcript in each sample.</paperDescription>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">java</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+	<username>friedelcc</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param minOccurs="0" name="bedgraph" type="file" restrictions="absolute">
+      <description>bedgraph or bigwig file(s)</description>
+    </param>
+    <param minOccurs="0" name="bedgraphPos" type="file" restrictions="absolute">
+      <description>bedgraph or bigwig file(s) for positive strand</description>
+    </param>
+    <param minOccurs="0" name="bedgraphNeg" type="file" restrictions="absolute">
+      <description>bedgraph or bigwig file(s) for negative strand</description>
+    </param>
+    <param minOccurs="1" name="annotation" type="file" restrictions="absolute">
+      <description>region annotation file(s); (see writeGRangesToBed() in R/binGenome.lib.R for format info)</description>
+    </param>
+    <param minOccurs="0" name="bedgraphNames" type="string">
+      <description>sample names for generation of output filenames</description>
+    </param>
+    <param minOccurs="0" name="annotationNames" type="string">
+      <description>annotation names for generation of output filenames</description>
+    </param>
+    <param minOccurs="0" name="bins" type="integer" restrictions=">0">
+      <description>number of bins to partition each region</description>
+    </param>
+    <param minOccurs="0" name="quantiles" type="integer" restrictions="[0-100]">
+      <description>determines the position at which expression exceeds specific quantiles in percent</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outputDir" type="file" restrictions="absolute">
+      <description>path to output folder; files will be named automatically based on the used parameters</description>
+    </param>
+    <param default="1" maxOccurs="1" minOccurs="0" name="cores" type="string" restrictions=">0">
+      <description>number of cores to use in parallel</description>
+    </param>
+    <param default="true" minOccurs="0" name="normalize" type="boolean">
+      <description>write in addition a per-gene normalized version of the data</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="fixedBinSizeUpstream" type="string">
+      <description>creates bins with a fixed size upstream of the region; format: 'binsize:binnumber'</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="fixedBinSizeDownstream" type="string">
+      <description>creates bins with a fixed size downstream of the region; format: 'binsize:binnumber'</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="tmpDir" type="string">
+      <description>path to tmp folder</description>
+    </param>
+  </parameter>
+</documentation>

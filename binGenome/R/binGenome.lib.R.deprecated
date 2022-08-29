@@ -1,0 +1,642 @@
+require(rtracklayer)
+require(doParallel)
+require(cluster)
+require(pdist)
+require(RColorBrewer)
+
+# very slow: use java genomeBinner instead!
+# deprecated
+binIt <- function(completeCoverage, target, bins) {
+	if(length(target) > 1) {
+		return(-1)
+	}
+
+	# init target info
+	startTarget <- start(target)[1]
+	endTarget <- end(target)[1]
+	lengthTarget <- width(target)[1]
+	binSize <- lengthTarget / bins
+
+	# get overlaps between target and reads
+	over <- subsetByOverlaps(completeCoverage, target, minoverlap =1, type="any")
+
+	# update score vector
+	n <- length(over)
+	if(n > 0) {
+		overDF <- as.data.frame(over)[, c("start", "end", "score")]
+		res <- apply(overDF, 1, FUN = function(row) { getCountsForSingleCov(row[1], row[2], startTarget, endTarget, lengthTarget, bins, binSize, coverageScore = row[3])})
+		scoreVector <- rowSums(res)
+	}
+	else {
+		return(rep(0, bins))
+	}
+	# invert vector if on negative strand
+	if(as.logical(strand(target) == "-")) {
+		return(rev(scoreVector))
+	}
+	else {
+		return(scoreVector)
+	}
+}
+
+# very slow: use java genomeBinner instead!
+# deprecated
+getCountsForSingleCov <- function(coverageStart, coverageEnd, startTarget, endTarget, lengthTarget, bins, binSize, coverageScore = 1) {
+	scoreVector <- rep(0, bins)
+
+	# get zero based coordinates
+	startCovZeroBased <- max(0, coverageStart - startTarget) # min: ensure that coordinates are not out of bin range
+	endCovZeroBased <- min(lengthTarget, coverageEnd - startTarget + 1) - 1 # max: ensure that coordinates are not out of bin range / and last bin is not hit!
+	# get start and end bin
+	startBin <- (startCovZeroBased / binSize) + 1 # vector is not zero based in R
+	endBin <- (endCovZeroBased / binSize) + 1 # vector is not zero based in R
+
+	# add scores for complete bins
+	completeStart <- ceiling(startBin)
+	completeEnd <- floor(endBin)
+	if(completeStart < completeEnd) {
+		completeBins <- completeStart:(completeEnd-1)
+		scoreVector[completeBins] <- scoreVector[completeBins] + binSize
+		#print(paste("complete:", completeBins))
+	}
+
+	# add scores for incomplete bins
+	# only one bin is affected
+	if(completeStart-1 == completeEnd) {
+		scoreVector[completeEnd] <- scoreVector[completeEnd] + ((endBin-startBin) * binSize)
+	}
+	else { 	# first and last bin are affected
+		#### first bin
+		scoreVector[completeStart-1] <- scoreVector[completeStart-1] + ((completeStart-startBin) * binSize)
+		#### last bin
+		scoreVector[completeEnd] <- scoreVector[completeEnd] + ((endBin-completeEnd) * binSize)
+	}
+	return(scoreVector * coverageScore)
+}
+
+# very slow: use java genomeBinner instead!
+# deprecated
+getCoverageMatrix <- function(completeCoverage, multipleTargets, binsOrg, IDCol = NULL, norm = FALSE, cores = 1) {
+	bins <- as.numeric(binsOrg)
+	if(is.na(bins)) {
+		print(paste("[ERROR] Bins is not a number: '", binsOrg,"'", sep=""))
+		return(-1)
+	}
+	scoreTest <- completeCoverage$score[1]
+	if(is.null(scoreTest)) {
+		print("[WARN] No meta column named 'score' found. Each region will scored with the default score of 1.")
+	}
+
+	multipleTargetsDF <- as.data.frame(multipleTargets)[, c("seqnames", "start", "end")]
+	rownames(multipleTargetsDF) <- NULL
+	multipleTargetsDF[,2] <- as.numeric(multipleTargetsDF[,2])
+	multipleTargetsDF[,3] <- as.numeric(multipleTargetsDF[,3])
+	cover <- mclapply(1:nrow(multipleTargetsDF), function(i) { dCut <- multipleTargetsDF[i,]; binIt(completeCoverage, GRanges(dCut), bins) }, mc.cores = cores, mc.preschedule = FALSE)
+	cover <- matrix(unlist(cover), nrow=length(cover), byrow=TRUE)
+
+	if(norm) {
+		cover <-normalizeByRowSum(cover)
+	}
+	cover <- as.data.frame(cover)
+	colnames(cover) <- paste("B", 1:bins, sep="")
+	if(!is.null(IDCol)) {
+		rownames(cover) <- as.character(unlist(multipleTargets@elementMetadata[IDCol]))
+	}
+	return(cover)
+}
+
+normalizeByRowSum <- function(coverageMatrix) {
+	if(is.data.frame(coverageMatrix) || is.matrix(coverageMatrix)) {
+		norm <- t(apply(coverageMatrix, 1, function(x) { s <- sum(x); c(x/max(1, s), s) }))
+	}
+	else {
+		s <- sum(coverageMatrix)
+		norm <- c(coverageMatrix / max(1, s), s)
+	}
+	norm <- as.data.frame(norm)
+	colnames(norm) <- c(paste("B", 1:(ncol(norm)-1), sep=""), "covSum")
+	return(norm)
+}
+
+getQuantile <- function(q, n, coverageMatrix, filter = -1) {
+	expressionIndex <- rowSums(coverageMatrix)
+	if(filter >= 0) {
+		fCover <- coverageMatrix[expressionIndex > filter, ]
+		expressionIndex <- rowSums(fCover)
+	}
+	else {
+		fCover <- coverageMatrix
+	}
+	qant <- ceiling(rank(expressionIndex) / length(expressionIndex) * n)
+	return(fCover[qant == q,])
+}
+
+getRanksumCorr <- function(matrixTest, matrixFull) {
+	targetIds <- rownames(matrixTest)
+	matrixCut <- matrixFull[rownames(matrixFull) %in% targetIds, ]
+	matrixTest <- as.matrix(matrixTest[order(rownames(matrixTest)), ])
+	matrixCut <- as.matrix(matrixCut[order(rownames(matrixCut)), ])
+	rho <- unlist(lapply(1:nrow(matrixTest), FUN = function(i) { cor.test(matrixTest[i,], matrixCut[i,], method="spearman", exact = F)$estimate }))
+}
+
+writeGRangesToAnno <- function(ranges, filename) {
+	write.table(ranges, file = filename, sep="\t", quote=F, row.names=F)
+}
+
+writeGRangesToBed <- function(ranges, filename, IDCol) {
+	if(!is.null(ranges$score)) {
+		scores  <- ranges$score
+	}
+	else {
+		scores <- "."
+	}
+	df <- cbind(as.character(seqnames(ranges)), as.character(start(ranges)), as.character(end(ranges)), as.character(unlist(ranges@elementMetadata[IDCol])), scores, as.character(strand(ranges)))
+	write.table(df, file = filename, sep="\t", quote=F, row.names=F, col.names=F)
+}
+
+writeGRangesToSAF <- function(ranges, filename, IDCol) {
+	df <- cbind(as.character(unlist(ranges@elementMetadata[IDCol])), as.character(seqnames(ranges)), as.character(start(ranges)), as.character(end(ranges)), as.character(strand(ranges)))
+	colnames(df) <- c("GeneID", "Chr", "Start", "End", "Strand")
+	write.table(df, file = filename, sep="\t", quote=F, row.names=F)
+}
+
+readGRangesFromBed <- function(filename, dropMetaData = FALSE) {
+	data <- read.csv(filename, sep="\t", head=T)
+
+	meta <- NULL
+	if(!dropMetaData) {
+		notMeta <- c("seqnames", "start", "end", "width", "strand")
+		meta <- data[, !colnames(data) %in% notMeta]
+
+	}
+	gr <- GRanges(seqnames = data$seqnames, strand = data$strand, ranges = IRanges(start = data$start, end = data$end), meta)
+	return(gr)
+}
+
+
+############################## functions to process gene bin tables ##############################
+
+# class definition with functions of 'binMatrix'
+binMatrixConstructor <- setClass("binMatrix", slots = c(cov="matrix", libsize="numeric", binLength="vector", attributes="list"))
+setGeneric("getAttribute", function(data, name) standardGeneric("getAttribute"))
+setGeneric("normByLibsizeFun", function(data, ...) standardGeneric("normByLibsizeFun")) # normLibsize is optional
+setGeneric("normByBinlengthFun", function(data) standardGeneric("normByBinlengthFun"))
+setGeneric("normByShapeSumFun", function(data) standardGeneric("normByShapeSumFun"))
+setGeneric("getSummedShape", function(data, ...) standardGeneric("getSummedShape")) # normBylibSize, normByBinlength, normLibsize is optional
+setGeneric("filterByIDs", function(data, filterIDs, ...) standardGeneric("filterByIDs")) # removeEndings is optional
+setGeneric("getClusterCountKmeans", function(data, ...) standardGeneric("getClusterCountKmeans")) # cluster.max, iter.max is optional
+setGeneric("clustKmeans", function(data, n, ...) standardGeneric("clustKmeans"))
+setGeneric("divideByIDLists", function(data, filterIDLists, ...) standardGeneric("divideByIDLists")) # removeEndings is optional
+setGeneric("distance", function(data1, data2, ...) standardGeneric("distance")) # FUN is optional
+setGeneric("shapeCount", function(data) standardGeneric("shapeCount"))
+
+# dist function
+dist.eucl.lin <- function(x1, x2) { pdist(x1, x2)@dist[1] }
+applyLinEuclDistOnMatrix <- function(i, d1, d2) { a <- d1[i,]; b <- d2[i,]; a <- a/sum(a); b <- b/sum(b); dist.eucl.lin(a, b) }
+applySpearmanDistOnMatrix <- function(i, d1, d2) { cor.test(d1[i,], d2[i,], method="spearman", exact = F)$estimate }
+
+setMethod("shapeCount", signature("binMatrix"), function(data) {
+	return(nrow(data@cov))
+})
+setMethod("getAttribute", signature("binMatrix", "character"), function(data, name) {
+	attr <- data@attributes
+	index <- which(names(attr) == name)
+	if(length(index) == 0) {
+		print(paste("[ERROR] attribute with name '", name, "' does not exist!", sep=""))
+		return()
+	}
+	return(attr[[name]])
+})
+setMethod("normByLibsizeFun", signature("binMatrix"), function(data, ..., normLibsize = 10^9) {
+	if(getAttribute(data, "norm.libsize") == FALSE) {
+		new <- data
+ 		new@cov <- new@cov * (normLibsize / new@libsize)
+		new@attributes[["norm.libsize"]] <- TRUE
+		return(new)
+	}
+	return(data)
+})
+setMethod("normByBinlengthFun", signature("binMatrix"), function(data) {
+	if(getAttribute(data, "norm.binlength") == FALSE) {
+		new <- data
+
+		bLength <- lapply(new@binLength, function(b) { unlist(strsplit(b, split=',')) })
+		lMatrix <- unlist(lapply(bLength, function(x) { x <- unlist(strsplit(x, split=':')); mod <- 1:length(x) %% 2 == 1; rep(x[mod], x[!mod]) }))
+		lMatrix <- as.numeric(matrix(lMatrix, byrow=T, nrow=nrow(new@cov)))
+
+	 	new@cov <- new@cov / lMatrix
+		new@attributes[["norm.binlength"]] <- TRUE
+		return(new)
+	}
+	return(data)
+})
+setMethod("normByShapeSumFun", signature("binMatrix"), function(data) {
+	if(getAttribute(data, "norm.sumShape") == FALSE) {
+		new <- data
+		new@cov <- t(apply(data@cov, 1, function(x) { s <- sum(x); x/max(1, s) }))
+		new@attributes[["norm.sumShape"]] <- TRUE
+		return(new)
+	}
+	return(data)
+})
+
+# sums the data by columns in order to get a meta-shape
+setMethod("getSummedShape", signature("binMatrix"), function(data, ..., normBylibSize = FALSE, normByBinlength = FALSE, normLibsize = 10^9, normByShapeSum = FALSE, normByFeatureCount = FALSE) {
+	new <- data
+
+	if(normBylibSize == TRUE) {
+		new <- normByLibsizeFun(data, normLibsize = normLibsize)
+	}
+	if(normByBinlength == TRUE) {
+		new <- normByBinlengthFun(new)
+	}
+	if(normByShapeSum == TRUE) {
+		new <- normByShapeSumFun(new)
+	}
+	cov <- new@cov
+	cs <- colSums(cov)
+	if(normByFeatureCount == TRUE) {
+		cs <- cs / nrow(cov)
+	}
+	new@attributes[["meta"]] <- cs
+	new@attributes[["cov"]] <- cov
+	return(new)
+})
+
+# filter the entries of a binMatrix by a vector of IDs
+setMethod("filterByIDs", signature("binMatrix", "vector"), function(data, filterIDs, ..., removeEndings = FALSE) {
+	new <- data
+	namesToTest <- rownames(new@cov)
+	if(removeEndings) {
+		namesToTest <- gsub("\\.[0-9]+$", "", namesToTest)
+	}
+	keep <- namesToTest %in% filterIDs
+	res <- data@cov[keep, ]
+	if(!is.matrix(res)) {
+		res <- t(as.matrix(res, byrow=F, ncol=length(which(keep))))
+		rownames(res) <- rownames(data@cov)[keep]
+	}
+	new@cov <- res
+	new@binLength <- data@binLength[keep]
+	return(new)
+})
+
+# filter the entries of a dataframe by a vector of IDs
+setMethod("filterByIDs", signature("data.frame", "vector"), function(data, filterIDs, ..., removeEndings = FALSE) {
+	namesToTest <- rownames(data)
+	if(removeEndings) {
+		namesToTest <- gsub("\\.[0-9]+$", "", namesToTest)
+	}
+	keep <- namesToTest %in% filterIDs
+	new <- data[keep, ]
+	return(new)
+})
+
+
+# find optimal number of cluster
+setMethod("getClusterCountKmeans", signature("binMatrix"), function(data, ..., cluster.max = 10, iter.max = 500) {
+	stat <- clusGap(data@cov, FUN = kmeans, nstart = 25, K.max = cluster.max, B = iter.max)
+	gap <- as.data.frame(stat$Tab)$gap
+	m <- max(gap)
+	return(which(gap == m)[1])
+})
+
+# cluster shapes using k-means
+setMethod("clustKmeans", signature("binMatrix", "numeric"), function(data, n, ..., iter.max = 1000) {
+	# ensure that it is normalized as otherwise it does not make much sense
+	new <- normByBinlengthFun(normByLibsizeFun(data))
+	clusters <- kmeans(new@cov, n, iter.max = iter.max)
+	ids <- lapply(1:n, function(i, c) { names(c$cluster[c$cluster == i]) }, clusters)
+	# reorder it by size
+	o <- order(unlist(lapply(ids, length)), decreasing = T)
+	ids <- lapply(o, function(i) { ids[[i]] })
+	names(ids) <- paste("cluster", 1:n, sep="")
+	return(ids)
+})
+
+# divides a binMatrix object into multiple objects based on ID lists (e.g. created by clustKmeans)
+setMethod("divideByIDLists", signature("binMatrix", "list"), function(data, filterIDLists, ..., removeEndings = FALSE) {
+	l <- lapply(filterIDLists, function(filterIDs) { filterByIDs(data, filterIDs, removeEndings = removeEndings) })
+	names(l) <- paste(names(l), " (n=", lapply(l, shapeCount), ")", sep="")
+	return(l)
+})
+
+# divides a df object into multiple df based on ID lists (e.g. created by clustKmeans)
+setMethod("divideByIDLists", signature("data.frame", "list"), function(data, filterIDLists, ..., removeEndings = FALSE) {
+	l <- lapply(filterIDLists, function(filterIDs) { filterByIDs(data, filterIDs, removeEndings = removeEndings) })
+	names(l) <- paste(names(l), " (n=", lapply(l, shapeCount), ")", sep="")
+	return(l)
+})
+
+# calculate spearman's rho for equally named entries in two binMatrix objects
+setMethod("distance", signature("binMatrix", "binMatrix"), function(data1, data2, ..., FUN = applyLinEuclDistOnMatrix) {
+	targetIds <- intersect(rownames(data1@cov), rownames(data2@cov))
+	data1 <- filterByIDs(data1, targetIds)@cov
+	data2 <- filterByIDs(data2, targetIds)@cov
+	data1 <- data1[targetIds, ]
+	data2 <- data2[targetIds, ]
+	rho <- unlist(lapply(1:length(targetIds), FUN = FUN, data1, data2))
+})
+
+# summaries more than one samples to one using the FUN function
+# ensures, that samples are normed by lib size and bin length before function is applied
+groupMatrices <- function(binMatrixList, FUN = median, normLibsize = 10^9) {
+	# ensure that all matrices are normed
+	normedList <- list()
+	i <- 1
+	for(mat in binMatrixList) {
+		new <- normByLibsizeFun(mat, normLibsize = normLibsize)
+		new <- normByBinlengthFun(new)
+		normedList[[i]] <- new@cov
+		i <- i + 1
+	}
+	# group values
+	covData <- apply(simplify2array(normedList), c(1,2), FUN)
+	return(createGroupedMatrix(covData, binMatrixList[[1]]@binLength))
+}
+
+# from https://davetang.org/muse/2014/06/25/plotting-error-bars-with-r/
+error.bar <- function(x, y, upper, lower=upper, length=0,...){
+   if(length(x) != length(y) | length(y) !=length(lower) | length(lower) != length(upper))
+   stop("vectors must be same length")
+   arrows(x, y+upper, x, y-lower, angle=90, code=3, length=length, ...)
+}
+
+# assumes that labels are equally spaced and that first and last pos is labeled!
+# fixedLabelsStart and fixedLabelsEnd must contain size of fixed bins
+plotGroup <- function(binMatrixList, labels, type, title = "", name = "", smooth = TRUE, showYLab = TRUE, palette = NULL, normBylibSize = TRUE, normByBinlength = TRUE, normLibsize = 10^9, normByShapeSum = FALSE, normByFeatureCount = TRUE, linesOnTicks = NULL, fixedLabelsStart = NULL, fixedLabelsEnd = NULL, fixedLabelsStartTotalBins = 0, fixedLabelsEndTotalBins = 0, legendNCol = 1, ylimScale = 1, ylab = NULL, showXLab = TRUE, showLegend = TRUE, minYA = NULL, maxYA = NULL, legendPos = NULL) {
+	n <- length(binMatrixList)
+	# set some plot attributes
+	if(is.null(ylab)) {
+		if(showYLab) {
+			ylab <- "coverage per bin"
+			if(normByBinlength) ylab <- "avg. coverage per bp"
+			if(normBylibSize) ylab <- paste(ylab, " / library size * ", normLibsize, sep="")
+			if(normByShapeSum) ylab <- "coverage normed by shape sum"
+			if(normByFeatureCount) ylab <- paste(ylab, " / # shapes", sep="")
+			if(normByShapeSum && normByFeatureCount) ylab <- "occupancy"
+			if(name != "") ylab <- paste(name, ylab, sep=" ")
+		} else ylab <- ""
+	}
+	if(is.null(palette)) {
+		nA <- max(3, n)
+		palette <- brewer.pal(nA, "Set1")
+		tmpc <- palette[1]
+		palette[1] <- palette[2]
+		palette[2] <- tmpc
+	}
+
+	# find max value
+	maxY <- 0
+	minY <- 1000000000
+	metaStore <- list()
+	covStore <- list()
+	errorStore <- list()
+	for(i in 1:n) {
+		binMatrix <- binMatrixList[[i]]
+		meta <- getSummedShape(binMatrix, normBylibSize = normBylibSize, normByBinlength = normByBinlength, normLibsize = normLibsize, normByShapeSum = normByShapeSum, normByFeatureCount = normByFeatureCount)
+		errorStore[[i]] <- meta@attributes[["error"]]
+		covStore[[i]] <- meta@attributes[["cov"]]
+		meta <- meta@attributes[["meta"]]
+		metaStore[[i]] <- meta
+		minY <- min(minY, meta)
+		maxY <- max(maxY, meta)
+	}
+	maxY <- maxY * ylimScale
+	if(!is.null(minYA) && !is.null(maxYA)) {
+		minY <- minYA
+		maxY <- maxYA
+	}
+	YRange <- maxY-minY
+	if(maxY == 1 && minY == 1) {
+		minY <- 1 - 0.001
+		maxY <- 1 + 0.001
+	}
+	YRange <- max(YRange, 0.001) 
+	minY <- minY - 0.07*(YRange)
+	pvPos <- minY + 0.005*(YRange)
+
+	# perform wilcox-test
+	pvs <- NULL
+	if(n == 2) {
+		a <- covStore[[1]]
+		b <- covStore[[2]]
+		pvs <- c()
+		for(p in 1:ncol(a)) {
+			pv <- wilcox.test(a[,p], b[,p], exact=F, paired=T)$p.val
+			pvs <- c(pvs, pv)
+		}
+		pvs <- p.adjust(pvs, method = "bonferroni", n=length(pvs))
+		pvs[is.nan(pvs)] <- 1
+		pvsCol <- unlist(lapply(pvs, function(x) { r <- "white"; if(x <= 10^-3) r <- "yellow"; if(x <= 10^-10) r <- "orange"; if(x <= 10^-15) r <- "red"; return(r)}))
+	}
+
+	# plot lines
+	for(i in 1:n) {
+		meta <- metaStore[[i]]
+		error <- NULL
+		if(length(errorStore) >= i) {
+			error <- errorStore[[i]]
+		}
+		if(smooth) meta <- smooth(meta)
+		if(i == 1) {
+			N <- length(meta)
+			range <- 1:N - round(N/2)
+			title <- gsub(">=", "'*''>=''*'" , title) 
+			title <- gsub("<=", "'*''<=''*'" , title)
+			mai <- paste("     ", title, sep="")
+			tmpTitle <- unlist(strsplit(mai, "Delta"))
+			if(length(tmpTitle) == 2) {
+				mai <- paste("'", tmpTitle[1], "'*Delta*'", tmpTitle[2], "'", sep="")
+			}
+			else {
+				tmpTitle <- unlist(strsplit(mai, "epsilon"))
+				if(length(tmpTitle) == 2) {
+					mai <- paste("'",tmpTitle[1], "'*''%in%''*'", tmpTitle[2], "'", sep="")
+				}
+			}
+			if(!grepl("^'.*'$", mai)) {
+				mai <- paste("'", mai, "'", sep="")
+			}
+			plot(-1, -1, type="l", xaxt="n", ylim=c(minY, maxY), xlim=c(min(range), max(range)), xlab="", ylab="", col=palette[i], cex.axis=1.3, cex.lab=1.5, cex.main=1.6, lwd=1, main=parse(text=mai))
+
+  		if(showYLab) {
+				mtext(side = 2, text=ylab, cex=1.2, line=3)
+			}
+  		if(showXLab) {
+				#mtext(side = 1, text=paste("meta gene ", " 5' -> 3': ", type, sep=""), cex=1.2, line=4.5)
+			}
+		}
+		if(!is.null(error)) {
+			error.bar(range, meta, error[[2]], error[[1]], col=adjustcolor(palette[i], alpha.f = 0.3))
+		}
+		lines(range, meta, type="l", col=palette[i], lwd=1.75)
+	}
+
+	# create x-axis ticks
+	# create main interval
+	labelsRange <- (N-fixedLabelsStartTotalBins-fixedLabelsEndTotalBins)
+	interval <- round(seq(1+fixedLabelsStartTotalBins, N+1-fixedLabelsEndTotalBins, by=(labelsRange/(length(labels)-1))))
+	if(!is.null(fixedLabelsStartTotalBins) && length(fixedLabelsStart) > 0) {
+		intervalStart <- round(seq(1, fixedLabelsStartTotalBins+1, by=fixedLabelsStartTotalBins/(length(fixedLabelsStart)-1)))
+		interval <- c(intervalStart, interval)
+		labels <- c(fixedLabelsStart, labels)
+	}
+	if(!is.null(fixedLabelsEndTotalBins) && length(fixedLabelsEnd) > 0) {
+		intervalEnd <- round(seq(1, fixedLabelsEndTotalBins+1, by=fixedLabelsEndTotalBins/(length(fixedLabelsEnd)-1)))
+		intervalEnd <- intervalEnd + fixedLabelsStartTotalBins + labelsRange
+		interval <- c(interval, intervalEnd)
+		labels <- c(labels, fixedLabelsEnd)
+	}
+
+	# axis for ticks
+	interval[1] <- min(1, interval[1])
+	interval[length(interval)] <- N
+	interval <- interval - round(N/2)
+	if(showXLab) {
+		axis(1, at=interval, labels=labels, las=2, cex.axis=1.3)
+	}
+	else {
+		axis(1, at=interval, labels=rep("", length(labels)), las=2, cex.axis=1.3)
+	}
+
+	# plot ablines
+	if(!is.null(linesOnTicks)) {
+		for(i in linesOnTicks) {
+			abline(v=interval[i], lty=3)
+		}
+	}
+
+	if(showLegend) {
+	  strw = strwidth(names(binMatrixList))
+	  if(is.null(legendPos) || legendPos == "topright"){
+		  legend(x="top", names(binMatrixList), fill=palette, ncol=legendNCol, bty='n', cex=1.5, inset = .006, x.intersp = 0.6, text.width=c(30, 40)) # inset=c(0, 0.25), xpd=T,
+	  }
+	  else if(legendPos == "topleft") {
+	    legend(x="top", names(binMatrixList), fill=palette, ncol=legendNCol, bty='n', cex=1.5, inset = .006, x.intersp = 0.6, text.width=c(30, 40)) # inset=c(0, 0.25), xpd=T,
+	  }
+	  else if(legendPos == "bottomright") {
+	    legend(x="bottom", names(binMatrixList), fill=palette, ncol=legendNCol, bty='n', cex=1.5, inset = .01, x.intersp = 0.6, text.width=c(30, 40)) # inset=c(0, 0.25), xpd=T,
+	  }
+	}
+	# plot p-values
+	if(!is.null(pvs)) {
+		points(range, rep(pvPos, length(range)), col=pvsCol, lwd=2, pch=15)
+	}
+}
+
+# creates a object of class 'binMatrix'
+readBinTable <- function(file, sumFile) {
+	size <- read.csv(sumFile, sep="\t", head=T)[1,1]
+	m <- read.csv(file, sep="\t", head=T)
+
+	# make first col be the names
+	rownames(m) <- m[, 1]
+	m <- m[, -1]
+	bLength <- m[, ncol(m)]
+	m <- m[, -ncol(m)]
+	m <- as.matrix(m)
+
+	# create the attributes
+	a <- list("file" = file, "norm.libsize" = FALSE, "norm.binlength" = FALSE, "norm.sumShape" = FALSE, "merged" = FALSE)
+
+	obj <- binMatrixConstructor(cov = m, libsize = size, binLength = bLength, attributes = a)
+	return(obj)
+}
+
+createGroupedMatrix <- function(cov, bLength) {
+	# create the attributes
+	a <- list(file = NULL, "norm.libsize" = TRUE, "norm.binlength" = TRUE, "norm.sumShape" = FALSE, "merged" = TRUE)
+
+	obj <- binMatrixConstructor(cov = cov, libsize = 0, binLength = bLength, attributes = a)
+	return(obj)
+}
+
+
+plotMergedShape <- function(metaDataList, interestLists, name = "TODO", metaDataNorm = NULL, isListGeneList = FALSE, transGeneMapping = NULL, maxTranscripts = NULL, removeEndings = FALSE, psCount = 0.025, ylimScale = 1, fixedLabelsEndTotalBins = 90, fixedLabelsStartTotalBins = 90, legendPos = NULL) {
+
+	# TOOOOOOOOOOOOOOOOOOOOODO TODO
+	typeNamePlotALL <- c("body +/- 3000")
+	TSSl <- paste(seq(-3000, 1500, by=750), "bp", sep="")
+	TTSl <- paste(seq(-1500, 3000, by=750), "bp", sep="")
+	TSSl[TSSl == 0] <- "TSS"
+	TTSl[TTSl == 0] <- "TTS"
+	bodyLabels <- c("", paste(seq(10, 90, by=10), "%", sep=""), "")
+	linesOnTicks <- c(5,7,19,21)
+	# TODO ------------------
+
+	minY <- 999999999
+	maxY <- -999999999
+	# convert gene list to transcript list
+	if(isListGeneList) {
+		if(is.null(transGeneMapping) || is.null(maxTranscripts)) {
+			print("binGenome.lib.R: transGeneMapping and maxTranscripts can not be null if it is a gene list!") 
+			return(-1)
+		}
+		interestLists <- lapply(interestLists, function(x, tgm, maxT) { r <- tgm[gsub("\\.[0-9]+$", "", tgm$gene_id) %in% x, "transcript_id"]; as.character(r[r %in% maxT])}, tgm = transGeneMapping, maxT = maxTranscripts)
+	}
+
+	# norm if given
+	if(!is.null(metaDataNorm)) {
+	  
+	  normNameVar <- names(metaDataNorm)[1]
+	  if(normNameVar == "PolII") {
+	    normNameVar <- "RNAPII"
+	  }
+		name <- paste(name, " / ", normNameVar, " ratio", sep="")
+		normByShapeSumSwitch <- FALSE
+		ylab <- name
+	}
+	else {
+		normByShapeSumSwitch <- TRUE
+		ylab <- NULL
+	}
+
+	# divide lists 
+	metaDataDivided <- lapply(metaDataList, function(x, interestLists, removeEndings) { divideByIDLists(x, interestLists, removeEndings = removeEndings)}, interestLists, removeEndings)
+	
+	n <- length(interestLists)
+	N <- length(metaDataDivided)
+	data2PlotStore <- list()
+	# find Y-scale factor
+	for(i in seq(1, n)) {
+		data2Plot <- lapply(1:N, function(x, i, data) { data[[x]][[i]] }, i, metaDataDivided)
+		names(data2Plot) <- names(metaDataList)
+	
+		L <- length(data2Plot)
+		for(ii in seq(1, L)) {
+			# norm if given
+			if(!is.null(metaDataNorm)) {
+				data2norm <- data2Plot[[ii]]
+				data2norm <- normByShapeSumFun(data2norm)
+				norm <- filterByIDs(metaDataNorm[[ii]], rownames(data2norm@cov))
+				norm <- normByShapeSumFun(norm)
+				norm <- (data2norm@cov+psCount) / (norm@cov+psCount)
+				data2Plot[[ii]]@cov <- norm
+			}
+
+			meta <- getSummedShape(data2Plot[[ii]], normBylibSize = TRUE, normByBinlength = TRUE, normByShapeSum = normByShapeSumSwitch, normByFeatureCount = TRUE)
+			meta <- meta@attributes[["meta"]]
+			minY <- min(minY, meta)
+			maxY <- max(maxY, meta)
+		}
+		data2PlotStore[[i]] <- data2Plot
+	}
+
+	maxY <- maxY * ylimScale
+	# plot it
+	#par(mfrow = c(n, 1), oma = c(3.5,5,1,0) + 0.1, mar = c(1.5,0,2.5,0.5) + 0.1)
+	graphics::layout(mat = matrix(1:n, nrow = n, ncol = 1), heights = rep(c(1)/n, n), widths = 1)
+	par(mar = c(0,4,2,0)+0.5, oma=c(5,0,0,0)+0.1)
+	for(i in seq(1, n)) {
+		data2Plot <- data2PlotStore[[i]]
+
+		mainName <- paste(names(interestLists)[i], " (n=", nrow(data2Plot[[1]]@cov), ")", sep="")
+		showLegend <- (i == 1 || n == 1)
+		showXLab <- (i == n || n == 1)
+		showYLab <- (i == ceiling(n/2) || n == 1)
+
+		# plot!
+		plotGroup(data2Plot, bodyLabels, type = "", showXLab = showXLab, showLegend = showLegend, title = mainName, name = name, normBylibSize = TRUE, normByShapeSum = normByShapeSumSwitch, normByFeatureCount = TRUE, normByBinlength = TRUE, smooth=FALSE, fixedLabelsStart=TSSl, fixedLabelsEnd=TTSl, fixedLabelsStartTotalBins=fixedLabelsEndTotalBins, fixedLabelsEndTotalBins=fixedLabelsStartTotalBins, linesOnTicks=linesOnTicks, legendNCol = N, showYLab = showYLab, ylab = ylab, minYA = minY, maxYA = maxY, legendPos = legendPos)
+	}
+}
