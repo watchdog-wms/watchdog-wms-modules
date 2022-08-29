@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Elena Weiß</author>
+    <!-- day the module was updated the last time -->
+    <updated>2022-08-24</updated>
+    <category>General</category>
+    <description maxVersion="1" minVersion="1">creates bed and saf files given a tss file</description>
+    <!-- ##### optional ##### -->
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">java</dependencies>
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>klugem</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="gtf" type="file">
+      <description>path to gtf file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="tss" type="file">
+      <description>path to tss file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="outdir" type="file">
+      <description>path to output dir</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="name" type="string">
+      <description>name</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="info" type="boolean">
+      <description>if info should be written</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="bed" type="boolean">
+      <description>if bed file should be written</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="saf" type="boolean">
+      <description>if saf file should be written</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="bedwindow" type="boolean">
+      <description>if bedwindow should be written for scaled metagenes</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="antisense" type="boolean">
+      <description>if experiment is antisense</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="filterDist" type="integer">
+      <description>if distance to annotated tss should be limited</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="noMapping" type="boolean">
+      <description>if mapping should be avoided</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="minDist" type="boolean">
+      <description>minimum distance</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="genelist" type="file">
+      <description>list of genes</description>
+    </param>
+  </parameter>
+</documentation>
