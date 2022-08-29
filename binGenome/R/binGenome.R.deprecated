@@ -1,0 +1,165 @@
+####################################################
+####################################################
+########### deprecated as it is too slow ###########
+####################################################
+####################################################
+
+# load some libs
+library(getopt)
+
+# options to parse
+spec <- matrix(c( 'bedgraph', 'i', 1, "character",
+		  'bedgraphNames', 'n', 2, "character",
+		  'bins', 'b', 1, "character",
+		  'outputDir', 'o', 1, "character",
+		  'annotation', 'a', 1, "character",
+		  'annotationNames', 'm', 2, "character",
+		  'cores', 'c', 2, "integer",
+		  'normalize', '', 2, "logical",
+		  #'metadataID', '', 2 "character", # implement if required at some time
+		  'installDir', 'y', 1, "character",
+		  'confirmRun2EndFile', 'z', 2, "character"), ncol=4, byrow=T)
+
+# parse the parameters
+opt <- getopt(spec)
+
+########### set reasonable defaults
+if(is.null(opt$cores)) { opt$cores <- 1}
+if(is.null(opt$normalize)) { opt$normalize <- FALSE}
+###########
+
+if(!dir.exists(opt$installDir)) {
+	print(paste("[ERROR] Module folder '", opt$installDir, "' was not found!", sep=""))
+	quit(save = "no", status = 14, runLast = FALSE) # status = 14 <--> invalid arguments	
+}
+
+exitFlag <- 0
+####################################### do some basic checks
+
+bins <- c(unlist(strsplit(opt$bins, ",")))
+bedgraphFiles <- c(unlist(strsplit(opt$bedgraph, ",")))
+annotationFiles <- c(unlist(strsplit(opt$annotation, ",")))
+########### ensure that at least one file is given for each category
+if(length(bedgraphFiles) == 0) {
+	print("[ERROR] At least one bedgraph file must be given.")
+	exitFlag <- 1
+}
+if(length(annotationFiles) == 0) {
+	print("[ERROR] At least one annotation file must be given.")
+	exitFlag <- 1
+}
+if(length(bins) == 0) {
+	print("[ERROR] At least one bin size must be given.")
+	exitFlag <- 1
+}
+###########
+
+########### ensure that number names and files are equal 
+bedgraphNames <- NULL
+annotationNames <- NULL
+if(!is.null(opt$bedgraphNames)) {
+	bedgraphNames <- c(unlist(strsplit(opt$bedgraphNames, ",")))
+	if(length(bedgraphFiles) != length(bedgraphNames)) {
+		print(paste("[ERROR] Number of bedgraph files and names differ! (", length(bedgraphFiles), " vs ", length(bedgraphNames), ")", sep=""))
+		exitFlag <- 1
+	}
+}
+if(!is.null(opt$annotationNames)) {
+	annotationNames <- c(unlist(strsplit(opt$annotationNames, ",")))
+	if(length(annotationFiles) != length(annotationNames)) {
+		print(paste("[ERROR] Number of annotation files and names differ! (", length(annotationFiles), " vs ", length(annotationNames), ")", sep=""))
+		exitFlag <- 1
+	}
+}
+###########
+
+########### ensure that annotation and bedgraph files exist
+for(f in bedgraphFiles) {
+	if(!file.exists(f)) {
+		print(paste("[ERROR] Bedgraph file '", f, "' was not found!", sep=""))
+		exitFlag <- 1
+	}
+}
+for(f in annotationFiles) {
+	if(!file.exists(f)) {
+		print(paste("[ERROR] Annotation file '", f, "' was not found!", sep=""))
+		exitFlag <- 1
+	}
+}
+###########
+
+for(b in bins) {
+	if(b <=0) {
+		print(paste("[ERROR] Number of bins must be a positive integer instead of '", b, "' !", sep=""))
+		exitFlag <- 1
+	}
+}
+if(exitFlag == 1) {
+	quit(save = "no", status = 14, runLast = FALSE) # status = 14 <--> invalid arguments	
+}
+
+##################################################################### START ACTUAL WORK HERE #####################################################################
+# try to create the output folder
+if(!dir.exists(opt$outputDir)) {
+	dir.create(opt$outputDir, showWarnings = F, mode = "0755")
+	# ensure that it is there now
+	if(!dir.exists(opt$outputDir)) {
+		print(paste("[ERROR] Can not create output folder'", opt$outputDir, "' !", sep=""))
+		quit(save = "no", status = 14, runLast = FALSE) # status = 14 <--> invalid arguments	
+	}
+}
+
+# change working directory for sourcing of files
+setwd(opt$installDir)
+source("binGenome.lib.R.deprecated")
+
+# load bedgraph files one after the other
+for(i in 1:length(bedgraphFiles)) {
+	bgf <- bedgraphFiles[i]
+	if(is.null(bedgraphNames)) {
+		bgName <- gsub("\\.[^\\.]+$", '' ,basename(bgf)) # get the plain filename without the last ending ('.')
+	} else {
+		bgName <- bedgraphNames[i]
+	}
+	print(paste("[INFO] Loading ", bgName, "...", sep=""))
+
+	completeCoverage <- import(bgf)
+	sumOfCover <- as.data.frame(sum(width(completeCoverage) * completeCoverage$score))
+	colnames(sumOfCover)[1] <- "sumOfCoverage"
+	write.table(sumOfCover, file = paste(opt$outputDir, "/", bgName, ".sum.csv", sep=""), sep="\t", quote=F, row.names=F)	
+
+	# load annotation files one after the other
+	for(ii in 1:length(annotationFiles)) {
+		af <- annotationFiles[ii]
+		if(is.null(annotationNames)) {
+			aName <- gsub("\\.[^\\.]+$", '', basename(af)) # get the plain filename without the last ending ('.')
+		} else {
+			aName <- annotationNames[ii]
+		}
+
+		targetAnno <- readGRangesFromBed(af, dropMetaData = TRUE)
+		# calc one bin after the other
+		for(b in bins) {
+			print(paste("[INFO] Processing ", b, " - ", aName, " - ", bgName, sep=""))
+			print(date())
+			cover <- getCoverageMatrix(completeCoverage, targetAnno, b, norm = FALSE, cores = opt$cores)	
+			write.table(cover, file = paste(opt$outputDir, "/", bgName, "_", aName, ".", b, ".coverage.csv", sep=""), sep="\t", quote=F, row.names=F) # TODO: check if row.names are set
+
+			# normalize it by row count if wished
+			if(opt$normalize) {
+				norm <- normalizeByRowSum(cover)
+				write.table(norm, file = paste(opt$outputDir, "/", bgName, "_", aName, ".", b, ".coverage.norm.csv", sep=""), sep="\t", quote=F, row.names=F) # TODO: check if row.names are set
+			}
+		}
+		print(date())
+	}
+}
+
+##################################################################### DONE ALL WORK #####################################################################
+
+
+# write a file that we know, the script run to its end
+if(!is.null(opt$confirmRun2EndFile)) {
+	file.create(opt$confirmRun2EndFile, showWarnings = FALSE)
+}
+

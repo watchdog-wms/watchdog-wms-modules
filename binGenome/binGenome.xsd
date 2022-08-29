@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="binGenomeTaskParameterType">
+		<x:all>
+			<x:element name="bedgraph" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="unbounded"/>
+			<x:element name="bedgraphPos" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="unbounded"/>
+			<x:element name="bedgraphNeg" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="unbounded"/>
+			<x:element name="annotation" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="unbounded"/>
+			<x:element name="bedgraphNames" type="paramString" minOccurs="0" maxOccurs="unbounded"/>
+			<x:element name="annotationNames" type="paramString" minOccurs="0" maxOccurs="unbounded"/>
+			<x:element name="bins" type="paramGreaterZero_binGenome" minOccurs="0" maxOccurs="unbounded"/>
+			<x:element name="quantiles" type="paramQuant_binGenome" minOccurs="0" maxOccurs="unbounded"/>
+			<x:element name="outputDir" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1"/>
+			<x:element name="cores" type="paramString" minOccurs="0" maxOccurs="1" default="1"/>
+			<x:element name="normalize" type="paramBoolean" minOccurs="0" maxOccurs="unbounded" default="true"/>
+			<x:element name="fixedBinSizeUpstream" type="paramStringTwoInts_binGenome" minOccurs="0" maxOccurs="1"/>
+			<x:element name="fixedBinSizeDownstream" type="paramStringTwoInts_binGenome" minOccurs="0" maxOccurs="1"/>
+			<x:element name="tmpDir" type="paramAbsoluteFolderPath" minOccurs="0" maxOccurs="1"/>
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="binGenomeTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="binGenome.sh"/>
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="binGenomeTaskType">
+		<x:complexContent>
+			<x:extension base="binGenomeTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="binGenomeTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="binGenomeTask" type="binGenomeTaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->	
+	<x:complexType name="paramGreaterZero_binGenome">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value >= 1))" xerces:message="Parameter with name 'bins' must be equal or greater than 1." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+	<x:complexType name="paramQuant_binGenome">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 0 and 100 >= x:integer($value))" xerces:message="Parameter with name 'quantiles' must be between 0 and 100 (percent)." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+	<x:complexType name="paramStringTwoInts_binGenome">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or matches($value, '[0-9]+:[0-9]+')" xerces:message="Parameter must follow the pattern 'binsize:binnumber' while both values must be integers." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+</x:schema>
