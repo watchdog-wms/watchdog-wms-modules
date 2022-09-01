@@ -1,0 +1,21 @@
+#!/usr/bin/Rscript
+
+args = commandArgs(trailingOnly=TRUE)
+
+df1 <- read.csv(args[1], sep="\t", header=FALSE)
+df2 <- read.csv(args[2], sep="\t", header=FALSE)
+
+
+df1[, 3] <- df1[,3]+3000
+
+df3 <- merge(df1, df2, by=c("V1", "V2", "V3"))
+
+
+df3 <- subset(df3, df3[5] == df3[6])
+
+df3[,6] <- NULL
+
+df3 <- df3[!duplicated(df3), ]
+
+
+write.table(df3, args[3], row.names=FALSE, quote=FALSE, col.names=FALSE, sep="\t")
