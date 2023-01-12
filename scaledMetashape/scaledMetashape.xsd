@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+	<!-- definition of the task parameters -->
+	<x:complexType name="scaledMetashapeTaskParameterType">
+		<x:all>
+			<x:element name="bedgraphTable" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
+			<x:element name="genelist" type="paramString" minOccurs="0" maxOccurs="3"/>
+			<x:element name="experiment" type="paramString" minOccurs="0" maxOccurs="1"/>
+			<x:element name="metaFrame" type="paramInteger" minOccurs="1" maxOccurs="1" />
+			<x:element name="bins" type="paramInteger" minOccurs="1" maxOccurs="1" />
+			<x:element name="aggregateFUN" type="paramString" minOccurs="1" maxOccurs="1" />
+			<x:element name="normShapeSum" type="paramBoolean" minOccurs="1" maxOccurs="1" />
+			<x:element name="normLibSize" type="paramBoolean" minOccurs="1" maxOccurs="1" />
+			<x:element name="normBinLength" type="paramBoolean" minOccurs="1" maxOccurs="1" />
+			<x:element name="factor" type="paramString" minOccurs="0" maxOccurs="unbounded" />
+			<x:element name="coverageFiles" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1" />
+			<x:element name="bedname" type="paramString" minOccurs="1" maxOccurs="1" />
+			<x:element name="plotname" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="config" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="scaledMetashapeTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="metashape.R" />
+				<x:attribute name="preBinCommand" type="x:string" fixed="Rscript" />
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
+				<x:attribute name="returnFilePathParameter" type="x:string" fixed="confirmRun2EndFile" />
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="scaledMetashapeTaskType">
+		<x:complexContent>
+			<x:extension base="scaledMetashapeTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="scaledMetashapeTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="scaledMetashapeTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<x:complexType name="scaledMetashapeTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<x:element name="scaledMetashapeOutputFolder" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="scaledMetashapeTask" type="scaledMetashapeTaskType" substitutionGroup="abstractTask" />
+</x:schema>
