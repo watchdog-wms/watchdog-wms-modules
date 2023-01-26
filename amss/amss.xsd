@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+	<!-- definition of the task parameters -->
+	<x:complexType name="amssTaskParameterType">
+		<x:all>
+			<x:element name="inputregs" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
+			<x:element name="bams" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1"/>
+			<x:element name="pattern" type="paramString" minOccurs="1" maxOccurs="1"/>
+			<x:element name="strandness" type="paramString" minOccurs="1" maxOccurs="1"/>
+			<x:element name="pseudocount" type="paramInteger" minOccurs="0" maxOccurs="1"/>
+			<x:element name="numrandomizations" type="paramInteger" minOccurs="0" maxOccurs="1"/>
+			<x:element name="out" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1"/>
+			<x:element name="sampleAnnotation" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="amssTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="amss.sh" />
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
+				<x:attribute name="returnFilePathParameter" type="x:string" fixed="returnFilePath" />
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<x:complexType name="amssTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+					<x:element name="out" type="x:string"/>
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="amssTaskType">
+		<x:complexContent>
+			<x:extension base="amssTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="amssTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="amssTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+	<!-- make task definition availible via substitution group -->
+	<x:element name="amssTask" type="amssTaskType" substitutionGroup="abstractTask" />
+</x:schema>
