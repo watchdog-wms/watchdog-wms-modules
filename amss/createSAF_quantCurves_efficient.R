@@ -1,6 +1,10 @@
 
 options(warn=-1)
 
+list.of.packages <- c("tidyr", "stringr", "gtools")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
 library(tidyr)
 library(stringr)
 library(gtools)

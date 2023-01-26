@@ -9,6 +9,8 @@ DEFINE_string 'inputregs' '' 'single region to compute' 'i'
 DEFINE_string 'bams' '' 'path to bam files' 'b'
 DEFINE_string 'strandness' '' '0 if unstranded, 1 if forward' 's'
 DEFINE_string 'pattern' '' 'pattern for bams' 'p'
+DEFINE_string 'pseudocount' '' 'pseudocount to subtract' 'z'
+DEFINE_string 'numrandomizations' '' 'num of randomizations' 'q'
 DEFINE_string 'sampleAnnotation' '' 'samples annotated to names' 'a'
 DEFINE_boolean 'debug' 'true' '[optional] prints debug messages.' 'd'
 DEFINE_string 'returnFilePath' '' 'path to the return variables file' 'r'
@@ -30,12 +32,19 @@ elif [[ -z $FLAGS_inputregs ]] ; then
 fi
 #extend param checks!!!
 
+
+if [[ -z $FLAGS_pseudocount ]] ; then
+	FLAGS_pseudocount=1
+fi
+if [[ -z $FLAGS_numrandomizations ]] ; then
+        FLAGS_numrandomizations=1000
+fi
+
+
 printParamValues "parameters"
 
 
 
-#bam="/mnt/input/own/SeqMappings/ChIPmentation_Doelken/ContextMap/"
-#scripts="/home/proj/projekte/sequencing/Illumina/PolIIPausing/TSS-profiling/scripts/"
 
 
 IN=$FLAGS_inputregs
@@ -65,10 +74,12 @@ done
 runtime=$((`date +%s`-start))
 echo "TIME select window counts "$runtime
 
-/mnt/raidproj/proj/software/R/Unix/R-4.0.1/bin/Rscript $SCRIPT_FOLDER"/quantify_curves_efficient.R" $chr $s $e $FLAGS_out $FLAGS_sampleAnnotation	#computes AMSS
+#computes AMSS
+Rscript $SCRIPT_FOLDER"/quantify_curves_efficient.R" $chr $s $e $FLAGS_out $FLAGS_sampleAnnotation $FLAGS_pseudocount $FLAGS_numrandomizations
 #rm -r $FLAGS_out$chr"-"$s"-"$e"/counts/"
 
-/mnt/raidproj/proj/software/R/Unix/R-4.0.1/bin/Rscript $SCRIPT_FOLDER"/createSAF_quantCurves_efficient.R" $FLAGS_out"/"$chr"-"$s"-"$e"/" $FLAGS_sampleAnnotation $strand	#writes amss regions into annotation files for dexseq per single dir
+#writes amss regions into annotation files for dexseq per single dir
+Rscript $SCRIPT_FOLDER"/createSAF_quantCurves_efficient.R" $FLAGS_out"/"$chr"-"$s"-"$e"/" $FLAGS_sampleAnnotation $strand
 
 
 
