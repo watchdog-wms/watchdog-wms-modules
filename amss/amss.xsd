@@ -7,6 +7,8 @@
 			<x:element name="bams" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1"/>
 			<x:element name="pattern" type="paramString" minOccurs="1" maxOccurs="1"/>
 			<x:element name="strandness" type="paramString" minOccurs="1" maxOccurs="1"/>
+			<x:element name="pseudocount" type="paramInteger" minOccurs="0" maxOccurs="1"/>
+			<x:element name="numrandomizations" type="paramInteger" minOccurs="0" maxOccurs="1"/>
 			<x:element name="out" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1"/>
 			<x:element name="sampleAnnotation" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1"/>
 		</x:all>
