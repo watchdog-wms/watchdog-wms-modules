@@ -1,6 +1,10 @@
 
 options(warn=-1)
 
+list.of.packages <- c("tidyr", "plyr", "Rsamtools", "padr", "GenomicRanges", "ggplot2", "DescTools", "PCAtools", "gridExtra", "foreach", "doParallel")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
 suppressMessages(library(tidyr))
 suppressMessages(library(plyr))
 suppressMessages(library(Rsamtools))
@@ -16,14 +20,13 @@ suppressMessages(library(doParallel))
 args = commandArgs(trailingOnly=TRUE)
 
 
-#bampath <- "/mnt/input/own/SeqMappings/ChIPmentation_Doelken/ContextMap/"
-#bams <- list.files(path=bampath, pattern="H3K27ac_")
-#bams <- bams[!grepl(".bai|log", bams)]
 
-num_randomize_iters <- 1000 #zurücksetzetn auf 1000
+argslen <- length(args)
+num_randomize_iters <- as.numeric(as.character(args[argslen]))
+#num_randomize_iters <- 1000
 shift_zeroline <- "median"  #oder mean
-pseudocount<- 1
-
+#pseudocount <- 1
+pseudocount <- as.numeric(as.character(args[argslen-1]))
 
 
 preprocess <- function(s, e, chrom, dir) {
@@ -124,30 +127,40 @@ amss <- function(scores) {
           break
         }
       }
-    } #else if (s < 0) { #only this else is from me, rest from wikipedia. cite=?!
-      #if (!diff) {
-        #total <- 0 #because of only positive values
-      #}
-    #}
+    }
   }
   # Getting maximal subsequences using stored indices
   v <- c()
-  for (l in 1:(max(k)-1)) {
-    vec3 <- list(range(I_s[l] : I_e[l]))  #intervals, adapted by me from wiki
-    v <- c(v, vec3)
+  if (length(I_s) > 0 && length(I_e) > 0) {
+    for (l in 1:max(1, (max(k)-1))) { #if k=1 than would go till 0
+      if (I_s[l]==0 && I_e[l]==0) { #beginning values, nothing found
+        vec3 <- list(c(NA, NA))
+      } else {
+        vec3 <- list(range(I_s[l] : I_e[l]))  #intervals, adapted by me from wiki
+      }
+      v <- c(v, vec3)
+    }
+  } else {
+    print("no MSS found")
+    v <- c(v, list(c(NA, NA)))
   }
   return(v)
 }
 
 amss2df <- function(res, df, c) {
   intervals <- c()
-  for (v in res) {
-    if (v[1]==v[2]) {  #can not compute AUC if AMSS only one position
-      next
+  if (is.na(res[[1]][1]) || is.na(res[[1]][2])) { #no MSS found
+    intervals <- rbind(intervals, c(NA, NA, NA, NA))
+  } else {
+    for (v in res) {
+      if (v[1]==v[2]) {  #can not compute AUC if AMSS only one position
+        auc2 <- NA
+      } else {
+        auc2 <- AUC(df[v,2], df[v,c], method="trapezoid", absolutearea=TRUE) #from DescTools, neg areas are summed
+      }
+      s <- sum(df[v[1]:v[2],c])
+      intervals <- rbind(intervals, c(df[v,2], s, auc2))
     }
-    s <- sum(df[v[1]:v[2],c])
-    auc2 <- AUC(df[v,2], df[v,c], method="trapezoid", absolutearea=TRUE) #from DescTools, neg areas are summed
-    intervals <- rbind(intervals, c(df[v,2],s, auc2))
   }
   intervals <- as.data.frame(intervals)
   colnames(intervals) <- c("start_seq_idx", "end_seq_idx", "sum_height", "AUC")

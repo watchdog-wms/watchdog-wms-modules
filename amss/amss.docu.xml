@@ -39,6 +39,12 @@
     <param maxOccurs="1" minOccurs="1" name="sampleAnnotation" type="file">
       <description>file specifying two conditions</description>
     </param>
+    <param maxOccurs="1" minOccurs="0" name="pseudocount" type="integer">
+      <description>pseudocount to subtract from counts</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="numrandomizations" type="integer">
+      <description>number of randomizations</description>
+    </param>
   </parameter>
   <return>
     <!-- mandatory fields per return variable: name, type, description -->
