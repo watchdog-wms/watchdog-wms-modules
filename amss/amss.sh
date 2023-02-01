@@ -44,6 +44,7 @@ if [[ -z $FLAGS_everyPos ]] ; then
         FLAGS_everyPos="false"
 fi
 
+
 printParamValues "parameters"
 
 

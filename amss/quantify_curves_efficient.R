@@ -29,6 +29,7 @@ shift_zeroline <- "median"  #oder mean
 pseudocount <- as.numeric(as.character(args[argslen-1]))
 
 
+
 preprocess <- function(s, e, chrom, dir) {
   dflist <- list()
   files <- list.files(path=paste0(dir, "/counts/"), pattern=".counts")
