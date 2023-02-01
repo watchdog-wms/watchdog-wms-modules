@@ -17,6 +17,7 @@ parser.add_argument('--strandness', help='0 if unstranded, 1 if forward')
 parser.add_argument('-givenstrand', help='strand of gene')
 parser.add_argument('-bam', help='path to bam file')
 parser.add_argument('-out', help='path to output dir')
+parser.add_argument('--everyPos', help='count every read position from start to end')
 
 args = vars(parser.parse_args())
 #print(args)
@@ -27,35 +28,43 @@ samfile = pysam.AlignmentFile(args['bam'], "rb")
 
 bamreads = {}
 
+def countReadsToPositions(pos):
+	if int(args['strandness']) == 0:
+		if pos not in bamreads:
+			bamreads[pos] = 1
+		else:
+			bamreads[pos] = bamreads[pos]+1
+	elif int(args['strandness']) == 1:
+		strand = '+' if not r.is_reverse else '-'
+		if strand == str(args['givenstrand']):
+			if pos not in bamreads:
+				bamreads[pos] = 1
+		else:
+			bamreads[pos] = bamreads[pos]+1
+	elif int(args['strandness']) == 2:
+		strand = '+' if not r.is_reverse else '-'
+		if strand != str(args['givenstrand']):
+			if pos not in bamreads:
+				bamreads[pos] = 1
+			else:
+				bamreads[pos] = bamreads[pos]+1
+
+
 reads = samfile.fetch(args['chr'], int(args['start']), int(args['end'])+1)
 for r in reads:
-    ar = str(r).split()
-    pos = int(ar[3])
-    if int(args['strandness']) == 0:
-	    if pos not in bamreads:
-		    bamreads[pos] = 1
-	    else:
-		    bamreads[pos] = bamreads[pos]+1
-    elif int(args['strandness']) == 1:
-        strand = '+' if not r.is_reverse else '-'
-        if strand == str(args['givenstrand']):
-            if pos not in bamreads:
-                bamreads[pos] = 1
-            else:
-                bamreads[pos] = bamreads[pos]+1
-    elif int(args['strandness']) == 2:
-        strand = '+' if not r.is_reverse else '-'
-        if strand != str(args['givenstrand']):
-            if pos not in bamreads:
-                bamreads[pos] = 1
-            else:
-                bamreads[pos] = bamreads[pos]+1
+	ar = str(r).split()
+	if args['everyPos'] == "true":
+		read_positions = r.get_reference_positions()
+		for rp in read_positions:
+			countReadsToPositions(rp)
+	else:
+		pos = int(ar[3])
+		countReadsToPositions(pos)
+    
 
 for n in range(int(args['start']), int(args['end'])+1):
 	if n not in bamreads.keys():
 		bamreads[n] = 0
-
-
 
 
 
