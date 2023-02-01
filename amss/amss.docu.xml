@@ -45,6 +45,9 @@
     <param maxOccurs="1" minOccurs="0" name="numrandomizations" type="integer">
       <description>number of randomizations</description>
     </param>
+    <param maxOccurs="1" minOccurs="0" name="everyPos" type="string">
+      <description>every position of read is counted</description>
+    </param>
   </parameter>
   <return>
     <!-- mandatory fields per return variable: name, type, description -->

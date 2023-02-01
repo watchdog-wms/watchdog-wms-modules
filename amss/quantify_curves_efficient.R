@@ -22,11 +22,11 @@ args = commandArgs(trailingOnly=TRUE)
 
 
 argslen <- length(args)
-num_randomize_iters <- as.numeric(as.character(args[argslen-1]))
+num_randomize_iters <- as.numeric(as.character(args[argslen]))
 #num_randomize_iters <- 1000
 shift_zeroline <- "median"  #oder mean
 #pseudocount <- 1
-pseudocount <- as.numeric(as.character(args[argslen]))
+pseudocount <- as.numeric(as.character(args[argslen-1]))
 
 
 preprocess <- function(s, e, chrom, dir) {
