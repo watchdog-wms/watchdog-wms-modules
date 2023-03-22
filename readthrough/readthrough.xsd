@@ -5,7 +5,6 @@
 	<x:complexType name="readthroughTaskParameterType">
 		<x:all>
 			<x:element name="annotation" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
-			<x:element name="connections" type="paramString" minOccurs="0" maxOccurs="1" />
 			<x:element name="genecounts" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
 			<x:element name="input" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
 			<x:element name="readinLength" type="paramIntegerRange_readinLength_readthrough" minOccurs="0" maxOccurs="1" />

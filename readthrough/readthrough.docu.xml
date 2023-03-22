@@ -59,6 +59,9 @@
     <param maxOccurs="1" minOccurs="0" name="exclude" type="string">
       <description>[optional] chromosomes to exclude from calculating total mapped reads, separated by ,</description>
     </param>
+	<param maxOccurs="1" minOccurs="0" name="excludeType" type="string">
+      <description>[optional]  gene types to exclude when determining genes with no other genes up- or down-stream, separated by ,</description>
+    </param>
     <param maxOccurs="1" minOccurs="0" name="dOCRFile" type="string">
       <description>[optional] file containing dOCR lengths</description>
     </param>
