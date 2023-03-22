@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Caroline Friedel</author>
+    <!-- day the module was updated the last time -->
+    <updated>2023-03-23</updated>
+    <category>sequencing</category>
+    <description maxVersion="1" minVersion="1">Calculates readthrough and readin values and optionally downstream FPKM and expression in dOCR regions</description>
+    <!-- ##### optional ##### -->
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>Read-through was calculated as previously described in Hennig T et al, 2028, PLOS Pathogens 14(3): e1006954</paperDescription>
+    <PMID>29579120</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">java</dependencies>
+	<dependencies maxVersion="1" minVersion="1">picard (jar included with module)</dependencies>
+	<dependencies maxVersion="1" minVersion="1">Apache Commons CLI library (jar included with module)</dependencies>
+    <!-- module specific hints or comments -->
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+	<username>friedelcc</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="annotation" type="file">
+      <description>annotation file path</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="genecounts" type="file">
+      <description>gene read count file</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="input" type="file">
+      <description>input file</description>
+    </param>
+	<param maxOccurs="1" minOccurs="1" name="output" type="file">
+      <description>output file</description>
+    </param>
+	<param default="5000" maxOccurs="1" minOccurs="0" name="readthroughLength" type="integer">
+      <description>[optional] length of downstream window in which read-through is calculated</description>
+    </param>
+    <param default="5000" maxOccurs="1" minOccurs="0" name="readinLength" type="integer">
+      <description>[optional] length of upstream window in which read-in is calculated</description>
+    </param>
+    <param default="0" maxOccurs="1" minOccurs="0" name="strandedness" type="integer">
+      <description>strandedness: 0=not strandspecific, 1=first read indicates strand, 2=second read indicates strand</description>
+    </param>
+    <param default="25" maxOccurs="1" minOccurs="0" name="overlap" type="integer">
+      <description>[optional] minimum overlap of read to be counted for read-through/in window</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="idxstats" type="file">
+      <description>[optional] idxstats file with numbers of mapped reads per chromosome, necessary for calculating downstream FPKM and transcription in dOCR regions</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="normFactor" type="string">
+      <description>[optional] factor for normalizing by mapped reads and gene length for downstream FPKM calculation</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="exclude" type="string">
+      <description>[optional] chromosomes to exclude from calculating total mapped reads, separated by ,</description>
+    </param>
+    <param maxOccurs="1" minOccurs="0" name="dOCRFile" type="string">
+      <description>[optional] file containing dOCR lengths</description>
+    </param>
+    <param default="1000" maxOccurs="1" minOccurs="0" name="windowLength" type="integer">
+      <description>[optional] number of steps for evaluating transcription on dOCRs</description>
+    </param>
+  </parameter>
+</documentation>

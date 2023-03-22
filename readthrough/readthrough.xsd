@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="readthroughTaskParameterType">
+		<x:all>
+			<x:element name="annotation" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="connections" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="genecounts" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="input" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="readinLength" type="paramIntegerRange_readinLength_readthrough" minOccurs="0" maxOccurs="1" />
+			<x:element name="output" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="strandedness" type="paramIntegerRange_strandedness_readthrough" minOccurs="0" maxOccurs="1" />
+			<x:element name="readthroughLength" type="paramIntegerRange_readthroughLength_readthrough" minOccurs="0" maxOccurs="1" />
+			<x:element name="overlap" type="paramIntegerRange_overlap_readthrough" minOccurs="0" maxOccurs="1" />
+			<x:element name="idxstats" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<x:element name="normFactor" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="exclude" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="excludeType" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="dOCRFile" type="paramString" minOccurs="0" maxOccurs="1" />
+			<x:element name="windowLength" type="paramIntegerRange_readthroughLength_readthrough" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="readthroughTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="readthrough.sh" />
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="readthroughTaskType">
+		<x:complexContent>
+			<x:extension base="readthroughTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="readthroughTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="readthroughTask" type="readthroughTaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->
+	<x:complexType name="paramIntegerRange_readinLength_readthrough">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and x:integer($value) &lt;= 1000000000)" xerces:message="Parameter with name 'readinLength' must be between 1 and 1000000000." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+	<x:complexType name="paramIntegerRange_strandedness_readthrough">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 0 and x:integer($value) &lt;= 2)" xerces:message="Parameter with name 'strandedness' must be between 0 and 2." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+	<x:complexType name="paramIntegerRange_readthroughLength_readthrough">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and x:integer($value) &lt;= 1000000000)" xerces:message="Parameter with name 'readthroughLength' must be between 1 and 1000000000." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+	<x:complexType name="paramIntegerRange_overlap_readthrough">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1 and x:integer($value) &lt;= 200)" xerces:message="Parameter with name 'overlap' must be between 1 and 200." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+
+</x:schema>
