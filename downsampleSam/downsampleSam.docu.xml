@@ -14,7 +14,8 @@
     <!-- short description and PubmedID for the methods section of a manuscript -->
     <paperDescription>Downsampling of reads was performed with the DownsampleSam command line tool of the Picard library.</paperDescription>
     <!-- external dependencies required for that module -->
-    <dependencies maxVersion="1" minVersion="1">picard</dependencies>
+	<dependencies maxVersion="1" minVersion="1">Java</dependencies>
+    <dependencies maxVersion="1" minVersion="1">Picard</dependencies>
   </info>
   <!-- ##### optional ##### -->
   <!-- github usernames of users who should be able to commit changes to that module -->
