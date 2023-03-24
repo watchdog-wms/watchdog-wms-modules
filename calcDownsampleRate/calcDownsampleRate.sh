@@ -12,8 +12,8 @@ fi
 DEFINE_string 'idxstats' '' 'idxstats file' 'i'
 echo "idx"
 DEFINE_string 'output' '' 'output table file' 'o'
-DEFINE_string 'exclude' '' '[optional] chromosomes to be excluded, colon separated' 'e'
-DEFINE_string 'samples' '' '[optional] samples to be used, \| separated' 's'
+DEFINE_string 'exclude' '' '[optional] chromosomes to be excluded, comma separated' 'e'
+DEFINE_string 'samples' '' '[optional] samples to be used, comma separated' 's'
 DEFINE_boolean 'version' 'false' '[optional] prints the version' 'v'
 
 echo "parse param"
