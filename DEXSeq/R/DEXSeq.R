@@ -63,7 +63,9 @@ S1 <- pDataTmp[pDataTmp$condition == opt$controlCondition, "sample"]
 S2 <- pDataTmp[pDataTmp$condition == opt$testCondition, "sample"]
 exprs <- exprs[, colnames(exprs) %in% c(S1, S2)]
 colnames(pData) <- "condition"
-pData$condition <- droplevels(pData$condition)
+if(class(pData$condition) == "factor") {
+	pData$condition <- droplevels(pData$condition)
+}
 
 pData <- as.data.frame(pData[colnames(exprs), ])
 rownames(pData) <- colnames(exprs)
@@ -118,6 +120,7 @@ featureID <- sapply(strsplit(rownames(exprs), ":"), "[", 2)
 exoninfo <- exoninfo[sort(names(exoninfo)), ]
 transcripts <- transcripts[sort(names(transcripts))]
 
+pData$condition <- factor(pData$condition)
 dxd <- DEXSeqDataSet(exprs, pData, design= ~ sample + exon + condition:exon, featureID, groupID, featureRanges=exoninfo, transcripts=transcripts)
 
 # go!!!
@@ -129,6 +132,7 @@ plotDispEsts(dxd)
 dxd<-testForDEU(dxd,BPPARAM=BPPARAM)
 dxd<-estimateExonFoldChanges(dxd, fitExpToVar="condition", BPPARAM=BPPARAM)
 dxr1<-DEXSeqResults(dxd)
+dframeTest <- is(dxr1, "DFrame")
 
 # change name for better reading
 if(!is.null(opt$featureAnnotation)) {
@@ -151,15 +155,29 @@ if(!is.null(opt$featureAnnotation)) {
 	mapIDList <- function(x, features) {
 		return(paste(unlist(lapply(x, mapID, features)), collapse="+"))
 	}
-	dxr1$groupID <- unlist(bplapply(strsplit(dxr1$groupID, "\\+"), mapIDList, features, BPPARAM=BPPARAM))
-	names(dxr1$genomicData) <- unlist(bplapply(strsplit(names(dxr1$genomicData), "\\+"), mapIDList, features, BPPARAM=BPPARAM))
-	rownames(dxr1) <- unlist(bplapply(strsplit(rownames(dxr1), "\\+"), mapIDList, features, BPPARAM=BPPARAM))
+	if(dframeTest) {
+		dxr1@listData$groupID <- unlist(lapply(strsplit(dxr1$groupID, "\\+"), mapIDList, features))
+		names(dxr1@listData$genomicData) <- unlist(lapply(strsplit(names(dxr1$genomicData), "\\+"), mapIDList, features))
+	} else {
+		dxr1$groupID <- unlist(lapply(strsplit(dxr1$groupID, "\\+"), mapIDList, features))
+		names(dxr1$genomicData) <- unlist(lapply(strsplit(names(dxr1$genomicData), "\\+"), mapIDList, features))
+	}	
+	rownames(dxr1) <- unlist(lapply(strsplit(rownames(dxr1), "\\+"), mapIDList, features))
 }
 
 # write it to the disk
-DEXSeqHTML(dxr1, FDR=opt$pValueCutoff ,color=c("#FF000080","#0000FF80"), path=opt$output, BPPARAM=BPPARAM)
-dxr1$transcripts <- bplapply(dxr1$transcripts, paste, collapse=";", BPPARAM=BPPARAM)
+DEXSeqHTML(dxr1, FDR=opt$pValueCutoff,color=c("#FF000080","#0000FF80"), path=opt$output, BPPARAM=BPPARAM)
+if(dframeTest) {
+	dxr1@listData$transcripts <- unlist(lapply(dxr1$transcripts, paste, collapse=";")) 
+} else {
+	dxr1$transcripts <- lapply(dxr1$transcripts, paste, collapse=";")
+}
+
+if(dframeTest) {
+write.table(dxr1@listData, file = paste(opt$output, "DEXSeq.csv", sep="/"), append = FALSE, quote = FALSE, sep = "\t", col.names = TRUE, row.names = FALSE);
+} else{
 write.table(dxr1, file = paste(opt$output, "DEXSeq.csv", sep="/"), append = FALSE, quote = FALSE, sep = "\t", col.names = TRUE, row.names = FALSE)
+}
 
 # write a file that we know, the script run to its end
 if(!is.null(opt$confirmRun2EndFile)) {

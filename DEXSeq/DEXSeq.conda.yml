@@ -3,7 +3,12 @@ channels:
   - conda-forge
 dependencies:
   - bc=1.07.1
-  - bioconductor-dexseq= 1.32
+  - r-base=4.2
+  - bioconductor-dexseq=1.44.0
+  - bioconductor-genomicfeatures=1.50.2
   - coreutils=8.31
-  - grep=2.14
-  - sed=4.7
+  - grep=3.4
+  - sed=4.8
+  - r-getopt=1.20.3
+  - font-ttf-ubuntu=0.83
+  - mscorefonts=0.0.1
