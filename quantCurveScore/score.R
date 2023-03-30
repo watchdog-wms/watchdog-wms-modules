@@ -6,13 +6,14 @@ library(getopt)
 library(plyr)
 library(tidyr)
 library(gtools)
+#library(PTXQC)
 
 opt <- NULL
 # options to parse
 spec <- matrix(c('out',              'o', 1, "character",   # output dir
-		 'testCondition',       't', 1, "character",   # test condition
+		              'testCondition',       't', 1, "character",   # test condition
                  'controlCondition',     'c', 1, "character",   # control condition
-		 'sampleAnnotation',    's', 1, "character",  #sample annotation file
+		              'sampleAnnotation',    's', 1, "character",  #sample annotation file
                  'confirmRun2EndFile', 'e', 1, "character"
 ), ncol=4, byrow=T)
 
@@ -50,7 +51,6 @@ c2_c1 <- paste0(opt$testCondition, "_", opt$controlCondition)
 samples <- read.csv(opt$sampleAnnotation, sep="\t", header=TRUE)
 
 dexseq <- read.csv(paste0(opt$out, "/", c2_c1, "/DEXSeq.csv"), sep="\t", header=TRUE)
-#dexseq <- dexseq[,c(1,7,10,12,13,15,ncol(dexseq))]
 lfc <- colnames(dexseq)[grepl("log2fold", colnames(dexseq))]
 wantedcols <- c("groupID", "padj", lfc, "genomicData.start", "genomicData.end", "genomicData.strand", "transcripts")
 dexseq <- dexseq[, colnames(dexseq) %in% wantedcols]
@@ -121,26 +121,22 @@ for (gene in windows) {
     reps <- gsub("filtered\\.", "", reps)
     strangenametempfix <- TRUE
   }
-  conds <- unique(gsub("_\\d.counts", "", reps))
+  
+  #SOLVE IT BY sampleAnnotation must be ordered (cond1 a-c, cond2 a-c)
+  conds <- subset(samples, samples$condition==opt$controlCondition)
+  numhalf <- nrow(conds)
+  
   direction <- subscores$direction[1]
   repdf <- c()
-  for (rep in reps[1:(length(reps)/2)]) {
-    repnum <- gsub(conds[1], "", rep)
-    repnum <- gsub(conds[2], "", repnum)
-    repnum <- gsub(".counts", "", repnum)
-    pair <- paste0(conds[2], repnum, ".counts")
-    tmp <- subset(samples, samples$condition==opt$controlCondition)
-    if (!gsub(".counts", "", rep) %in% tmp$sample) {
-      x <- pair
-      pair <- rep
-      rep <- x
-    }
+  for (line in 1:(nrow(samples)/2)) {
+  	rep <- samples$sample[line]
+  	pair <- samples$sample[line+numhalf]
     if (strangenametempfix) {
-      c1 <- read.csv(paste0(gene, "/counts/", gsub("\\.counts", "\\.filtered\\.counts", rep)), sep="\t", header=FALSE)
-      c2 <- read.csv(paste0(gene, "/counts/", gsub("\\.counts", "\\.filtered\\.counts", pair)), sep="\t", header=FALSE)
+      	c1 <- read.csv(paste0(gene, "/counts/", gsub("\\.counts", "\\.filtered\\.counts", rep, ".counts")), sep="\t", header=FALSE)
+      	c2 <- read.csv(paste0(gene, "/counts/", gsub("\\.counts", "\\.filtered\\.counts", pair, ".counts")), sep="\t", header=FALSE)
     } else {
-      c1 <- read.csv(paste0(gene, "/counts/", rep), sep="\t", header=FALSE)
-      c2 <- read.csv(paste0(gene, "/counts/", pair), sep="\t", header=FALSE)
+     		c1 <- read.csv(paste0(gene, "/counts/", rep, ".counts"), sep="\t", header=FALSE)
+      	c2 <- read.csv(paste0(gene, "/counts/", pair, ".counts"), sep="\t", header=FALSE)
     }
     c1$V2 <- (c1$V2/sum(c1$V2))*100
     c2$V2 <- (c2$V2/sum(c2$V2))*100
@@ -150,9 +146,9 @@ for (gene in windows) {
     c$c1 <- as.numeric(c$c1)
     c$c2 <- as.numeric(c$c2)
     if (gsub(">", "_", direction)==c1_c2) {
-      c$diff <- c$c1 - c$c2
+      		c$diff <- c$c1 - c$c2
     } else {
-      c$diff <- c$c2 - c$c1
+      		c$diff <- c$c2 - c$c1
     }
     repdf <- cbind(repdf, c[,4])
   }
