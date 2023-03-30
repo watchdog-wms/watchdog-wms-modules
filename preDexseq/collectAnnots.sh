@@ -34,7 +34,7 @@ printParamValues "parameters"
 
 ###### collect all amss files into one
 all_amss=$FLAGS_indir"/amss.regions"
-rm $all_amss
+[ -f $all_amss ] && rm $all_amss
 touch $all_amss
 echo -e "start_seq_idx\tend_seq_idx\tsum_height\tAUC\tlen\tdir\twindow\n" > $all_amss
 for single in $(find $FLAGS_indir -name "*final_amss*"); do
