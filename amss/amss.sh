@@ -58,6 +58,9 @@ chr=${arrIN[0]}
 s=${arrIN[1]}
 e=${arrIN[2]}
 strand=${arrIN[3]}
+if [[ -z "$strand" ]] ; then
+	strand="+"
+fi
 echo "calling window: $chr $s $e $strand"
 plotfile=$FLAGS_out"/"$chr"-"$s"-"$e"/amss_plots.pdf"
 echo $plotfile
@@ -71,14 +74,16 @@ for b in $FLAGS_bams*; do
 	f=$(basename "$b")
 	if [[ $f =~ $FLAGS_pattern ]] ; then
 		echo $f
-		python3 $SCRIPT_FOLDER"/quantify_curves_difference.py" -chr $chr -s $s -e $e -givenstrand $strand --strandness $FLAGS_strandness -bam $FLAGS_bams/$f -out $FLAGS_out$chr"-"$s"-"$e"/" --everyPos $FLAGS_everyPos	#fetches specified region and counts from bam
+		#fetch counts of bam file in the specified genomic region
+		python3 $SCRIPT_FOLDER"/quantify_curves_difference.py" --chr $chr --start $s --end $e --givenstrand $strand --strandness $FLAGS_strandness --bam $FLAGS_bams/$f --out $FLAGS_out$chr"-"$s"-"$e"/" --everyPos $FLAGS_everyPos	#fetches specified region and counts from bam
 	fi
 done
 runtime=$((`date +%s`-start))
 echo "TIME select window counts "$runtime
 
 #computes AMSS
-Rscript $SCRIPT_FOLDER"/quantify_curves_efficient.R" $chr $s $e $FLAGS_out $FLAGS_sampleAnnotation $FLAGS_pseudocount $FLAGS_numrandomizations
+#Rscript $SCRIPT_FOLDER"/quantify_curves_efficient.R" $chr $s $e $FLAGS_out $FLAGS_sampleAnnotation $FLAGS_pseudocount $FLAGS_numrandomizations
+Rscript $SCRIPT_FOLDER"/quantify_curves_efficient.R" -c $chr -s $s -t $e -o $FLAGS_out -a $FLAGS_sampleAnnotation -p $FLAGS_pseudocount -n $FLAGS_numrandomizations
 #rm -r $FLAGS_out$chr"-"$s"-"$e"/counts/"
 
 #writes amss regions into annotation files for dexseq per single dir

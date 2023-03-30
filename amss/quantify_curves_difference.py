@@ -1,6 +1,12 @@
 
 #!/usr/bin/python3
 
+def import_or_install(package):
+    try:
+        __import__(package)
+    except ImportError:
+        pip.main(['install', package])
+
 
 import pysam
 import collections
@@ -9,14 +15,14 @@ import os
 import argparse
 
 
-parser = argparse.ArgumentParser(description='Process window params')
-parser.add_argument('-chr', help='chromosome')
-parser.add_argument('-start', help='start of window')
-parser.add_argument('-end', help='end of window')
+parser = argparse.ArgumentParser(description='Process window params', allow_abbrev=False)
+parser.add_argument('--chr', help='chromosome')
+parser.add_argument('--start', help='start of window')
+parser.add_argument('--end', help='end of window')
 parser.add_argument('--strandness', help='0 if unstranded, 1 if forward')
-parser.add_argument('-givenstrand', help='strand of gene')
-parser.add_argument('-bam', help='path to bam file')
-parser.add_argument('-out', help='path to output dir')
+parser.add_argument('--givenstrand', help='strand of gene')
+parser.add_argument('--bam', help='path to bam file')
+parser.add_argument('--out', help='path to output dir')
 parser.add_argument('--everyPos', help='count every read position from start to end')
 
 args = vars(parser.parse_args())
@@ -81,7 +87,7 @@ if not os.path.exists(os.path.join(str(args['out']), "counts")):
 
 out = open(of, "w")
 for key in sorted(bamreads):
-	if key >= int(args['start']) and key <= int(args['end'])+1:
+	if key >= int(args['start']) and key <= int(args['end']):
 		out.write(str(key) + "\t" + str(bamreads[key]) + "\n")
 out.close()
 
