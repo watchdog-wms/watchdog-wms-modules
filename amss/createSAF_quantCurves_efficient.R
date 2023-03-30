@@ -3,21 +3,18 @@ options(warn=-1)
 
 list.of.packages <- c("tidyr", "stringr", "gtools")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
+#if(length(new.packages)) install.packages(new.packages)
 
 library(tidyr)
 library(stringr)
 library(gtools)
 
-##############
-### files for DEXSeq
-##############
 
 args = commandArgs(trailingOnly=TRUE)
 
 
 dir <- args[1]
-#dir <- "/mnt/raidtmp/weiss/quantCurves/H3K27ac/diffwindows/chr6-xxxxx-yyyy/"
+
 
 sampleanno <- read.csv(as.character(args[2]), sep="\t", header=TRUE)
 condname1 <- unique(sampleanno$condition)[1]
@@ -44,6 +41,7 @@ file_c1 <- files[grepl(c1_c2, files)]
 file_c2 <- gsub(c1_c2, c2_c1, file_c1)
 
 
+# reads and formats c1 and c2 MSS regions into one dataframe
 combinedataframes <- function(f1, f2) {
   d1 <- read.csv(f1, sep="\t", header=TRUE)
   d1 <- subset(d1, !is.na(d1$start_seq_idx))
@@ -103,6 +101,7 @@ combinedataframes <- function(f1, f2) {
   }
 }
 
+#adds filling regions to computed MSS for region
 fillup_from_start2end <- function(s, e, df) {
   allnums <- seq(s, e, 1)
   allnums <- allnums[!(allnums %in% df$V4)]
@@ -111,6 +110,9 @@ fillup_from_start2end <- function(s, e, df) {
   df$V5 <- as.numeric(as.character(df$V5))
   incl <- c(incl, unlist(apply(df[,c(4,5)], 1, function(x) {seq(x[1], x[2],1)})))
   allnums <- allnums[!(allnums %in% incl)]
+  if (length(allnums)==0) { #amms cover whole region
+    return(rep(NA, 8))
+  }
   missingseqs <- split(allnums, cumsum(c(TRUE, diff(allnums)!=1)))
   missingidx <- c()
   missingidx <- c(missingidx, unlist(sapply(missingseqs, function(x) range(x))))
@@ -124,9 +126,11 @@ fillup_from_start2end <- function(s, e, df) {
   return(missingidx)
 }
 
+# 
 together <- function(file, file2, fc) {
   tmp <- combinedataframes(file, file2)
   if (!is.na(tmp) && nrow(tmp)>0) {
+    rownames(tmp) <-NULL
     arr <- strsplit(file, "/")[[1]]
     arr <- arr[arr!=""]
     pos <- arr[grepl("chr", arr)]
@@ -135,10 +139,12 @@ together <- function(file, file2, fc) {
     end <- as.numeric(as.character(strsplit(pos, "-")[[1]][3]))
     geneid <- paste0(chr, "-", start, "-", end)
     
+    #header
     entry <- c(chr, "dexseq", "aggregate_gene", start, end, ".", givenstrand, ".", 
                paste0("gene_id \"", geneid, "\""))
     gff <- entry
-    #print(tmp)
+
+    #convert found MSS to dexseq annotation format
     for (line in 1:nrow(tmp)) {
       entry <- c(chr, "dexseq", "exonic_part", tmp$start_seq_idx[line], tmp$end_seq_idx[line], ".", givenstrand, ".", 
                  paste0("transcripts \"", 
@@ -157,26 +163,32 @@ together <- function(file, file2, fc) {
     gff <- gff[order(gff$V4),] #sort start positions asc
    
 
+    #fill in the filled up regions
     missing_regs <- fillup_from_start2end(start,end,gff[2:nrow(gff),])
-    fixed_cols <- c(chr, "dexseq", "exonic_part", ".", gff$V7[1], ".", NA)
-    missing_regs <- cbind(missing_regs, rbind(fixed_cols))
-    missing_regs <- missing_regs[,c(3,4,5,1,2,6,7,8,9)]
-    colnames(missing_regs) <- colnames(gff)
-    missing_regs$V9 <- NA
-    filled <- rbind(gff, missing_regs)
-    filled <- filled[order(filled$V4),]
-    rownames(filled) <- NULL
+    if (length(missing_regs[(is.na(missing_regs))]) == 8) { #no filled regs
+      filled <- gff
+    } else {
+      fixed_cols <- c(chr, "dexseq", "exonic_part", ".", gff$V7[1], ".", NA)
+      missing_regs <- cbind(missing_regs, rbind(fixed_cols))
+      missing_regs <- missing_regs[,c(3,4,5,1,2,6,7,8,9)]
+      colnames(missing_regs) <- colnames(gff)
+      missing_regs$V9 <- NA
+      filled <- rbind(gff, missing_regs)
+      filled <- filled[order(filled$V4),]
+      rownames(filled) <- NULL
+    }
+    
 
     exline <- filled[!is.na(filled$V9),9][2]
     filled$V9 <- apply(filled, 1, function(x) {
       if (is.na(x[9])) {
-	newcor <- paste0(x[4], "-", x[5])
-	if (!grepl(c1_c2, exline)) {
-		exline <- str_replace(exline, c2_c1, c1_c2)
-	}
+	      newcor <- paste0(x[4], "-", x[5])
+	      if (!grepl(c1_c2, exline)) {
+		      exline <- str_replace(exline, c2_c1, c1_c2)
+	      }
         news <- str_replace(exline, paste0("\\d+-\\d+-", c1_c2, "-diff"),
                            paste0(newcor, "-filled-nondiff"))
-	return(news)
+	      return(news)
       } else {
         return(x[9])
       }
@@ -198,7 +210,6 @@ together <- function(file, file2, fc) {
       print("ERROR should not have Inf as start positions")
       print("")
     }
-    #print(filled)
     return(filled)
   } else {
 	  return(NA)
