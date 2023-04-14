@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 SCRIPT_FOLDER=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $SCRIPT_FOLDER/../../core_lib/includeBasics.sh $@
