@@ -39,7 +39,10 @@ if(is.null(opt$sampleAnnotation)) {
   quit(save = "no", status = 11, runLast = FALSE) # status = 11 <--> missing arguments
 }
 
-source("/home/proj/software/watchdog/modules/sharedUtils/R/functions.R")
+
+args <- commandArgs(trailingOnly = FALSE)
+functionsFileName <- paste(dirname(sub('--file=', '', args[grep('--file=', args)])), '/../../modules/sharedUtils/R/functions.R', sep = '')
+source(functionsFileName)
 
 
 #########
