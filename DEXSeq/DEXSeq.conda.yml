@@ -8,7 +8,7 @@ dependencies:
   - bioconductor-genomicfeatures=1.50.2
   - coreutils=8.31
   - grep=3.4
-  - sed=4.8
+  - sed
   - r-getopt=1.20.3
   - font-ttf-ubuntu=0.83
   - mscorefonts=0.0.1
