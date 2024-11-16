@@ -4,7 +4,7 @@
   <info>
     <!-- forename lastname -->
     <author>Florian Röckl</author>
-    <!-- day the module was updated the last time -->
+    <!-- day the module was updated the last time --> 
     <updated>2024-11-04</updated>
     <category>SEQUENCING</category>
     <description maxVersion="1" minVersion="1">calls deletions and insertions. Deletions are also verified and consensus sequences of insertions are extracted.</description>
