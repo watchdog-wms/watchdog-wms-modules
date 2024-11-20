@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="bcftoolsVariantCallingTaskParameterType">
+		<x:all>
+			<x:element name="reference" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="bamfile" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="vcf" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="maxdepth" type="paramIntegerRange_maxdepth_bcftoolsVariantCalling" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="bcftoolsVariantCallingTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="bcftoolsVariantCalling.sh" />
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="bcftoolsVariantCallingTaskType">
+		<x:complexContent>
+			<x:extension base="bcftoolsVariantCallingTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="bcftoolsVariantCallingTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="bcftoolsVariantCallingTask" type="bcftoolsVariantCallingTaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->
+	<x:complexType name="paramIntegerRange_maxdepth_bcftoolsVariantCalling">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 100 and 1000000000 >= x:integer($value))" xerces:message="Parameter with name 'maxdepth' must be between 100 and 1000000000." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+
+</x:schema>
