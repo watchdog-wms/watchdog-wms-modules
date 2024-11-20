@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Florian Röckl</author>
+    <!-- day the module was updated the last time -->
+    <updated>2024-11-06</updated>
+    <category>SEQUENCING</category>
+    <description maxVersion="1" minVersion="1">matches detected variants (SNPs and indels) to genomic features of a GTF file.</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>gtfMatcher was used to match detected variants, including SNPs, deletions and insertions, to genomic features of a GTF file.</paperDescription>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">python3</dependencies>
+    <!-- module specific hints or comments -->
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>floro5</username>
+    <username>friedelcc</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="gtf" type="file">
+      <description>Path to GTF file containing annotated genomic features.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="infile" type="file">
+      <description>Path to file containing variants.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="out" type="file">
+      <description>Path to output file, where results of variants matched on features are stored.</description>
+    </param>
+    <param maxOccurs="1" minOccurs="1" name="mode" type="string">
+      <description>Select variant mode/type, which should get matched on GTF file. Modes are written in capital letters: SNP, INSERTION or DELETION.</description>
+    </param>
+  </parameter>
+</documentation>
