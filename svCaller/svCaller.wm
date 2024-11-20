@@ -1,0 +1,29 @@
+Name	shortO	longO	Type	Default	Description	Min	Max	Call	CallType	Limitations
+help	h1	help	string	-	show this help message and exit	0	1	'-(.*) (.*)'	short	-
+bed	bed_graph	bed	AbsoluteFilePath	-	-bed_graph BED, --bed BED  Path to bedgraph file	0	1	'-(.*) (.*)'	short	-
+min_cld	minimum_cluster_difference	min_cld	integer	100	-minimum_cluster_difference MIN_CLD, --min_cld MIN_CLD  The mininum distance of two clusters, at which they  still get combined	0	1	'-(.*) (.*)'	short	-
+min_size	minimum_size	min_size	integer	2	-minimum_size MIN_SIZE, --min_size MIN_SIZE  Path to file that contains variants, called by  bcftools	0	1	'-(.*) (.*)'	short	-
+max_z	maximum_z_score	max_z	double	0.0	-maximum_z_score MAX_Z, --max_z MAX_Z  Maximum z score threshold for coverage analysis	0	1	'-(.*) (.*)'	short	-
+max_direct	maximum_direct_z_score	max_direct	double	-2.5	-maximum_direct_z_score MAX_DIRECT, --max_direct MAX_DIRECT  Maximum direct z score threshold for coverage analysis	0	1	'-(.*) (.*)'	short	-
+max_local	maximum_local_z_score	max_local	double	-6.0	-maximum_local_z_score MAX_LOCAL, --max_local MAX_LOCAL  Maximum local z score threshold for coverage analysis	0	1	'-(.*) (.*)'	short	-
+range	local_range	range	integer	500	-local_range RANGE, --range RANGE  Size of range/region before a certain position, used  for the determination of local z Score parameters	0	1	'-(.*) (.*)'	short	-
+pc	pseudo_count	pc	integer	1	-pseudo_count PC, --pc PC  Pseudo count for coverages over positions	0	1	'-(.*) (.*)'	short	-
+tol	tolerance	tol	double	0.8	-tolerance TOL, --tol TOL  Tolerance of insertion positions mapped to deletions	0	1	'-(.*) (.*)'	short	-
+bam	bamfile	bam	AbsoluteFilePath	-	-bamfile BAM, --bam BAM  Path to bam file used for clipping patter analysis	0	1	'-(.*) (.*)'	short	-
+out_del	outpath_deletions	out_del	AbsoluteFilePath	-	-outpath_deletions OUT_DEL, --out_del OUT_DEL  Path to output txt file containing deletions	0	1	'-(.*) (.*)'	short	-
+out_ins	outpath_insertions	out_ins	AbsoluteFilePath	-	-outpath_insertions OUT_INS, --out_ins OUT_INS  Path to output txt file containing insertions	0	1	'-(.*) (.*)'	short	-
+max_patt_diff	maximum_pattern_diff	max_patt_diff	integer	10	-maximum_pattern_diff MAX_PATT_DIFF, --max_patt_diff MAX_PATT_DIFF  Maximum distance of peaks of clipped reads to count  them as insertion	0	1	'-(.*) (.*)'	short	-
+min_sur_z	minimum_surounding_z_score	min_sur_z	double	50.0	-minimum_surounding_z_score MIN_SUR_Z, --min_sur_z MIN_SUR_Z  Minimum local z score for clipping pattern analysis	0	1	'-(.*) (.*)'	short	-
+ws	window_size	ws	integer	20	-window_size WS, --ws WS  Size of the window, whose position are controlled to  be significantly low	0	1	'-(.*) (.*)'	short	-
+min_z	min_z_score	min_z	double	10.0	-min_z_score MIN_Z, --min_z MIN_Z  Minimum z score for clipping pattern analysis	0	1	'-(.*) (.*)'	short	-
+get_clp_file	get_clipping_file	get_clp_file	AbsoluteFilePath	-	-get_clipping_file GET_CLP_FILE, --get_clp_file GET_CLP_FILE  Set this paramters as a path to get a file containing  for each position the number of clipped reads	0	1	'-(.*) (.*)'	short	-
+min_reads	minimum_number_of_reads	min_reads	integer	10	-minimum_number_of_reads MIN_READS, --min_reads MIN_READS  Minimum number of reads at which a position is  permitted to be a peak	0	1	'-(.*) (.*)'	short	-
+gen_prop	genome_propagate	gen_prop	integer	1000	-genome_propagate GEN_PROP, --gen_prop GEN_PROP  Number of propagation to determine genome start/end	0	1	'-(.*) (.*)'	short	-
+gap	gap_counter	gap	integer	5	-gap_counter GAP, --gap GAP  Maximum number of permitted consecutive  gaps/0-coverage positions during the determination of  the genome start/end	0	1	'-(.*) (.*)'	short	-
+ref	reference	ref	AbsoluteFilePath	-	-reference REF, --ref REF  Path to reference genome	0	1	'-(.*) (.*)'	short	-
+fir_ws	first_weight_score	fir_ws	double	0.0	-first_weight_score FIR_WS, --fir_ws FIR_WS  Primary threshold for the score, which results from  the verification of deletions with clipped sequences	0	1	'-(.*) (.*)'	short	-
+sec_ws	second_weight_score	sec_ws	double	1.0	-second_weight_score SEC_WS, --sec_ws SEC_WS  Secondary, more stringent threshold for the score,  which results from the verification of deletions with  clipped sequences	0	1	'-(.*) (.*)'	short	-
+con_path	consensus_path	con_path	AbsoluteFilePath	-	-consensus_path CON_PATH, --con_path CON_PATH  Path to the file containing the consensus sequences	0	1	'-(.*) (.*)'	short	-
+mpc	matrix_pseudo_count	mpc	integer	1	-matrix_pseudo_count MPC, --mpc MPC  Small pseudo count for the log used for the  computation of the PWMs	0	1	'-(.*) (.*)'	short	-
+min_length	minimum_length	min_length	integer	10	-minimum_length MIN_LENGTH, --min_length MIN_LENGTH  The minimum length of a consensus sequence	0	1	'-(.*) (.*)'	short	-
+clp_ver_range	clipping_verfication_range	clp_ver_range	integer	100	-clipping_verfication_range CLP_VER_RANGE, --clp_ver_range CLP_VER_RANGE  The range about clipped positons of deletions, where  consesus sequences are tried to match on	0	1	'-(.*) (.*)'	short	-

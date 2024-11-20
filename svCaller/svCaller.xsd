@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="svCallerTaskParameterType">
+		<x:all>
+<x:element name="help" type="paramString" minOccurs="0" maxOccurs="1" />
+<x:element name="bed" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+<x:element name="min_cld" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="min_size" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="max_z" type="paramDouble" minOccurs="0" maxOccurs="1" />
+<x:element name="max_direct" type="paramDouble" minOccurs="0" maxOccurs="1" />
+<x:element name="max_local" type="paramDouble" minOccurs="0" maxOccurs="1" />
+<x:element name="range" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="pc" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="tol" type="paramDouble" minOccurs="0" maxOccurs="1" />
+<x:element name="bam" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+<x:element name="out_del" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+<x:element name="out_ins" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+<x:element name="max_patt_diff" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="min_sur_z" type="paramDouble" minOccurs="0" maxOccurs="1" />
+<x:element name="ws" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="min_z" type="paramDouble" minOccurs="0" maxOccurs="1" />
+<x:element name="get_clp_file" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+<x:element name="min_reads" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="gen_prop" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="gap" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="ref" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+<x:element name="fir_ws" type="paramDouble" minOccurs="0" maxOccurs="1" />
+<x:element name="sec_ws" type="paramDouble" minOccurs="0" maxOccurs="1" />
+<x:element name="con_path" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+<x:element name="mpc" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="min_length" type="paramInteger" minOccurs="0" maxOccurs="1" />
+<x:element name="clp_ver_range" type="paramInteger" minOccurs="0" maxOccurs="1" />
+
+
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="svCallerTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="svCaller.sh" />
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="svCallerTaskType">
+		<x:complexContent>
+			<x:extension base="svCallerTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="svCallerTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:element name="return" type="svCallerTaskReturnType" minOccurs="0" maxOccurs="0" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of the return variables -->	
+	<x:complexType name="svCallerTaskReturnType">
+		<x:complexContent>
+			<x:extension base="taskReturnType">
+				<x:all>
+
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="svCallerTask" type="svCallerTaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->
+
+
+</x:schema>
