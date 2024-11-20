@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="documentation.xsd">
+  <!-- mandatory fields: author, category, updated, description -->
+  <info>
+    <!-- forename lastname -->
+    <author>Florian Röckl</author>
+    <!-- day the module was updated the last time -->
+    <updated>2024-11-06</updated>
+    <category>SEQUENCING</category>
+    <description maxVersion="1" minVersion="1">generates an index for a fasta file.</description>
+    <!-- ##### optional ##### -->
+    <!-- website of the dependencies used in this module -->
+    <website>https://bio-bwa.sourceforge.net/</website>
+    <!-- short description and PubmedID for the methods section of a manuscript -->
+    <paperDescription>bwaIndex was used to index a fasta file, so that it can be subsequently utilized for searching sequences in it.</paperDescription>
+    <PMID> 19451168</PMID>
+    <!-- external dependencies required for that module -->
+    <dependencies maxVersion="1" minVersion="1">bwa</dependencies>
+    <!-- module specific hints or comments -->
+  </info>
+  <!-- ##### optional ##### -->
+  <!-- github usernames of users who should be able to commit changes to that module -->
+  <maintainer>
+    <username>floro5</username>
+    <username>friedelcc</username>
+  </maintainer>
+  <parameter>
+    <!-- mandatory fields per parameter: name, type, description -->
+    <!-- optional fields per parameter: restrictions, default, minOccurs, maxOccurs, minVersion, maxVersion -->
+    <param maxOccurs="1" minOccurs="1" name="fasta" type="file">
+      <description> Path to the fasta file, which is going to be indexed. Index files will appear in the same folder!</description>
+    </param>
+    <param default="false" maxOccurs="1" minOccurs="0" name="ignoreFastaExistence" type="boolean">
+      <description>do not throw an error if fasta file does not exist</description>
+    </param>
+  </parameter>
+</documentation>
