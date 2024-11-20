@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="SPadesTaskParameterType">
+		<x:all>
+			<x:element name="forward" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="reverse" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="cons_path" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="outFolder" type="paramAbsoluteFolderPath" minOccurs="1" maxOccurs="1" />
+			<x:element name="memory" type="paramIntegerGreater_memory_SPades" minOccurs="0" maxOccurs="1" />
+			<x:element name="ignoreConsensusExistence" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="SPadesTaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="SPades.sh" />
+				<x:attribute name="versionQueryParameter" type="x:string" fixed="version"/>
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="SPadesTaskType">
+		<x:complexContent>
+			<x:extension base="SPadesTaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="SPadesTaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="SPadesTask" type="SPadesTaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->
+	<x:complexType name="paramIntegerGreater_memory_SPades">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assert test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or (x:integer($value) >= 1)" xerces:message="Parameter with name 'memory' must be equal or greater than 1." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+
+</x:schema>

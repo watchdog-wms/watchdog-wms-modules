@@ -1,0 +1,34 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=2_gnu
+  - _sysroot_linux-64_curr_repodata_hack=3=h69a702a_16
+  - bzip2=1.0.8=h4bc722e_7
+  - ca-certificates=2024.7.4=hbcca054_0
+  - kernel-headers_linux-64=3.10.0=h4a8ded7_16
+  - ld_impl_linux-64=2.40=hf3520f5_7
+  - libffi=3.4.2=h7f98852_5
+  - libgcc-ng=14.1.0=h77fa898_0
+  - libgomp=14.1.0=h77fa898_0
+  - libnsl=2.0.1=hd590300_0
+  - libsqlite=3.46.0=hde9e2c9_0
+  - libstdcxx-ng=14.1.0=hc0a3c3a_0
+  - libuuid=2.38.1=h0b41bf4_0
+  - libxcrypt=4.4.36=hd590300_1
+  - libzlib=1.2.13=h4ab18f5_6
+  - llvm-openmp=8.0.1=hc9558a2_0
+  - ncurses=6.5=h59595ed_0
+  - openmp=8.0.1=0
+  - openssl=3.3.1=h4bc722e_2
+  - pip=24.0=pyhd8ed1ab_0
+  - python=3.8.19=hd12c33a_0_cpython
+  - readline=8.2=h8228510_1
+  - setuptools=71.0.4=pyhd8ed1ab_0
+  - spades=3.15.5=h95f258a_1
+  - sysroot_linux-64=2.17=h4a8ded7_16
+  - tk=8.6.13=noxft_h4845f30_101
+  - tzdata=2024a=h0c530f3_0
+  - wheel=0.43.0=pyhd8ed1ab_1
+  - xz=5.2.6=h166bdaf_0
