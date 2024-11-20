@@ -1,0 +1,9 @@
+SAMPLE	STRAIN
+WT_17	strain_17
+dICP0	strain_17
+dVhs	strain_17
+Tsk	strain_17
+WT_F_PAA	strain_F
+dICP22	strain_F
+dICP22_PAA	strain_F
+dICP27	strain_KOS
