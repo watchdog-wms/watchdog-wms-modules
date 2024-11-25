@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<x:schema xmlns:x="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xerces="http://xerces.apache.org">
+
+	<!-- definition of the task parameters -->
+	<x:complexType name="BWATaskParameterType">
+		<x:all>
+			<x:element name="index" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="in1" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="in2" type="paramAbsoluteFilePath" minOccurs="0" maxOccurs="1" />
+			<x:element name="out" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<x:element name="all" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="ignoreIndexExistence" type="paramBoolean" minOccurs="0" maxOccurs="1" />
+			<x:element name="numberOfThreads" type="paramIntegerGreater_numberOfThreads_BWA" minOccurs="0" maxOccurs="1" />
+			<x:element name="minimumSeedLength" type="paramInteger" minOccurs="0" maxOccurs="1" />
+		</x:all>
+	</x:complexType>
+
+	<!-- change default attributes -->
+	<x:complexType name="BWATaskOverrideType">
+		<x:complexContent>
+			<x:restriction base="baseAttributeTaskType">
+				<x:attribute name="binName" type="x:string" fixed="BWA.sh" />
+			</x:restriction>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- definition of final task -->
+	<x:complexType name="BWATaskType">
+		<x:complexContent>
+			<x:extension base="BWATaskOverrideType">
+				<x:all>
+					<x:element name="parameter" type="BWATaskParameterType" minOccurs="1" maxOccurs="1" />
+					<x:group ref="defaultTaskElements" />
+				</x:all>
+			</x:extension>
+		</x:complexContent>
+	</x:complexType>
+
+	<!-- make task definition availible via substitution group -->
+	<x:element name="BWATask" type="BWATaskType" substitutionGroup="abstractTask" />
+
+	<!-- module specific parameter types -->
+	<x:complexType name="paramIntegerGreater_numberOfThreads_BWA">
+		<x:simpleContent>
+			<x:restriction base="paramInteger">
+				<x:assertion test="matches($value, '(\$\{[A-Za-z_]+\})|(\$\(.+\))|([\[\(\{](\$[A-Za-z_]+(,\s*){0,1}){0,1}([0-9]+(,\S*){0,1}){0,1}[\]\)\}])') or x:integer($value) >= 1" xerces:message="Parameter with name 'numberOfThreads' must be equal or greater than 1." />
+			</x:restriction>
+		</x:simpleContent>
+	</x:complexType>
+
+</x:schema>
