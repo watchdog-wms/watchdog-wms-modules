@@ -12,8 +12,8 @@
     <!-- website of the dependencies used in this module -->
     <website>https://github.com/lh3/bwa</website>
     <!-- short description and PubmedID for the methods section of a manuscript -->
-    <paperDescription>Sequencing reads were aligned using BWA mem (version (%SOFTWARE_VERSION%)) []</paperDescription>
-    <PMID>119451168</PMID>
+    <paperDescription>Sequencing reads were aligned using BWA mem (version (%SOFTWARE_VERSION%)) [Li, H., Durbin, R. (2009). Fast and accurate short read alignment with Burrows-Wheeler transform. Bioinformatics (Oxford, England), 25(14), 1754–1760]</paperDescription>
+    <PMID>19451168</PMID>
     <!-- external dependencies required for that module -->
     <dependencies maxVersion="1" minVersion="1">BWA</dependencies>
   </info>
