@@ -15,7 +15,7 @@
     <paperDescription>Sequencing reads were aligned using BWA mem (version (%SOFTWARE_VERSION%)) []</paperDescription>
     <PMID>119451168</PMID>
     <!-- external dependencies required for that module -->
-    <dependencies maxVersion="1" minVersion="1">BWA/dependencies>
+    <dependencies maxVersion="1" minVersion="1">BWA</dependencies>
   </info>
   <!-- ##### optional ##### -->
   <!-- github usernames of users who should be able to commit changes to that module -->
