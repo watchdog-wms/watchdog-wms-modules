@@ -34,9 +34,6 @@
     <param default="mpileup2snp" maxOccurs="1" minOccurs="0" name="method" type="string">
       <description>method: mpileup2snp, mpileup2indel or mpileup2cns</description>
     </param>
-    <param maxOccurs="1" minOccurs="1" name="jar" type="file">
-      <description>jar file</description>
-    </param>
     <param maxOccurs="1" minOccurs="1" name="reference" type="file">
       <description>reference sequence</description>
     </param>

@@ -5,4 +5,4 @@ dependencies:
   - coreutils=8.31
   - grep=2.14
   - samtools=1.10
-  - openjdk=22.0.1
+  - varscan=2.4.6

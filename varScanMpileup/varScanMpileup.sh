@@ -4,7 +4,8 @@ source $SCRIPT_FOLDER/../../core_lib/includeBasics.sh
 
 # check, if used tools are installed
 # TODO: add tools which are used in this script here in order to check, if they are installed on the system
-USED_TOOLS='samtools:java'
+#USED_TOOLS='samtools:java'
+USED_TOOLS='samtools:varscan'
 MESSAGE=$($LIB_SCRIPT_FOLDER/checkUsedTools.sh "$USED_TOOLS" "check_shflag_tools")
 CODE=$?
 
@@ -16,7 +17,7 @@ fi
 # define parameters
 DEFINE_string 'infile' '' 'input file' 'i'
 DEFINE_string 'method' 'mpileup2snp' 'method: mpileup2snp, mpileup2indel or mpileup2cns' 'd'
-DEFINE_string 'jar' '' 'jar file' 'j'
+#DEFINE_string 'jar' '' 'jar file' 'j'
 DEFINE_string 'reference' '' 'reference sequence' 'g'
 DEFINE_integer 'minCoverage' '' 'paramIntegerRange_varScanMpileup' 'm'
 DEFINE_integer 'minReads2' '' 'Minimum supporting reads at a position to call variants' 'r'
@@ -39,7 +40,8 @@ printParamValues "initial parameters" # print param values, if in debug mode
 
 if [ "$FLAGS_version" -eq 0 ]; then
         
-        MESSAGE=$(java -jar $FLAGS_jar 2>&1 | grep '^VarScan' | cut -d " " -f 2);
+       # MESSAGE=$(java -jar $FLAGS_jar 2>&1 | grep '^VarScan' | cut -d " " -f 2);
+       MESSAGE=$(varscan 2>&1 | grep '^VarScan' | cut -d " " -f 2);
 
         echo $MESSAGE
         exit $EXIT_OK
@@ -51,10 +53,10 @@ if [ -z "$FLAGS_infile" ]; then
 	echoError "Parameter --infile must be set. (see --help for details)";
 	exit $EXIT_MISSING_ARGUMENTS
 fi
-if [ -z "$FLAGS_jar" ]; then
-	echoError "Parameter --jar must be set. (see --help for details)";
-	exit $EXIT_MISSING_ARGUMENTS
-fi
+# if [ -z "$FLAGS_jar" ]; then
+# 	echoError "Parameter --jar must be set. (see --help for details)";
+# 	exit $EXIT_MISSING_ARGUMENTS
+# fi
 
 if [ -z "$FLAGS_reference" ]; then
 	echoError "Parameter --reference must be set. (see --help for details)";
@@ -131,8 +133,8 @@ fi
 
 
 # run it
-MESSAGE=$($SAMTOOLS_CMD | java -jar $FLAGS_jar $FLAGS_method $flagsAsString > $FLAGS_output);
-
+#MESSAGE=$($SAMTOOLS_CMD | java -jar $FLAGS_jar $FLAGS_method $flagsAsString > $FLAGS_output);
+MESSAGE=$($SAMTOOLS_CMD | varscan $FLAGS_method $flagsAsString > $FLAGS_output);
 
 RET=$?
 
