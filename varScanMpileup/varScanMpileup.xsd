@@ -6,7 +6,7 @@
 		<x:all>
 			<x:element name="infile" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="unbounded" />
 			<x:element name="method" type="paramString" minOccurs="0" maxOccurs="1" />
-			<x:element name="jar" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
+			<!--<x:element name="jar" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />-->
 			<x:element name="reference" type="paramAbsoluteFilePath" minOccurs="1" maxOccurs="1" />
 			<x:element name="minCoverage" type="paramIntegerGreater_varScanMpileup" minOccurs="0" maxOccurs="1" />
 			<x:element name="minReads2" type="paramIntegerGreater_varScanMpileup" minOccurs="0" maxOccurs="1" />
