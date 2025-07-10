@@ -59,7 +59,7 @@ if [ ! -d "$dirname_out" ]; then
     mkdir -p "$dirname_out"
 fi
 
-command_to_call="python3 /home/proj/software/watchdog/florian_modules/identifyStrain/identifyStrain.py --input $FLAGS_input --ref $FLAGS_reference --out $FLAGS_output --con $FLAGS_config"
+command_to_call="python3 $SCRIPT_FOLDER/identifyStrain.py --input $FLAGS_input --ref $FLAGS_reference --out $FLAGS_output --con $FLAGS_config"
 MESSAGE=$(eval $command_to_call 2>&1)
 RET=$?
 
