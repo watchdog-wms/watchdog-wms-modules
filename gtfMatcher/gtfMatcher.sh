@@ -60,7 +60,7 @@ if [ ! -d "$dirname_out" ]; then
     mkdir -p "$dirname_out"
 fi
 
-command_to_call="python3 /mnt/raidproj/proj/software/watchdog/florian_modules/gtfMatcher/gtfMatcher.py --gtf $FLAGS_gtf --infile $FLAGS_infile --out $FLAGS_out --m $FLAGS_mode"
+command_to_call="python3 $SCRIPT_FOLDER/gtfMatcher.py --gtf $FLAGS_gtf --infile $FLAGS_infile --out $FLAGS_out --m $FLAGS_mode"
 MESSAGE=$(eval $command_to_call 2>&1)
 RET=$?
 
