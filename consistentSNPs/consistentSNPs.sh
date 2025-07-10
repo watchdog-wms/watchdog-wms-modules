@@ -55,7 +55,7 @@ if [ ! -d "$dirname_out" ]; then
     mkdir -p "$dirname_out"
 fi
 
-command_to_call="python3 /home/proj/software/watchdog/florian_modules/consistentSNPs/consistentSNPs.py --bcf_rep $FLAGS_bcftool_rep --var_rep $FLAGS_varscan_rep --out $FLAGS_output"
+command_to_call="python3 $SCRIPT_FOLDER/consistentSNPs.py --bcf_rep $FLAGS_bcftool_rep --var_rep $FLAGS_varscan_rep --out $FLAGS_output"
 MESSAGE=$(eval $command_to_call 2>&1)
 RET=$?
 
