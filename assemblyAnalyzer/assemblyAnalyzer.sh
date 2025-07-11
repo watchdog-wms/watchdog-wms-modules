@@ -70,7 +70,7 @@ if [ ! -d "$dirname_out" ]; then
     mkdir -p "$dirname_out"
 fi
 
-command_to_call="python3 /mnt/raidproj/proj/software/watchdog/florian_modules/assemblyAnalyzer/assemblyAnalyzer.py --fasta $FLAGS_fasta --sam $FLAGS_sam --out $FLAGS_out --max_size $FLAGS_maxSize"
+command_to_call="python3 $SCRIPT_FOLDER/assemblyAnalyzer.py --fasta $FLAGS_fasta --sam $FLAGS_sam --out $FLAGS_out --max_size $FLAGS_maxSize"
 
 MESSAGE=$(eval $command_to_call 2>&1)
 RET=$?
