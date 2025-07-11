@@ -2,4 +2,5 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
+  - python=3.8
   - spades=3.15.5
