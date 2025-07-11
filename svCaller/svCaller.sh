@@ -243,7 +243,7 @@ if [ ! -d "$dirname_out_con" ]; then
     mkdir -p "$dirname_out_con"
 fi
 
-MESSAGE=$(python3 /mnt/raidproj/proj/software/watchdog/florian_modules/svCaller/svCaller.py $flagsAsString)
+MESSAGE=$(python3 $SCRIPT_FOLDER/svCaller.py $flagsAsString)
 RET=$?
 
 # check for error
